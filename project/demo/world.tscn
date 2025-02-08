@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c8bbq8f2ctmn"]
+
+[node name="World" type="Node2D"]
+
+[node name="LightEnvironment2D" type="LightEnvironment2D" parent="."]
+
+[node name="SpotLight2D" type="SpotLight2D" parent="LightEnvironment2D"]
+
+[node name="Wall2D" type="Wall2D" parent="LightEnvironment2D"]

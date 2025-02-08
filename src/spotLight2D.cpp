@@ -20,8 +20,7 @@ SpotLight2D::~SpotLight2D() {
 }
 
 void SpotLight2D::_ready() {
-	Vector2 currentPosition = get_position();
-	print_line("Current Transform");
+	
 }
 
 void SpotLight2D::_process(double delta) {
