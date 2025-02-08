@@ -10,13 +10,13 @@ env = SConscript("godot-cpp/SConstruct")
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
 
-# Find gdextension path even if the directory or extension is renamed (e.g. project/addons/example/example.gdextension).
+# Find gdextension path even if the directory or extension is renamed 
 (extension_path,) = glob("project/addons/*/*.gdextension")
 
-# Get the addon path (e.g. project/addons/example).
+# Get the addon path 
 addon_path = Path(extension_path).parent
 
-# Get the project name from the gdextension file (e.g. example).
+# Get the project name from the gdextension file 
 project_name = Path(extension_path).stem
 
 scons_cache_path = os.environ.get("SCONS_CACHE")
@@ -24,7 +24,7 @@ if scons_cache_path != None:
     CacheDir(scons_cache_path)
     print("Scons cache enabled... (path: '" + scons_cache_path + "')")
 
-# Create the library target (e.g. libexample.linux.debug.x86_64.so).
+# Create the library target 
 debug_or_release = "release" if env["target"] == "template_release" else "debug"
 if env["platform"] == "macos":
     library = env.SharedLibrary(

@@ -1,32 +1,18 @@
-#include "register_types.h"
+#include "registerTypes.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/classes/engine.hpp>
 
-#include "my_node.hpp"
-#include "my_singleton.hpp"
+#include "spotLight2D.h"
 
-static MySingleton *_my_singleton;
-
-void gdextension_initialize(ModuleInitializationLevel p_level)
-{
+void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
-		ClassDB::register_class<MyNode>();
-		ClassDB::register_class<MySingleton>();
-
-		_my_singleton = memnew(MySingleton);
-		Engine::get_singleton()->register_singleton("MySingleton", MySingleton::get_singleton());
+		ClassDB::register_class<SpotLight2D>();
 	}
 }
 
-void gdextension_terminate(ModuleInitializationLevel p_level)
-{
-	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
-	{
-		Engine::get_singleton()->unregister_singleton("MySingleton");
-		memdelete(_my_singleton);
-	}
+void gdextension_terminate(ModuleInitializationLevel p_level) {
 }
 
 extern "C"
