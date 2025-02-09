@@ -4,6 +4,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
@@ -106,7 +109,7 @@ jobs:
           ls -l project/addons/*/bin/
       # TODO: Replace '--no-clobber' with '--update=none' in ubuntu 24.04
       # TODO: Workaround artifact folder structure: https://github.com/actions/upload-artifact/issues/174
-      - name: Copy README.md and LICENSE to addon and make a new directory for artifacts
+      - name: Copy README.md and LICENSE to addon and make a new directory for artifacts and commit binaries 
         shell: bash
         run: |
           for addon in ${{ github.workspace }}/project/addons/*/; do
@@ -124,9 +127,38 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          submodules: recursive 
       # TODO: Simplify generating artifact names. See: https://github.com/orgs/community/discussions/26686
       - name: Merge artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: ${{ github.event.repository.name }}-${{ github.event_name == 'pull_request' && format('pr{0}', github.event.number) || github.ref_name }}
+          name: ${{ github.event.repository.name }}-binary-artifact
           delete-merged: true
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-binary-artifact
+          path: ${{github.workspace}}/artifact
+      - name: Move binary artifact content to project
+        run: |
+          mv ${{github.workspace}}/artifact/${{ github.event.repository.name }}-* ${{ github.workspace }}/${{ github.event.repository.name }}-binary-artifact
+          cp -rf ${{github.workspace}}/${{ github.event.repository.name }}-binary-artifact/* ${{github.workspace}}/project/
+      - name: Delete binary artifact directory
+        run: |
+          rm -rf ${{github.workspace}}/artifact/${{ github.event.repository.name }}-binary-artifact
+          rm -rf ${{ github.workspace }}/${{ github.event.repository.name }}-binary-artifact
+          rm -rf ${{ github.workspace }}/${{github.workspace}}/artifact
+          ls ${{github.workspace}}/project/addons/lightSim/bin
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add --force ${{github.workspace}}/project
+          git status
+          git commit -m "[automatic] added platform-specific binaries"
+          git push
