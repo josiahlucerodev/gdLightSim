@@ -137,7 +137,7 @@ jobs:
           for addon in ${{ github.workspace }}/project/addons/*/; do
             cp '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
           done
-          mkdir --parents ${{ github.workspace }}/github-artifact/${{ github.event.repository.name }}-${{ github.sha }}/
+          mkdir -p ${{ github.workspace }}/github-artifact/${{ github.event.repository.name }}-${{ github.sha }}/
           mv ${{ github.workspace }}/project/addons/ ${{ github.workspace }}/github-artifact/${{ github.event.repository.name }}-${{ github.sha }}/
       - name: Upload artifact
         uses: actions/upload-artifact@v4
