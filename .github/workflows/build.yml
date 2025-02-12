@@ -51,6 +51,30 @@ jobs:
             target: template_release
             platform: android
             arch: arm64v8
+          - identifier: macos-debug-x86_64
+            name: MacOS Debug x86_64
+            runner: macos-13
+            target: template_debug
+            platform: macos
+            arch: x86_64
+          - identifier: macos-release-x86_64
+            name: MacOS Release x86_64
+            runner: macos-13
+            target: template_release
+            platform: macos
+            arch: x86_64 
+          - identifier: macos-debug-arm64v8
+            name: MacOS Debug arm64v8
+            runner: macos-latest
+            target: template_debug
+            platform: macos
+            arch: arm64v8
+          - identifier: macos-release-arm64v8
+            name: MacOS Release arm64v8
+            runner: macos-latest
+            target: template_release
+            platform: macos
+            arch: arm64v8 
     steps:
       - name: (Windows) Install mingw64
         if: ${{ startsWith(matrix.identifier, 'windows-') }}

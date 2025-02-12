@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Debug",
+            "type": "shell",
+            "command": "scons",
+            "args": [
+                "debug_symbols=yes",
+                "dev_build=yes",
+                "lto=none",
+                "optimize=none"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Debug build"
+        },
+        {
+            "label": "Release",
+            "type": "shell",
+            "command": "scons",
+            "args": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Release build"
+        }
+    ]
+}

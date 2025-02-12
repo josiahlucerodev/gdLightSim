@@ -4,14 +4,12 @@
 #include <godot_cpp/classes/engine.hpp>
 
 #include "spotLight2D.h"
-#include "wall2D.h"
 #include "lightEnvironment2D.h"
 
 void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
 		ClassDB::register_class<SpotLight2D>();
-		ClassDB::register_class<Wall2D>();
 		ClassDB::register_class<LightEnvironment2D>();
 	}
 }

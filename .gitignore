@@ -10,5 +10,4 @@
 # MacOS
 .DS_Store
 
-# Editors
-.vscode/
+*.pdb

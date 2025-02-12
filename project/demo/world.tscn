@@ -3,7 +3,61 @@
 [node name="World" type="Node2D"]
 
 [node name="LightEnvironment2D" type="LightEnvironment2D" parent="."]
+displayBVH = true
+displayAABB = true
+displayPoints = true
+displayMidpoints = true
+displayRays = true
+rayArcSpread = 0.0011
 
 [node name="SpotLight2D" type="SpotLight2D" parent="LightEnvironment2D"]
+arc = 74.67
+position = Vector2(-4291, -603)
 
-[node name="Wall2D" type="Wall2D" parent="LightEnvironment2D"]
+[node name="Polygon2D" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-9326, -55)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D2" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-52, -784)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 343, 306)
+
+[node name="Polygon2D3" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-2240, -735)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 671.698, 303.983, 343, 306)
+
+[node name="Polygon2D4" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-526, -1736)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D5" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(486, -1697)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D6" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(2854, -1648)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D7" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(3339, -50)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D8" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-2659, 885)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D9" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-7645, 387)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D10" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(2132, 324)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 850, 641, 561, 498, -15, 796)
+
+[node name="Polygon2D11" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-2987, -2107)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
+
+[node name="Polygon2D12" type="Polygon2D" parent="LightEnvironment2D"]
+position = Vector2(-1502, 105)
+polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
