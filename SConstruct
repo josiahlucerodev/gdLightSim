@@ -27,12 +27,14 @@ if scons_cache_path != None:
 # Create the library target 
 debug_or_release = "release" if env["target"] == "template_release" else "debug"
 if env["platform"] == "macos":
+    arch = os.uname()[4]
     library = env.SharedLibrary(
-        "{0}/bin/lib{1}.{2}.{3}.framework/{1}.{2}.{3}".format(
+        "{0}/bin/lib{1}.{2}.{3}.{4}.framework/{1}.{2}.{3}.{4}".format(
             addon_path,
             project_name,
             env["platform"],
             debug_or_release,
+            arch
         ),
         source=sources,
     )
