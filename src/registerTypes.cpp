@@ -6,8 +6,10 @@
 
 //own
 #include "spotLight2D.h"
+#include "circleLight2D.h"
 #include "beamLight2D.h"
 #include "lightEnvironment2D.h"
+#include "mirror2D.h"
 
 void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -15,6 +17,8 @@ void gdextension_initialize(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<SpotLight2D>();
 		ClassDB::register_class<LightEnvironment2D>();
 		ClassDB::register_class<BeamLight2D>();
+		ClassDB::register_class<CircleLight2D>();
+		ClassDB::register_class<Mirror2D>();
 	}
 }
 

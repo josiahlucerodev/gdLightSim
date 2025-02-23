@@ -10,6 +10,7 @@
 //own
 #include "spotLight2D.h"
 #include "beamLight2D.h"
+#include "circleLight2D.h"
 
 using namespace godot;
 
@@ -138,8 +139,8 @@ template<typename Type>
 void getChildrenOfType(std::vector<Type*>& dst, Node& parent, const String& typeName) {
     Array children = parent.get_children();
     for (std::size_t i = 0; i < children.size(); ++i) {
-        Node* child = Object::cast_to<Node>(children[i]);
-        if (child) {
+        Node2D* child = Object::cast_to<Node2D>(children[i]);
+        if (child && child->is_visible()) {
             if(child->get_class() == typeName) {
                 dst.push_back(Object::cast_to<Type>(child));
             }
@@ -354,29 +355,16 @@ std::optional<RayHit2D> shotRay(const Ray2D& ray, const BVH& bvh) {
 bool isRelativelyEqual(real_t a, real_t b, real_t epsilon = 1e-6) {
     return std::abs(a - b) < epsilon;
 }
-
-struct BeamRayToPoint {
-    real_t beamOriginDistance;
-    Vector2 rayOrigin;
-};
-
-std::optional<BeamRayToPoint> getBeamRayToPoint(Point2 beamLocation, real_t beamRotiation, 
-    Point2 unscaledRightBeamPoint, Point2 point) {
-        
-    real_t theta = beamLocation.angle_to_point(point) - (beamRotiation + Math::deg_to_rad(real_t(90)));
-    if(abs(theta + Math::deg_to_rad(real_t(90))) > (Math_PI / 2)) {
-        return std::nullopt;
-    }
-    
-    real_t h = beamLocation.distance_to(point);
-    real_t a = cos(theta) * h;
-    Vector2 origin = (unscaledRightBeamPoint * a) + beamLocation;
-
-    BeamRayToPoint beamRayToPoint{};
-    beamRayToPoint.beamOriginDistance = a;
-    beamRayToPoint.rayOrigin = origin;
-    return beamRayToPoint;
-}
+const Ray2D& getRay(const RayVariant& rayVariant) {
+    return std::visit([](auto&& arg) -> const Ray2D& {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, Ray2D>) {
+            return arg;
+        } else {
+            return arg.ray;
+        }
+    }, rayVariant);
+} ;
 
 template<typename Section, typename Predicate>
 std::vector<Section> generateSections(const std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {
@@ -478,6 +466,24 @@ void LightEnvironment2D::_process(double delta) {
 
     constructBVH(bvh, shapes);
 
+    auto shotRayAndAdd = [&](std::vector<RayVariant>& rays, 
+        const Ray2D& ray) {
+        std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
+        if(rayHit.has_value()) {
+            rays.push_back(RayVariant(rayHit.value()));
+        } else {
+            rays.push_back(RayVariant(ray));
+        }
+        
+        if(displayRays) {
+            if(rayHit.has_value()) {
+                rayHits.push_back(rayHit.value());
+            } else {
+                rayMisses.push_back(ray);
+            }
+        }
+    };
+
     std::vector<SpotLight2D*> spotLights = getChildrenOfType<SpotLight2D>(*this, "SpotLight2D");
     for(SpotLight2D* spotLight : spotLights) {
         real_t spotLightAngle = spotLight->get_rotation();
@@ -485,50 +491,16 @@ void LightEnvironment2D::_process(double delta) {
         real_t spotLightArc = Math::deg_to_rad(spotLight->get_arc());
         int64_t spotLightRayCount = spotLight->get_ray_count();
 
-        std::vector<Point2> pointsInSpotlightArc;
-        pointsInSpotlightArc.reserve(points.size());
-        std::vector<RayVariant> rays;
-        
+        std::vector<RayVariant> rays;        
         auto testRay = [&](Point2 direction) {
             Ray2D ray = Ray2D{spotLightLocation, direction};
-            std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
-            if(rayHit.has_value()) {
-                rays.push_back(RayVariant(rayHit.value()));
-            } else {
-                rays.push_back(RayVariant(ray));
-            }
-            
-            if(displayRays) {
-                if(rayHit.has_value()) {
-                    rayHits.push_back(rayHit.value());
-                } else {
-                    rayMisses.push_back(ray);
-                }
-            }
+            shotRayAndAdd(rays, ray);
         };
         
         for(std::size_t i = 0; i < spotLightRayCount; i++) {
             real_t angle = (spotLightAngle - (spotLightArc / 2)) + (spotLightArc / spotLightRayCount) * i;
             testRay(Vector2{cos(angle), sin(angle)});
         }
-
-        auto getRay = [](const RayVariant& rayVariant) -> const Ray2D& {
-            return std::visit([](auto&& arg) -> const Ray2D& {
-                using T = std::decay_t<decltype(arg)>;
-                if constexpr (std::is_same_v<T, Ray2D>) {
-                    return arg;
-                } else {
-                    return arg.ray;
-                }
-            }, rayVariant);
-        } ;
-
-        std::sort(rays.begin(), rays.end(), 
-            [&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-                return spotLightLocation.angle_to_point(getRay(lhs).direction) < spotLightLocation.angle_to_point(getRay(rhs).direction);
-            }
-        );
-
         
         auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
             auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
@@ -560,25 +532,9 @@ void LightEnvironment2D::_process(double delta) {
         Vector2 leftBeamPoint = unscaledLeftBeamPoint * beamLightWidth;
         leftBeamPoint += beamLightLocation;
 
-        std::vector<BeamRayToPoint> beamRays;
-        beamRays.reserve(points.size());
-
         std::vector<RayVariant> rays;
         auto testRay = [&](Ray2D ray) {
-            std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
-            if(rayHit.has_value()) {
-                rays.push_back(RayVariant(rayHit.value()));
-            } else {
-                rays.push_back(RayVariant(ray));
-            }
-            
-            if(displayRays) {
-                if(rayHit.has_value()) {
-                    rayHits.push_back(rayHit.value());
-                } else {
-                    rayMisses.push_back(ray);
-                }
-            }
+            shotRayAndAdd(rays, ray);
         };
 
         for(std::size_t i = 0; i < beamLightRayCount; i++) {
@@ -586,29 +542,6 @@ void LightEnvironment2D::_process(double delta) {
             Point2 origin = (unscaledRightBeamPoint * width) + beamLightLocation;
             testRay(Ray2D{origin, beamDirection});
         }
-
-        auto getRay = [](const RayVariant& rayVariant) -> const Ray2D& {
-            return std::visit([](auto&& arg) -> const Ray2D& {
-                using T = std::decay_t<decltype(arg)>;
-                if constexpr (std::is_same_v<T, Ray2D>) {
-                    return arg;
-                } else {
-                    return arg.ray;
-                }
-            }, rayVariant);
-        } ;
-
-
-        std::sort(rays.begin(), rays.end(), 
-            [&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-                Point2 lhsO = getRay(lhs).origin;
-                Point2 rhsO = getRay(rhs).origin;
-
-
-                return Math::sign(beamLightLocation.angle_to(lhsO)) * beamLightLocation.distance_to(lhsO)
-                    < Math::sign(beamLightLocation.angle_to(rhsO)) * beamLightLocation.distance_to(rhsO);
-            }
-        );
 
         auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
             auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
@@ -622,8 +555,38 @@ void LightEnvironment2D::_process(double delta) {
 
         std::vector<LinearScanSection> sections = generateSections<LinearScanSection>(rays, predicate);
         linearScanSections.insert(linearScanSections.begin(), sections.begin(), sections.end());
-
     }
+\
+    std::vector<CircleLight2D*> pointLights = getChildrenOfType<CircleLight2D>(*this, "CircleLight2D");
+    for(CircleLight2D* pointLight : pointLights) {
+        Point2 pointLightLocation = pointLight->get_position();
+        int64_t pointLightRayCount = pointLight->get_ray_count();
+
+        std::vector<RayVariant> rays;        
+        auto testRay = [&](Point2 direction) {
+            Ray2D ray = Ray2D{pointLightLocation, direction};
+            shotRayAndAdd(rays, ray);
+        };
+        
+        for(std::size_t i = 0; i < pointLightRayCount; i++) {
+            real_t angle = ((Math_PI * 2) /  pointLightRayCount) * i;
+            testRay(Vector2{cos(angle), sin(angle)});
+        }
+        
+        auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
+            auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
+                return (p2.y - p1.y) / (p2.x - p1.x);
+            };            
+
+            double slope1 = calculateSlope(r1.location, r2.location);
+            double slope2 = calculateSlope(r2.location, r3.location);
+            return std::abs(slope1 - slope2) > radialSectionTolerance;
+        };
+
+       std::vector<RadialScanSection> sections = generateSections<RadialScanSection>(rays, predicate);
+       radialScanSections.insert(radialScanSections.begin(), sections.begin(), sections.end());
+    }
+
     queue_redraw();
 }
 
