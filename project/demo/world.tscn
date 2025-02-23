@@ -3,17 +3,21 @@
 [node name="World" type="Node2D"]
 
 [node name="LightEnvironment2D" type="LightEnvironment2D" parent="."]
+displayBVH = true
+displayAABB = true
+displayPoints = true
+displayMidpoints = true
+displayRays = false
 displayRadialScanSections = true
 displayLinearScanSections = true
-radialRaySpread = 2.0
 radialSectionTolerance = 0.1
-linearRaySpread = 0.005
 linearSectionTolerance = 0.1
 
 [node name="test2" type="Node2D" parent="LightEnvironment2D"]
 
 [node name="SpotLight2D" type="SpotLight2D" parent="LightEnvironment2D/test2"]
 arc = 74.67
+ray_count = 1000
 position = Vector2(-5886, -316)
 
 [node name="Polygon2D" type="Polygon2D" parent="LightEnvironment2D/test2"]
@@ -68,5 +72,6 @@ polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D/test"]
 light_width = 676.0
+ray_count = 1000
 position = Vector2(4714, 3358)
 rotation = -1.81514

@@ -29,12 +29,8 @@ void LightEnvironment2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_display_linear_scan_sections"), &LightEnvironment2D::get_display_linear_scan_sections);
 	ClassDB::bind_method(D_METHOD("set_display_linear_scan_sections", "display_lss"), &LightEnvironment2D::set_display_linear_scan_sections);
 
-    ClassDB::bind_method(D_METHOD("get_radial_ray_spread"), &LightEnvironment2D::get_radial_ray_spread);
-	ClassDB::bind_method(D_METHOD("set_radial_ray_spread", "radial_ray_spread"), &LightEnvironment2D::set_radial_ray_spread);
     ClassDB::bind_method(D_METHOD("get_radial_section_tolerance"), &LightEnvironment2D::get_radial_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_radial_section_tolerance", "tolerance"), &LightEnvironment2D::set_radial_section_tolerance);
-    ClassDB::bind_method(D_METHOD("get_linear_ray_spread"), &LightEnvironment2D::get_linear_ray_spread);
-	ClassDB::bind_method(D_METHOD("set_linear_ray_spread", "linear_ray_spread"), &LightEnvironment2D::set_linear_ray_spread);
     ClassDB::bind_method(D_METHOD("get_linear_section_tolerance"), &LightEnvironment2D::get_linear_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_linear_section_tolerance", "tolerance"), &LightEnvironment2D::set_linear_section_tolerance);
 
@@ -46,9 +42,7 @@ void LightEnvironment2D::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRadialScanSections"), "set_display_radial_scan_sections", "get_display_radial_scan_sections");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayLinearScanSections"), "set_display_linear_scan_sections", "get_display_linear_scan_sections");
 
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_radial_ray_spread", "get_radial_ray_spread");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_radial_section_tolerance", "get_radial_section_tolerance");
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_linear_ray_spread", "get_linear_ray_spread");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_linear_section_tolerance", "get_linear_section_tolerance");
 }
 
@@ -98,23 +92,11 @@ void LightEnvironment2D::set_display_linear_scan_sections(const bool displayLine
     this->displayLinearScanSections = displayLinearScanSections;
 }
 
-double LightEnvironment2D::get_radial_ray_spread() const {
-    return radialRaySpread;
-}
-void LightEnvironment2D::set_radial_ray_spread(const double radialRaySpread) {
-    this->radialRaySpread = radialRaySpread;
-}
 double LightEnvironment2D::get_radial_section_tolerance() const {
     return radialSectionTolerance;
 }
 void LightEnvironment2D::set_radial_section_tolerance(const double radialSectionTolerance) {
     this->radialSectionTolerance = radialSectionTolerance;
-}
-double LightEnvironment2D::get_linear_ray_spread() const {
-    return linearRaySpread;
-}
-void LightEnvironment2D::set_linear_ray_spread(const double linearRaySpread) {
-    this->linearRaySpread = linearRaySpread;
 }
 double LightEnvironment2D::get_linear_section_tolerance() const {
     return linearSectionTolerance;
@@ -144,9 +126,7 @@ void LightEnvironment2D::_ready() {
     displayRadialScanSections = true;
     displayLinearScanSections = true;
     
-    radialRaySpread = 0.005;
     radialSectionTolerance = 0.1;
-    linearRaySpread = 0.005;
     linearSectionTolerance = 0.1;
     shapes.clear();
     points.clear();
@@ -527,32 +507,9 @@ void LightEnvironment2D::_process(double delta) {
             }
         };
         
-        {
-            real_t angle = spotLightAngle - (spotLightArc / 2);
-            Point2 startRay = Point2(cos(angle), sin(angle));
-            testRay(startRay);
-            Point2 endRay = Point2(cos(angle + spotLightArc), sin(angle + spotLightArc));
-            testRay(endRay);
-        }
-        
-        
-        for(Point2 point : points) {
-            if(abs(spotLightLocation.angle_to_point(point)) <= spotLightArc / 2) {
-                pointsInSpotlightArc.push_back(point);
-            }
-        }
-
-        for(size_t i = 0; i < pointsInSpotlightArc.size(); i++) {
-            Point2& point = pointsInSpotlightArc[i];
-            real_t distance = spotLightLocation.distance_to(point);
-            real_t arc = (radialRaySpread / distance) / spotLightRayCount;
-
-            for(std::size_t i = 0; i < spotLightRayCount; i++) {
-                real_t angle = spotLightLocation.angle_to_point(point) - (arc / 2);
-                angle += ((arc / spotLightRayCount) * i);
-                Point2 direction = Point2(cos(angle), sin(angle));
-                testRay(direction);
-            }
+        for(std::size_t i = 0; i < spotLightRayCount; i++) {
+            real_t angle = (spotLightAngle - (spotLightArc / 2)) + (spotLightArc / spotLightRayCount) * i;
+            testRay(Vector2{cos(angle), sin(angle)});
         }
 
         auto getRay = [](const RayVariant& rayVariant) -> const Ray2D& {
@@ -624,30 +581,10 @@ void LightEnvironment2D::_process(double delta) {
             }
         };
 
-        for(Point2 point : points) {
-            std::optional<BeamRayToPoint> rayToPointOption = getBeamRayToPoint(beamLightLocation, beamLightRotation
-                , unscaledRightBeamPoint, point);
-            if(rayToPointOption.has_value()) {
-                BeamRayToPoint rayToPoint = rayToPointOption.value();
-                if(abs(rayToPoint.beamOriginDistance) < (beamLightWidth)) {
-                    beamRays.push_back(rayToPoint);
-                }
-            }
-        }
-        
-        {
-            testRay(Ray2D{leftBeamPoint, beamDirection});
-            testRay(Ray2D{rightBeamPoint, beamDirection});
-        }
-
-        for(size_t i = 0; i < beamRays.size(); i++) {
-            BeamRayToPoint& rayToPoint = beamRays[i];
-
-            for(std::size_t i = 0; i < beamLightRayCount; i++) {
-                real_t offset = (linearRaySpread / -2) + ((linearRaySpread / beamLightRayCount) * i);
-                Vector2 spreadOrigin = rayToPoint.rayOrigin + Vector2{offset, offset};
-                testRay(Ray2D{spreadOrigin, beamDirection});
-            }
+        for(std::size_t i = 0; i < beamLightRayCount; i++) {
+            real_t width = (beamLightWidth / -2) + ((beamLightWidth / beamLightRayCount) * i * 2);
+            Point2 origin = (unscaledRightBeamPoint * width) + beamLightLocation;
+            testRay(Ray2D{origin, beamDirection});
         }
 
         auto getRay = [](const RayVariant& rayVariant) -> const Ray2D& {
