@@ -1,9 +1,12 @@
 #pragma once
 
-//godot
+//godotcpp
 #include <godot_cpp/classes/node2d.hpp>
 
+
 //std
+#include <optional>
+#include <variant>
 #include <algorithm>
 #include <vector>
 
@@ -18,6 +21,7 @@ struct ShapeAABB {
 };
 
 struct Shape {
+    std::size_t shapeId;
     Point2 midPoint;
     ShapeAABB aabb;
     std::vector<Point2> points;
@@ -53,9 +57,32 @@ struct Ray2D{
 };
 
 struct RayHit2D {
+    std::size_t shapeId;
+    real_t angle;  
     Ray2D ray;
     Point2 location;
 };
+
+using RayVariant = std::variant<Ray2D, RayHit2D>;
+
+enum struct SectionType {
+    unknown,
+    miss,
+    hit,
+};
+
+struct RadialScanSection {
+    SectionType type;
+    RayVariant startRay;
+    RayVariant endRay;
+};
+
+struct LinearScanSection {
+    SectionType type;
+    RayVariant startRay;
+    RayVariant endRay;
+};
+
 
 class LightEnvironment2D : public Node2D {
 	GDCLASS(LightEnvironment2D, Node2D);
@@ -66,13 +93,20 @@ protected:
     bool displayPoints;
     bool displayMidpoints;
     bool displayRays;
-    double rayArcSpread;
+    bool displayRadialScanSections;
+    bool displayLinearScanSections;
+    double radialRaySpread;
+    double radialSectionTolerance;
+    double linearRaySpread;
+    double linearSectionTolerance;
 public:
 	BVH bvh;
 	std::vector<Shape> shapes;
 	std::vector<Point2> points;
     std::vector<Ray2D> rayMisses;
     std::vector<RayHit2D> rayHits;
+    std::vector<RadialScanSection> radialScanSections;
+    std::vector<LinearScanSection> linearScanSections;
 public:
 
     LightEnvironment2D();
@@ -93,6 +127,17 @@ public:
 	void set_display_midpoints(const bool);
     bool get_display_rays() const;
 	void set_display_rays(const bool);
-    double get_ray_arc_spread() const;
-	void set_ray_arc_spread(const double);
+    bool get_display_radial_scan_sections() const;
+	void set_display_radial_scan_sections(const bool);
+    bool get_display_linear_scan_sections() const;
+	void set_display_linear_scan_sections(const bool);
+
+    double get_radial_ray_spread() const;
+	void set_radial_ray_spread(const double);
+    double get_radial_section_tolerance() const;
+	void set_radial_section_tolerance(const double);
+    double get_linear_ray_spread() const;
+	void set_linear_ray_spread(const double);
+    double get_linear_section_tolerance() const;
+	void set_linear_section_tolerance(const double);
 };

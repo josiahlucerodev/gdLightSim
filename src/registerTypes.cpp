@@ -1,9 +1,12 @@
 #include "registerTypes.h"
 
+//godotcpp
 #include <gdextension_interface.h>
 #include <godot_cpp/classes/engine.hpp>
 
+//own
 #include "spotLight2D.h"
+#include "beamLight2D.h"
 #include "lightEnvironment2D.h"
 
 void gdextension_initialize(ModuleInitializationLevel p_level) {
@@ -11,6 +14,7 @@ void gdextension_initialize(ModuleInitializationLevel p_level) {
 	{
 		ClassDB::register_class<SpotLight2D>();
 		ClassDB::register_class<LightEnvironment2D>();
+		ClassDB::register_class<BeamLight2D>();
 	}
 }
 

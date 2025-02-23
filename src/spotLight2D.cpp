@@ -1,8 +1,7 @@
 #include "spotLight2D.h"
 
-//godot_cpp
+//godotcpp
 #include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/core/print_string.hpp>
 #include <godot_cpp/godot.hpp>
 
 using namespace godot;
@@ -61,7 +60,7 @@ void SpotLight2D::_draw() {
 		real_t arcRad = Math::deg_to_rad(arc);
 		real_t angle = get_rotation() - (arcRad / 2);
 		Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 5;
+		real_t lineWidth = 1;
 		real_t distance = 10000;
 		draw_line(Point2(0, 0), Point2{cos(angle), sin(angle)} * distance, color, lineWidth);
 		draw_line(Point2(0, 0), Point2{cos(angle + arcRad), sin(angle + arcRad)} * distance, color, lineWidth);
