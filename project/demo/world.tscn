@@ -10,6 +10,7 @@ displayMidpoints = true
 displayRays = true
 displayRadialScanSections = true
 displayLinearScanSections = true
+radialRaySpread = 20.0
 radialSectionTolerance = 0.1
 linearSectionTolerance = 0.1
 
@@ -17,19 +18,14 @@ linearSectionTolerance = 0.1
 
 [node name="SpotLight2D" type="SpotLight2D" parent="LightEnvironment2D/test"]
 arc = 74.67
-ray_count = 1000
-visible = false
 position = Vector2(-5886, -316)
 
 [node name="CircleLight2D" type="CircleLight2D" parent="LightEnvironment2D/test"]
-ray_count = 1000
-visible = false
-position = Vector2(-1901, 314)
+position = Vector2(806, 1822)
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D/test"]
 light_width = 676.0
-ray_count = 1000
-position = Vector2(4274, 2503)
+position = Vector2(4211, 1476)
 rotation = -1.81514
 
 [node name="Polygon2D" type="Polygon2D" parent="LightEnvironment2D/test"]

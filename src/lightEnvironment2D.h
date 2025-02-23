@@ -95,7 +95,9 @@ protected:
     bool displayRays;
     bool displayRadialScanSections;
     bool displayLinearScanSections;
+    double radialRaySpread;
     double radialSectionTolerance;
+    double linearRaySpread;
     double linearSectionTolerance;
 public:
 	BVH bvh;
@@ -130,8 +132,12 @@ public:
     bool get_display_linear_scan_sections() const;
 	void set_display_linear_scan_sections(const bool);
 
+    double get_radial_ray_spread() const;
+	void set_radial_ray_spread(const double);
     double get_radial_section_tolerance() const;
 	void set_radial_section_tolerance(const double);
+    double get_linear_ray_spread() const;
+	void set_linear_ray_spread(const double);
     double get_linear_section_tolerance() const;
 	void set_linear_section_tolerance(const double);
 };
