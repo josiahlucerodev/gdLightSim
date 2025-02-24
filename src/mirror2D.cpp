@@ -58,7 +58,7 @@ void Mirror2D::_process(double delta) {
 void Mirror2D::_draw() {
 	if(drawDebug) {
 		Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 1;
+		real_t lineWidth = 5;
 		real_t distance = 10000;
 		draw_circle(Point2(0, 0), 30, color, true);
 

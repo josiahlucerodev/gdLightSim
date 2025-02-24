@@ -322,6 +322,20 @@ std::optional<RayHit2D> shotRayBVHNode(const Ray2D& ray, const BVH::Node* node) 
         return{};
     }
 
+    std::optional<RayHit2D> rayHit;
+    auto checkClosesHit = [&](std::optional<RayHit2D> newRayHit) {
+        if(newRayHit.has_value()) {
+            if(rayHit.has_value()) {
+                if(ray.origin.distance_to(newRayHit.value().location) < 
+                    ray.origin.distance_to(rayHit.value().location)) {
+                    rayHit = newRayHit;
+                } 
+            } else {
+                rayHit = newRayHit;
+            }
+        }
+    };
+
     for(std::size_t i = 0; i < node->shapes.size; i++) {
         Shape& shape = node->shapes.data[i];
         if(shape.points.size() < 2) {
@@ -341,28 +355,17 @@ std::optional<RayHit2D> shotRayBVHNode(const Ray2D& ray, const BVH::Node* node) 
                 newRayHit = rayLineHit(shape.shapeId, ray, 
                     shape.points[i], shape.points[i + 1]);
             }
-
-            if(newRayHit.has_value()) {
-                if(rayHit.has_value()) {
-                    if(ray.origin.distance_to(newRayHit.value().location) < 
-                        ray.origin.distance_to(rayHit.value().location)) {
-                        rayHit = newRayHit;
-                    } 
-                } else {
-                    rayHit = newRayHit;
-                }
-            }
+            checkClosesHit(newRayHit);
         }
+    }
 
-        return rayHit;
+    if(node->b1) {
+        checkClosesHit(shotRayBVHNode(ray, node->b1));
     }
-    
-    std::optional<RayHit2D> rayHitOption{};
-    rayHitOption = shotRayBVHNode(ray, node->b1);
-    if(!rayHitOption.has_value()) {
-        rayHitOption = shotRayBVHNode(ray, node->b2);
+    if(node->b1) {
+        checkClosesHit(shotRayBVHNode(ray, node->b2));
     }
-    return rayHitOption;
+    return rayHit;
 }  
 
 std::optional<RayHit2D> shotRay(const Ray2D& ray, const BVH& bvh) {
@@ -384,7 +387,10 @@ const Ray2D& getRay(const RayVariant& rayVariant) {
 } ;
 
 template<typename Section, typename Predicate>
-std::vector<Section> generateSections(const std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {
+std::vector<Section> generateSections(std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {
+    RayVariant front = rays.front();
+    rays.push_back(front);
+
     std::vector<Section> sections;
     size_t i = 0;
     while(i < rays.size()) {
@@ -466,6 +472,10 @@ std::optional<BeamRayToPoint> getBeamRayToPoint(Point2 beamLocation, real_t beam
     Point2 unscaledRightBeamPoint, Point2 point) {
         
     real_t theta = beamLocation.angle_to_point(point) - (beamRotiation + Math::deg_to_rad(real_t(90)));
+    theta = fmodf(theta, Math::deg_to_rad(real_t(360)));
+    if(theta > 0) {
+        theta -=Math::deg_to_rad(real_t(360));
+    }
     if(abs(theta + Math::deg_to_rad(real_t(90))) > (Math_PI / 2)) {
         return std::nullopt;
     }
@@ -794,16 +804,53 @@ void LightEnvironment2D::_draw() {
                 break;
             }
             case SectionType::miss: {
-                Ray2D& startRay = std::get<0>(section.startRay);    
-                Ray2D& endRay = std::get<0>(section.endRay);    
-                
-                drawRayMiss(*this, startRay); 
-                drawRayMiss(*this, endRay); 
-                for(std::size_t i = 0; i < 10000 / 20; i++) {
-                    draw_line((startRay.direction * (100 * i)) + startRay.origin, 
-                        (endRay.direction * (100 * i)) + endRay.origin, 
-                        Color(1.0, 0.0, 0.0));   
+                Ray2D startRay = std::get<0>(section.startRay);    
+                Ray2D endRay = std::get<0>(section.endRay);    
+
+                auto getSpotlightAngle = [](Vector2 rayDir1, Vector2 rayDir2) {
+                    real_t angle = rayDir1.angle_to(rayDir2);
+                    if(rayDir1.cross(rayDir2) > 0) {
+                        return real_t(Math_PI * 2 - abs(angle));
+                    }
+                    return angle;
+                };
+
+                real_t angle = getSpotlightAngle(startRay.direction, endRay.direction);
+                angle = abs(angle);
+
+                if(startRay.origin.angle_to_point(startRay.direction) ) {
+                    std::swap(startRay, endRay);
                 }
+
+                std::vector<Ray2D> rays;
+                //rays.push_back(startRay);
+                std::size_t rayCount = (std::size_t)(angle / Math::deg_to_rad(real_t(60)));
+                for(std::size_t i = 0; i < rayCount; i++) {
+                    real_t rayAngle = ((angle / rayCount) * i) + endRay.direction.angle();
+                    Vector2 dir = Vector2{cos(rayAngle), sin(rayAngle)};
+                    rays.push_back(Ray2D{endRay.origin, dir});
+                }
+                //rays.push_back(endRay);
+
+
+                real_t distance = 10000;
+
+                if(rays.size() < 2) {
+                    break;
+                }
+
+                for(std::size_t i = 0; i < rays.size() - 1; i++) {
+                    Ray2D start = rays[i];
+                    Ray2D end = rays[i + 1];
+                    drawRayMiss(*this, start); 
+                    drawRayMiss(*this, end); 
+                    for(std::size_t i = 0; i < distance / 20; i++) {
+                        draw_line((start.direction * (100 * i)) + start.origin, 
+                            (end.direction * (100 * i)) + end.origin, 
+                            Color(1.0, 0.0, 0.0));   
+                    }
+                }
+                
                 break;
             }
             default:
@@ -820,6 +867,8 @@ void LightEnvironment2D::_draw() {
                 
                 drawRayHit(*this, startHit); 
                 drawRayHit(*this, endHit); 
+
+                
                 draw_line(startHit.location, endHit.location, Color(0.0, 1.0, 0.0));
                 break;
             }
