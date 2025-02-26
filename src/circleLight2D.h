@@ -5,6 +5,11 @@
 
 using namespace godot;
 
+//own
+#include "ray2D.h"
+#include "section2D.h"
+#include "bvh2D.h"
+
 class CircleLight2D : public Node2D {
 	GDCLASS(CircleLight2D, Node2D);
 private:
@@ -25,3 +30,14 @@ public:
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool);
 };
+
+std::vector<RayVariant> shotCircleLight2D(
+	CircleLight2D& beamLight, 
+	const std::vector<Point2>& points, 
+	BVH2D& bvh, 
+	real_t radialRaySpread);
+std::vector<RadialScanSection> generateCircleLight2DSections(
+	CircleLight2D& beamLight, 
+	std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes,
+	real_t radialSectionTolerance); 

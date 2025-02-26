@@ -12,83 +12,19 @@
 
 //own
 #include "batchPool.h"
+#include "aabb2D.h"
+#include "shape2D.h"
+#include "ray2D.h"
+#include "bvh2D.h"
+#include "section2D.h"
 
 using namespace godot;
-
-struct ShapeAABB {
-    Point2 min;
-    Point2 max;
-};
-
-struct Shape {
-    std::size_t shapeId;
-    Point2 midPoint;
-    ShapeAABB aabb;
-    std::vector<Point2> points;
-};
-
-template<typename Type>
-struct ArrayView {
-    Type* data;
-    std::size_t size;
-};
-
-struct BVH {
-    struct Node {
-        Node* b1;
-        Node* b2;
-        ShapeAABB aabb;
-        Point2 midPoint;
-        ArrayView<Shape> shapes;
-    };
-    
-    BatchPool<Node> nodePool;
-    std::vector<Shape> shapes;
-    Node* root;
-
-    BVH() = default;
-    BVH(const BVH&) = delete;
-    BVH& operator=(const BVH&) = delete;
-};
-
-struct Ray2D{
-    Point2 origin;
-    Point2 direction;
-};
-
-struct RayHit2D {
-    std::size_t shapeId;
-    real_t angle;  
-    Ray2D ray;
-    Point2 location;
-};
-
-using RayVariant = std::variant<Ray2D, RayHit2D>;
-
-enum struct SectionType {
-    unknown,
-    miss,
-    hit,
-};
-
-struct RadialScanSection {
-    SectionType type;
-    RayVariant startRay;
-    RayVariant endRay;
-};
-
-struct LinearScanSection {
-    SectionType type;
-    RayVariant startRay;
-    RayVariant endRay;
-};
-
 
 class LightEnvironment2D : public Node2D {
 	GDCLASS(LightEnvironment2D, Node2D);
 protected:
 	static void _bind_methods();
-	bool displayBVH;
+	bool displayBVH2D;
 	bool displayAABB;
     bool displayPoints;
     bool displayMidpoints;
@@ -100,11 +36,10 @@ protected:
     double linearRaySpread;
     double linearSectionTolerance;
 public:
-	BVH bvh;
-	std::vector<Shape> shapes;
+	BVH2D bvh;
+	std::vector<Shape2D> shapes;
 	std::vector<Point2> points;
-    std::vector<Ray2D> rayMisses;
-    std::vector<RayHit2D> rayHits;
+    std::vector<RayVariant> allShotRays;
     std::vector<RadialScanSection> radialScanSections;
     std::vector<LinearScanSection> linearScanSections;
 public:

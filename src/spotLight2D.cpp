@@ -1,10 +1,16 @@
 #include "spotLight2D.h"
 
+//std
+#include <algorithm>
+
 //godotcpp
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
 
 using namespace godot;
+
+//own
+#include "angle.h"
 
 void SpotLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_arc"), &SpotLight2D::get_arc);
@@ -82,4 +88,85 @@ void SpotLight2D::_draw() {
 			}
 		}
 	}
+}
+
+std::vector<RayVariant> shotSpotLight2D(
+	SpotLight2D& spotLight, 
+	const std::vector<Point2>& points, 
+	BVH2D& bvh, 
+	real_t radialRaySpread) {
+	real_t spotLightAngle = spotLight.get_rotation();
+	Point2 spotLightLocation = spotLight.get_position();
+	real_t spotLightArc = Math::deg_to_rad(spotLight.get_arc());
+	int64_t spotLightRayCount = spotLight.get_ray_count();
+
+	std::vector<Point2> pointsInSpotlightArc;
+	pointsInSpotlightArc.reserve(points.size());
+	std::vector<RayVariant> rays;
+	
+	auto testRay = [&](Point2 direction) {
+		Ray2D ray = Ray2D{spotLightLocation, direction};
+		std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
+        if(rayHit.has_value()) {
+            rays.push_back(RayVariant(rayHit.value()));
+        } else {
+            rays.push_back(RayVariant(ray));
+        }
+	};
+	
+	{
+		real_t angle = spotLightAngle - (spotLightArc / 2);
+		Point2 startRay = Point2(cos(angle), sin(angle));
+		testRay(startRay);
+		Point2 endRay = Point2(cos(angle + spotLightArc), sin(angle + spotLightArc));
+		testRay(endRay);
+	}
+	
+	
+	for(Point2 point : points) {
+		if(abs(spotLightLocation.angle_to_point(point)) <= spotLightArc / 2) {
+			pointsInSpotlightArc.push_back(point);
+		}
+	}
+
+	for(size_t i = 0; i < pointsInSpotlightArc.size(); i++) {
+		Point2& point = pointsInSpotlightArc[i];
+		real_t distance = spotLightLocation.distance_to(point);
+		real_t arc = (radialRaySpread / distance) / spotLightRayCount;
+
+		for(std::size_t i = 0; i < spotLightRayCount; i++) {
+			real_t angle = spotLightLocation.angle_to_point(point) - (arc / 2);
+			angle += ((arc / spotLightRayCount) * i);
+			Point2 direction = Point2(cos(angle), sin(angle));
+			testRay(direction);
+		}
+	}
+    return rays;
+}
+
+std::vector<RadialScanSection> generateSpotLight2DSections(
+	SpotLight2D& spotLight, 
+	std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes,
+	real_t radialSectionTolerance) {
+	Point2 spotLightLocation = spotLight.get_position();
+
+	std::sort(rays.begin(), rays.end(), 
+		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
+			return clockwiseAngle(spotLightLocation, getRay(lhs).direction) 
+				< clockwiseAngle(spotLightLocation, getRay(rhs).direction);
+		}
+	);
+
+	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
+		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
+			return (p2.y - p1.y) / (p2.x - p1.x);
+		};            
+
+		double slope1 = calculateSlope(r1.location, r2.location);
+		double slope2 = calculateSlope(r2.location, r3.location);
+		return std::abs(slope1 - slope2) > radialSectionTolerance;
+	};
+
+	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
 }

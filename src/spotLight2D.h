@@ -3,6 +3,11 @@
 //godotcpp
 #include <godot_cpp/classes/node2d.hpp>
 
+//own
+#include "ray2D.h"
+#include "section2D.h"
+#include "bvh2D.h"
+
 using namespace godot;
 
 class SpotLight2D : public Node2D {
@@ -30,3 +35,14 @@ public:
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool);
 };
+
+std::vector<RayVariant> shotSpotLight2D(
+	SpotLight2D& beamLight, 
+	const std::vector<Point2>& points, 
+	BVH2D& bvh, 
+	real_t radialRaySpread);
+std::vector<RadialScanSection> generateSpotLight2DSections(
+	SpotLight2D& beamLight, 
+	std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes,
+	real_t radialSectionTolerance); 

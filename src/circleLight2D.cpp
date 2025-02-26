@@ -1,10 +1,17 @@
 #include "circleLight2D.h"
 
+//std
+#include <algorithm>
+
 //godotcpp
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
 
 using namespace godot;
+
+//own
+#include "angle.h"
+
 
 void CircleLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ray_count"), &CircleLight2D::get_ray_count);
@@ -68,4 +75,64 @@ void CircleLight2D::_draw() {
 			}
 		}
 	}
+}
+
+std::vector<RayVariant> shotCircleLight2D(
+	CircleLight2D& circleLight, 
+	const std::vector<Point2>& points, 
+	BVH2D& bvh, 
+	real_t radialRaySpread) {
+	Point2 circleLightLocation = circleLight.get_position();
+	int64_t circleLightRayCount = circleLight.get_ray_count();
+
+
+	std::vector<RayVariant> rays;
+	auto testRay = [&](Ray2D ray) {
+		std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
+        if(rayHit.has_value()) {
+            rays.push_back(RayVariant(rayHit.value()));
+        } else {
+            rays.push_back(RayVariant(ray));
+        }
+	};
+
+	for(Point2 point : points) {
+		real_t distance = circleLightLocation.distance_to(point);
+		real_t arc = (radialRaySpread / distance) / circleLightRayCount;
+
+		for(std::size_t i = 0; i < circleLightRayCount; i++) {
+			real_t angle = circleLightLocation.angle_to_point(point) - (arc / 2);
+			angle += ((arc / circleLightRayCount) * i);
+			Point2 direction = Point2(cos(angle), sin(angle));
+			testRay(Ray2D{circleLightLocation, direction});
+		}
+	}
+
+	return rays;
+}
+
+std::vector<RadialScanSection> generateCircleLight2DSections(
+	CircleLight2D& circleLight, 
+	std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes,
+	real_t radialSectionTolerance) {
+	Point2 circleLightLocation = circleLight.get_position();
+	std::sort(rays.begin(), rays.end(), 
+		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
+			return clockwiseAngle(circleLightLocation, getRay(lhs).direction) 
+				< clockwiseAngle(circleLightLocation, getRay(rhs).direction);
+		}
+	);
+
+	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
+		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
+			return (p2.y - p1.y) / (p2.x - p1.x);
+		};            
+
+		double slope1 = calculateSlope(r1.location, r2.location);
+		double slope2 = calculateSlope(r2.location, r3.location);
+		return std::abs(slope1 - slope2) > radialSectionTolerance;
+	};
+
+	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
 }

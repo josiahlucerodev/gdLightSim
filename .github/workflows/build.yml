@@ -180,7 +180,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add --force ${{github.workspace}}/project/addons/lightSim/bin
+          git add --force ${{github.workspace}}/project/addons/lightSim/bin/
           ls ${{github.workspace}}/project/addons/lightSim/bin
           echo "status"
           git status
