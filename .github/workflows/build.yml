@@ -176,12 +176,22 @@ jobs:
           rm -rf ${{ github.workspace }}/${{ github.event.repository.name }}-binary-artifact
           rm -rf ${{ github.workspace }}/${{github.workspace}}/artifact
           ls ${{github.workspace}}/project/addons/lightSim/bin
-      - name: Commit and Push Changes
+      - name: Set up Git LFS
+        run: |
+          git lfs install
+      - name: Track binaries with Git LFS
+        run: |
+          git lfs track "${{github.workspace}}/project/addons/lightSim/bin/*"
+      - name: Commit and push binaries
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add --force ${{github.workspace}}/project/addons/lightSim/bin/
+          echo "binaries"
           ls ${{github.workspace}}/project/addons/lightSim/bin
+          touch ${{ github.workspace }}/project/addons/lightSim/bin/*
+          echo "diff"
+          git diff ${{ github.workspace }}/project/addons/lightSim/bin/
+          git add --force ${{github.workspace}}/project/addons/lightSim/bin/
           echo "status"
           git status
           git commit -m "[automatic] added platform-specific binaries"
