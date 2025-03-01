@@ -91,7 +91,7 @@ void SpotLight2D::_draw() {
 }
 
 std::vector<RayVariant> shotSpotLight2D(
-	SpotLight2D& spotLight, 
+	const SpotLight2D& spotLight, 
 	const std::vector<Point2>& points, 
 	BVH2D& bvh, 
 	real_t radialRaySpread) {
@@ -106,7 +106,7 @@ std::vector<RayVariant> shotSpotLight2D(
 	
 	auto testRay = [&](Point2 direction) {
 		Ray2D ray = Ray2D{spotLightLocation, direction};
-		std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
+		std::optional<RayHit2D> rayHit = shotRay(ray, {}, bvh);
         if(rayHit.has_value()) {
             rays.push_back(RayVariant(rayHit.value()));
         } else {
@@ -145,7 +145,7 @@ std::vector<RayVariant> shotSpotLight2D(
 }
 
 std::vector<RadialScanSection> generateSpotLight2DSections(
-	SpotLight2D& spotLight, 
+	const SpotLight2D& spotLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t radialSectionTolerance) {

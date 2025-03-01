@@ -78,7 +78,7 @@ void CircleLight2D::_draw() {
 }
 
 std::vector<RayVariant> shotCircleLight2D(
-	CircleLight2D& circleLight, 
+	const CircleLight2D& circleLight, 
 	const std::vector<Point2>& points, 
 	BVH2D& bvh, 
 	real_t radialRaySpread) {
@@ -88,7 +88,7 @@ std::vector<RayVariant> shotCircleLight2D(
 
 	std::vector<RayVariant> rays;
 	auto testRay = [&](Ray2D ray) {
-		std::optional<RayHit2D> rayHit = shotRay(ray, bvh);
+		std::optional<RayHit2D> rayHit = shotRay(ray, {}, bvh);
         if(rayHit.has_value()) {
             rays.push_back(RayVariant(rayHit.value()));
         } else {
@@ -112,7 +112,7 @@ std::vector<RayVariant> shotCircleLight2D(
 }
 
 std::vector<RadialScanSection> generateCircleLight2DSections(
-	CircleLight2D& circleLight, 
+	const CircleLight2D& circleLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t radialSectionTolerance) {
@@ -133,6 +133,11 @@ std::vector<RadialScanSection> generateCircleLight2DSections(
 		double slope2 = calculateSlope(r2.location, r3.location);
 		return std::abs(slope1 - slope2) > radialSectionTolerance;
 	};
+
+	if(!rays.empty()) {
+		RayVariant front = rays.front();
+		rays.push_back(front);
+	}
 
 	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
 }

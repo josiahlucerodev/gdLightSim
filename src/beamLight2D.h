@@ -39,12 +39,12 @@ public:
 };
 
 std::vector<RayVariant> shotBeamLight2D(
-	BeamLight2D& beamLight, 
+	const BeamLight2D& beamLight, 
 	const std::vector<Point2>& points, 
 	BVH2D& bvh, 
 	real_t linearRaySpread);
 std::vector<LinearScanSection> generateBeamLight2DSections(
-	BeamLight2D& beamLight, 
+	const BeamLight2D& beamLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t linearSectionTolerance); 

@@ -32,9 +32,6 @@ struct LinearScanSection {
 template<typename Section, typename Predicate>
 std::vector<Section> generateSectionsBase(const std::vector<Shape2D>& shapes,
     std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {
-    RayVariant front = rays.front();
-    rays.push_back(front);
-
     std::vector<Section> sections;
     size_t i = 0;
     while(i < rays.size()) {

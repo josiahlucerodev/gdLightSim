@@ -1,5 +1,8 @@
 #include "lightEnvironment2D.h"
 
+//std
+#include <deque>
+
 //godotcpp
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/print_string.hpp>
@@ -12,6 +15,7 @@
 #include "beamLight2D.h"
 #include "circleLight2D.h"
 #include "mirror2D.h"
+#include "angle.h"
 
 using namespace godot;
 
@@ -187,22 +191,17 @@ void LightEnvironment2D::_process(double delta) {
 
     for(Polygon2D* polygon : polygons) {
         Shape2D shape = constructShape2D(*polygon, shapes.size());
-        for(Point2& point : shape.points) {
-            points.push_back(point);
-        }
         shapes.push_back(shape);
     }
 
     for(Mirror2D* mirror : mirrors) {
         Shape2D shape = constructShape2D(*mirror, shapes.size());
-        for(Point2& point : shape.points) {
-            points.push_back(point);
-        }
         shapes.push_back(shape);
     }
 
-    constructBVH2D(bvh, shapes);
 
+    constructBVH2D(bvh, shapes);
+    points = getPoints(shapes);
 
     std::vector<SpotLight2D*> spotLights = getChildrenOfType<SpotLight2D>(*this, "SpotLight2D");
     for(SpotLight2D* spotLight : spotLights) {
@@ -229,17 +228,25 @@ void LightEnvironment2D::_process(double delta) {
     }
 
 
-    std::vector<LinearScanSection> linearMirrorSectionQueue;
-    for(LinearScanSection lss : linearScanSections) {
-        if(lss.type == SectionType::hit && shapes[lss.shapeId].type == Shape2DType::mirror) {
-            linearMirrorSectionQueue.push_back(lss);
-        }
-    }
+    std::deque<LinearScanSection> linearMirrorSectionQueue;
+    addLinearMirrorBounceSectionsToQueue(shapes, linearMirrorSectionQueue, 
+        linearScanSections, 100);
 
-    /*
-    while(!linearMirrorSectionQueue.empty()) {
-    }
-    */
+    std::size_t lssIndex = 0;
+    while(!linearMirrorSectionQueue.empty() && lssIndex < 1000) {
+        LinearScanSection linearMirrorSection = linearMirrorSectionQueue.front();
+        linearMirrorSectionQueue.pop_front();
+
+        std::vector<RayVariant> rays = shotMirrorBeam(linearMirrorSection, shapes, bvh,  linearRaySpread); 
+        allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+        std::vector<LinearScanSection> sections = generateMirrorBeamSections(linearMirrorSection, rays, shapes, linearSectionTolerance);
+        linearScanSections.insert(linearScanSections.end(), sections.begin(), sections.end());
+        
+	    const Shape2D& mirrorShape = shapes[linearMirrorSection.shapeId];
+        addLinearMirrorBounceSectionsToQueue(shapes, linearMirrorSectionQueue, sections, mirrorShape.maxBounce);
+
+        lssIndex++;
+	}
 
     queue_redraw();
 }

@@ -1,4 +1,5 @@
 #include "ray2D.h"
+#include "angle.h"
 
 bool isRayIntersectsAABB(const Ray2D& ray, const AABB2D& aabb) {
     if (ray.origin.x >= aabb.min.x && ray.origin.x <= aabb.max.x &&
@@ -60,7 +61,7 @@ std::optional<RayHit2D> rayLineHit(std::size_t shapeId, const Ray2D& ray, const 
     Vector2 lineDir = lineEnd - lineStart;
     Vector2 normal = {-lineDir.y, lineDir.x};  
     normal.normalize();
-    real_t angle = ray.direction.angle_to(normal);
+    real_t angle = clockwiseAngle(ray.direction);
 
     return RayHit2D{shapeId, angle, ray, intersection};
 }

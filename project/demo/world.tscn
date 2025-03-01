@@ -12,14 +12,30 @@ displayRadialScanSections = true
 displayLinearScanSections = true
 radialRaySpread = 20.0
 radialSectionTolerance = 0.1
-linearRaySpread = 20.0
+linearRaySpread = 6.95
 linearSectionTolerance = 0.1
 
+[node name="Mirror2D2" type="Mirror2D" parent="LightEnvironment2D"]
+mirror_width = 351.0
+position = Vector2(5445, 2692)
+rotation = -0.785398
+
+[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D"]
+mirror_width = 351.0
+position = Vector2(5378, 1877)
+rotation = 0.785398
+
+[node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
+light_width = 676.0
+position = Vector2(8275, 1370)
+rotation = -3.13287
+
 [node name="Polygon2D" type="Polygon2D" parent="LightEnvironment2D"]
-position = Vector2(-9326, -55)
+position = Vector2(6409, 1991)
 polygon = PackedVector2Array(333, 38, 825, 36, 832, 303, 645, 667, 343, 306)
 
 [node name="test" type="Node2D" parent="LightEnvironment2D"]
+visible = false
 
 [node name="CircleLight2D" type="CircleLight2D" parent="LightEnvironment2D/test"]
 visible = false
@@ -29,17 +45,6 @@ position = Vector2(-8201, 3573)
 arc = 74.67
 visible = false
 position = Vector2(-4734, -1293)
-
-[node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D/test"]
-light_width = 676.0
-position = Vector2(6536, 1218)
-rotation = 3.15032
-
-[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/test/BeamLight2D"]
-mirror_width = 100.0
-draw_debug = true
-position = Vector2(3775.31, -209.956)
-rotation = 3.13287
 
 [node name="Polygon2D2" type="Polygon2D" parent="LightEnvironment2D/test"]
 position = Vector2(-52, -784)

@@ -36,12 +36,13 @@ BVH2D::Node* constructBVH2DRecursiveHelper(BVH2D& bvh, ArrayView<Shape2D> shapes
     return &node;
 }
 
-void constructBVH2D(BVH2D& bvh, std::vector<Shape2D>& shapes) {
-    std::sort(shapes.begin(), shapes.end(), 
+void constructBVH2D(BVH2D& bvh, const std::vector<Shape2D>& shapes) {
+    std::vector<Shape2D> sortedShapes = shapes;
+    std::sort(sortedShapes.begin(), sortedShapes.end(), 
         [](Shape2D lhs, Shape2D rhs) -> bool { return lhs.midPoint < rhs.midPoint; }
     );
-    bvh.shapes = shapes;
-    bvh.root = constructBVH2DRecursiveHelper(bvh, ArrayView<Shape2D>{bvh.shapes.data(), bvh.shapes.size()});
+    bvh.sortedShapes = sortedShapes;
+    bvh.root = constructBVH2DRecursiveHelper(bvh, ArrayView<Shape2D>{bvh.sortedShapes.data(), bvh.sortedShapes.size()});
 }
 
 void resetBVH2D(BVH2D& bvh) {
@@ -49,11 +50,11 @@ void resetBVH2D(BVH2D& bvh) {
         return;
     }
     bvh.root = nullptr;
-    bvh.shapes.clear();
+    bvh.sortedShapes.clear();
     bvh.nodePool.clear();
 }
 
-std::optional<RayHit2D> shotRayBVH2DNode(const Ray2D& ray, const BVH2D::Node* node) {
+std::optional<RayHit2D> shotRayBVH2DNode(const Ray2D& ray, const std::optional<ShapeId>& shapeOriginId, const BVH2D::Node* node) {
     if(node == nullptr) {
         return {};
     }
@@ -80,7 +81,8 @@ std::optional<RayHit2D> shotRayBVH2DNode(const Ray2D& ray, const BVH2D::Node* no
         if(shape.points.size() < 2) {
             continue;
         }
-        if(!isRayIntersectsAABB(ray, shape.aabb)) {
+        if(!isRayIntersectsAABB(ray, shape.aabb) 
+            || (shapeOriginId.has_value() && shapeOriginId.value() == shape.shapeId)) {
             continue;
         }
 
@@ -99,14 +101,14 @@ std::optional<RayHit2D> shotRayBVH2DNode(const Ray2D& ray, const BVH2D::Node* no
     }
 
     if(node->b1) {
-        checkClosesHit(shotRayBVH2DNode(ray, node->b1));
+        checkClosesHit(shotRayBVH2DNode(ray, shapeOriginId, node->b1));
     }
     if(node->b1) {
-        checkClosesHit(shotRayBVH2DNode(ray, node->b2));
+        checkClosesHit(shotRayBVH2DNode(ray, shapeOriginId, node->b2));
     }
     return rayHit;
 }  
 
-std::optional<RayHit2D> shotRay(const Ray2D& ray, const BVH2D& bvh) {
-    return shotRayBVH2DNode(ray, bvh.root);
+std::optional<RayHit2D> shotRay(const Ray2D& ray, const std::optional<ShapeId>& shapeOriginId, const BVH2D& bvh) {
+    return shotRayBVH2DNode(ray, shapeOriginId, bvh.root);
 }  

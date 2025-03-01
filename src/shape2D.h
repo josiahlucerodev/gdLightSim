@@ -8,7 +8,6 @@
 
 //own
 #include "aabb2D.h"
-#include "mirror2D.h"
 
 enum struct Shape2DType {
     unknown,
@@ -16,14 +15,19 @@ enum struct Shape2DType {
     mirror
 };
 
+using ShapeId = std::size_t;
+
 struct Shape2D {
     Shape2DType type;
-    std::size_t shapeId;
+    ShapeId shapeId;
+    std::size_t maxBounce;
+    std::size_t rayCount;
     Point2 midPoint;
     AABB2D aabb;
     std::vector<Point2> points;
 };
 
 
-Shape2D constructShape2D(Polygon2D& polygon, std::size_t shapeId);
-Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId);
+Shape2D constructShape2D(Polygon2D& polygon, ShapeId shapeId);
+std::vector<Point2> getPoints(const std::vector<Shape2D>& shapes);
+std::vector<Point2> getPointsExcluding(ShapeId excludeId, const std::vector<Shape2D>& shapes);

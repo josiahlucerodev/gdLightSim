@@ -32,12 +32,12 @@ public:
 };
 
 std::vector<RayVariant> shotCircleLight2D(
-	CircleLight2D& beamLight, 
+	const CircleLight2D& beamLight, 
 	const std::vector<Point2>& points, 
 	BVH2D& bvh, 
 	real_t radialRaySpread);
 std::vector<RadialScanSection> generateCircleLight2DSections(
-	CircleLight2D& beamLight, 
+	const CircleLight2D& beamLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t radialSectionTolerance); 

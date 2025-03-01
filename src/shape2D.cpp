@@ -9,7 +9,10 @@ Shape2D constructShape2D(Polygon2D& polygon, std::size_t shapeId) {
     Shape2D shape;
     shape.type = Shape2DType::wall;
     shape.shapeId = shapeId;
+    shape.maxBounce = 0;
+    shape.rayCount = 0;
     shape.points.reserve(polygonPoints.size());
+
     Point2 point = polygon.get_transform().get_origin() + polygonPoints[0];
     shape.midPoint = Point2(0, 0);
     shape.aabb = AABB2D{
@@ -28,26 +31,19 @@ Shape2D constructShape2D(Polygon2D& polygon, std::size_t shapeId) {
     return shape;
 }
 
-Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
-    Shape2D shape;
-    shape.type = Shape2DType::mirror;
-    shape.shapeId = shapeId;
-    
-    real_t mirrorWidth = mirror.get_mirror_width();
-    Vector2 position = mirror.get_transform().get_origin();
-    Point2 rightPoint = position + (Point2(0, -1) * mirrorWidth);
-    Point2 leftPoint = position + (Point2(0, 1) * mirrorWidth);
-    
-    shape.aabb = AABB2D{
-        Point2{rightPoint.x, rightPoint.y},
-        Point2{rightPoint.x, rightPoint.y}
-    };
-    shape.aabb = updateAABB(shape.aabb, {Point2(leftPoint.x, leftPoint.y), Point2(leftPoint.x, leftPoint.y)});
-    
-    shape.midPoint = (leftPoint + rightPoint) / 2;
-    shape.points.reserve(2);
-    shape.points.push_back(rightPoint);
-    shape.points.push_back(leftPoint);
-
-    return shape;
+std::vector<Point2> getPoints(const std::vector<Shape2D>& shapes){
+    std::vector<Point2> points;
+    for(Shape2D shape : shapes) {
+        points.insert(points.end(), shape.points.begin(),  shape.points.end());
+    }
+    return points;
+}
+std::vector<Point2> getPointsExcluding(ShapeId excludeId, const std::vector<Shape2D>& shapes) {
+    std::vector<Point2> points;
+    for(Shape2D shape : shapes) {
+        if(shape.shapeId != excludeId) {
+            points.insert(points.end(), shape.points.begin(),  shape.points.end());
+        }
+    }
+    return points;
 }

@@ -37,12 +37,12 @@ public:
 };
 
 std::vector<RayVariant> shotSpotLight2D(
-	SpotLight2D& beamLight, 
+	const SpotLight2D& beamLight, 
 	const std::vector<Point2>& points, 
 	BVH2D& bvh, 
 	real_t radialRaySpread);
 std::vector<RadialScanSection> generateSpotLight2DSections(
-	SpotLight2D& beamLight, 
+	const SpotLight2D& beamLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t radialSectionTolerance); 
