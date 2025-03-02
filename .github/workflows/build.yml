@@ -166,6 +166,13 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-binary-artifact
           path: ${{github.workspace}}/artifact
+      - name: Setup git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      - name: Remove old binary files
+        run: |
+          git rm -r --cached ${{github.workspace}}/project/addons/lightSim/bin
       - name: Move binary artifact content to project
         run: |
           mv ${{github.workspace}}/artifact/${{ github.event.repository.name }}-* ${{ github.workspace }}/${{ github.event.repository.name }}-binary-artifact
@@ -184,8 +191,6 @@ jobs:
           git lfs track "${{github.workspace}}/project/addons/lightSim/bin/*"
       - name: Commit and push binaries
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
           echo "binaries"
           ls ${{github.workspace}}/project/addons/lightSim/bin
           touch ${{ github.workspace }}/project/addons/lightSim/bin/*

@@ -11,6 +11,7 @@ using namespace godot;
 
 //own
 #include "angle.h"
+#include "settings.h"
 
 
 void CircleLight2D::_bind_methods() {
@@ -54,14 +55,10 @@ void CircleLight2D::_process(double delta) {
 
 void CircleLight2D::_draw() {
 	if(drawDebug) {
-		Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 5;
-		real_t distance = 10000;
-		draw_circle(Point2(0, 0), 30, color, true);
+		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightColor);
 		
-		std::size_t numOfDisSegments = 50;
-		for(std::size_t i = 0; i < numOfDisSegments; i++) {
-			real_t localDistance = (distance / numOfDisSegments) * i;
+		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
 			std::size_t numOfSegments = 6 * (i + 2) / 2;
 			
 			for(std::size_t j = 0; j < numOfSegments; j++) {
@@ -71,7 +68,7 @@ void CircleLight2D::_draw() {
 				draw_line(
 					Point2{cos(localAngle), sin(localAngle)} * localDistance,
 					Point2{cos(localAngle + segmentSpreadAngle), sin(localAngle + segmentSpreadAngle)} * localDistance,
-					color, lineWidth);
+					Settings::debugLightColor, Settings::debugLineWidth);
 			}
 		}
 	}

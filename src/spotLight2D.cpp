@@ -11,6 +11,7 @@ using namespace godot;
 
 //own
 #include "angle.h"
+#include "settings.h"
 
 void SpotLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_arc"), &SpotLight2D::get_arc);
@@ -65,16 +66,15 @@ void SpotLight2D::_draw() {
 	if(drawDebug) {
 		real_t arcRad = Math::deg_to_rad(arc);
 		real_t angle = get_rotation() - (arcRad / 2);
-		Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 5;
-		real_t distance = 10000;
-		draw_line(Point2(0, 0), Point2{cos(angle), sin(angle)} * distance, color, lineWidth);
-		draw_line(Point2(0, 0), Point2{cos(angle + arcRad), sin(angle + arcRad)} * distance, color, lineWidth);
-		draw_circle(Point2(0, 0), 30, color, true);
+		draw_line(Point2(0, 0), Point2{cos(angle), sin(angle)} * Settings::debugDistance, 
+			Settings::debugLightColor, Settings::debugLineWidth);
+		draw_line(Point2(0, 0), Point2{cos(angle + arcRad), sin(angle + arcRad)} * Settings::debugDistance, 
+			Settings::debugLightColor, Settings::debugLineWidth);
+		draw_circle(Point2(0, 0), Settings::pointRadius, 
+			Settings::debugLightColor);
 		
-		std::size_t numOfDisSegments = 50;
-		for(std::size_t i = 0; i < numOfDisSegments; i++) {
-			real_t localDistance = (distance / numOfDisSegments) * i;
+		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
 			std::size_t numOfSegments = 6 * (i + 2) / 2;
 			
 			for(std::size_t j = 0; j < numOfSegments; j++) {
@@ -84,7 +84,7 @@ void SpotLight2D::_draw() {
 				draw_line(
 					Point2{cos(localAngle), sin(localAngle)} * localDistance,
 					Point2{cos(localAngle + segmentSpreadAngle), sin(localAngle + segmentSpreadAngle)} * localDistance,
-					color, lineWidth);
+					Settings::debugLightColor, Settings::debugLineWidth);
 			}
 		}
 	}

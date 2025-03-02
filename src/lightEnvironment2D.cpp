@@ -9,6 +9,10 @@
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/classes/polygon2d.hpp>
 #include <godot_cpp/core/math.hpp>
+#include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/mesh_instance2d.hpp>
+#include <godot_cpp/classes/packed_data_container.hpp>
+
 
 //own
 #include "spotLight2D.h"
@@ -16,6 +20,7 @@
 #include "circleLight2D.h"
 #include "mirror2D.h"
 #include "angle.h"
+#include "settings.h"
 
 using namespace godot;
 
@@ -34,6 +39,8 @@ void LightEnvironment2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_display_radial_scan_sections", "display_rss"), &LightEnvironment2D::set_display_radial_scan_sections);
     ClassDB::bind_method(D_METHOD("get_display_linear_scan_sections"), &LightEnvironment2D::get_display_linear_scan_sections);
 	ClassDB::bind_method(D_METHOD("set_display_linear_scan_sections", "display_lss"), &LightEnvironment2D::set_display_linear_scan_sections);
+    ClassDB::bind_method(D_METHOD("get_display_filled_light"), &LightEnvironment2D::get_display_filled_light);
+	ClassDB::bind_method(D_METHOD("set_display_filled_light", "display_filled_light"), &LightEnvironment2D::set_display_filled_light);
 
     ClassDB::bind_method(D_METHOD("get_radial_ray_spread"), &LightEnvironment2D::get_radial_ray_spread);
 	ClassDB::bind_method(D_METHOD("set_radial_ray_spread", "radial_ray_spread"), &LightEnvironment2D::set_radial_ray_spread);
@@ -51,6 +58,7 @@ void LightEnvironment2D::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRays"), "set_display_rays", "get_display_rays");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRadialScanSections"), "set_display_radial_scan_sections", "get_display_radial_scan_sections");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayLinearScanSections"), "set_display_linear_scan_sections", "get_display_linear_scan_sections");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayFilledLight"), "set_display_filled_light", "get_display_filled_light");
 
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_radial_ray_spread", "get_radial_ray_spread");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_radial_section_tolerance", "get_radial_section_tolerance");
@@ -103,6 +111,12 @@ bool LightEnvironment2D::get_display_linear_scan_sections() const {
 void LightEnvironment2D::set_display_linear_scan_sections(const bool displayLinearScanSections) {
     this->displayLinearScanSections = displayLinearScanSections;
 }
+bool LightEnvironment2D::get_display_filled_light() const {
+    return displayFilledLight;
+}
+void LightEnvironment2D::set_display_filled_light(const bool displayFilledLight) {
+    this->displayFilledLight = displayFilledLight;
+}
 
 double LightEnvironment2D::get_radial_ray_spread() const {
     return radialRaySpread;
@@ -146,6 +160,13 @@ void LightEnvironment2D::_ready() {
     points.clear();
     radialScanSections.clear();
     resetBVH2D(bvh);
+
+    lightArrayMesh.instantiate();
+    set_mesh(lightArrayMesh);
+    //env.lightArrayMesh;
+    //lightMeshInstance = new MeshInstance2D::;
+    //lightMeshInstance->set_mesh(lightArrayMesh); 
+    //add_child(lightMeshInstance.ptr());
 }
 
 template<typename Type>
@@ -198,7 +219,6 @@ void LightEnvironment2D::_process(double delta) {
         Shape2D shape = constructShape2D(*mirror, shapes.size());
         shapes.push_back(shape);
     }
-
 
     constructBVH2D(bvh, shapes);
     points = getPoints(shapes);
@@ -256,16 +276,16 @@ Rect2 createRect(AABB2D& aabb) {
 }
 
 void drawOneAABB(LightEnvironment2D& env, AABB2D aabb, Color color) {
-    env.draw_rect(createRect(aabb), color, false);
-    env.draw_circle(aabb.min, 10, color, true);
-    env.draw_circle(aabb.max, 10, color, true);
+    env.draw_rect(createRect(aabb), color, false, Settings::debugLineWidth);
+    env.draw_circle(aabb.min, Settings::pointRadius, color);
+    env.draw_circle(aabb.max, Settings::pointRadius, color);
 } 
 
 void drawBVH2DNode(LightEnvironment2D& env, BVH2D::Node* node) {
     if(node == nullptr) {
         return;
     }
-    drawOneAABB(env, node->aabb, Color(1.0, 1.0, 1.0));
+    drawOneAABB(env, node->aabb, Settings::bvhColor);
     drawBVH2DNode(env, node->b1);
     drawBVH2DNode(env, node->b2);
 }
@@ -277,7 +297,7 @@ void drawBVH2DNodeMidpoints(LightEnvironment2D& env, BVH2D::Node* node) {
     if(node == nullptr) {
         return;
     }
-    env.draw_circle(node->midPoint, 10, Color(1.0, 1.0, 0.0), true);
+    env.draw_circle(node->midPoint, Settings::pointRadius, Settings::midPointColor);
     drawBVH2DNodeMidpoints(env, node->b1);
     drawBVH2DNodeMidpoints(env, node->b2);
 }
@@ -286,14 +306,98 @@ void drawBVH2DMidpoints(LightEnvironment2D& env) {
 }
 
 void drawRayMiss(LightEnvironment2D& env, const Ray2D& ray) {
-    env.draw_line(ray.origin, ray.origin + (ray.direction * 10000), Color(1.0, 0.0, 0.0));
+    env.draw_line(ray.origin, ray.origin + (ray.direction * Settings::debugDistance), Settings::rayMissColor, Settings::debugLineWidth);
 }
 
 void drawRayHit(LightEnvironment2D& env, const RayHit2D& rayHit) {
-    env.draw_line(rayHit.ray.origin, rayHit.location, Color(0.0, 1.0, 0.0));
-    env.draw_circle(rayHit.location, 10, Color(0.0, 1.0, 0.0), true);
+    env.draw_line(rayHit.ray.origin, rayHit.location, Settings::rayHitColor, Settings::debugLineWidth);
+    env.draw_circle(rayHit.location, Settings::pointRadius, Settings::rayHitColor);
 }
 
+void generateQuad(PackedVector3Array& vertices, PackedVector2Array& uvs,
+    const Point2 p1, const Point2 p2,
+    const Point2 p3, const Point2 p4) {
+
+    vertices.push_back(Vector3(p1.x, p1.y, 0)); //p1
+    vertices.push_back(Vector3(p2.x, p2.y, 0)); //p2
+    vertices.push_back(Vector3(p3.x, p3.y, 0)); //p3
+
+    vertices.push_back(Vector3(p1.x, p1.y, 0)); //p1
+    vertices.push_back(Vector3(p3.x, p3.y, 0)); //p3
+    vertices.push_back(Vector3(p4.x, p4.y, 0)); //p4
+
+    uvs.push_back(Vector2(0, 0)); //p1
+    uvs.push_back(Vector2(1, 0)); //p2
+    uvs.push_back(Vector2(1, 1)); //p3
+
+    uvs.push_back(Vector2(0, 0)); //p1
+    uvs.push_back(Vector2(1, 1)); //p3
+    uvs.push_back(Vector2(0, 1)); //p4
+}
+void generateEmptyLightMesh(LightEnvironment2D& env) {
+    env.lightArrayMesh->reset_state();
+    env.set_mesh(nullptr);
+}
+void generateLightMesh(LightEnvironment2D& env) {
+    PackedVector3Array vertices;
+    PackedVector2Array uvs;
+
+    for(const RadialScanSection& section : env.radialScanSections) {
+        switch (section.type) {
+        case SectionType::hit: {
+            const RayHit2D& startHit = std::get<1>(section.startRay);    
+            const RayHit2D& endHit = std::get<1>(section.endRay);    
+            break;
+        }
+        case SectionType::miss: {
+            const Ray2D& startRay = std::get<0>(section.startRay);    
+            const Ray2D& endRay = std::get<0>(section.endRay); 
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    for(const LinearScanSection& section : env.linearScanSections) {
+        switch (section.type) {
+        case SectionType::hit: {
+            const RayHit2D& startHit = std::get<1>(section.startRay);    
+            const RayHit2D& endHit = std::get<1>(section.endRay);    
+            generateQuad(vertices, uvs,
+                startHit.ray.origin, startHit.location, 
+                endHit.location, endHit.ray.origin);
+            break;
+        }
+        case SectionType::miss: {
+            const Ray2D& startRay = std::get<0>(section.startRay);    
+            const Ray2D& endRay = std::get<0>(section.endRay);    
+
+            Point2 startDis = startRay.origin + (startRay.direction * Settings::debugDistance);
+            Point2 endDis = endRay.origin + (endRay.direction * Settings::debugDistance);
+
+            generateQuad(vertices, uvs,
+                startRay.origin, startDis, 
+                endDis, endRay.origin);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    Array surfaceArrays;
+    surfaceArrays.resize(ArrayMesh::ARRAY_MAX);
+    surfaceArrays[ArrayMesh::ARRAY_VERTEX] = vertices;
+    surfaceArrays[ArrayMesh::ARRAY_TEX_UV] = uvs;
+    
+    env.lightArrayMesh->reset_state();
+    env.lightArrayMesh->add_surface_from_arrays(
+        Mesh::PrimitiveType::PRIMITIVE_TRIANGLES,
+        surfaceArrays
+    );
+    env.set_mesh(env.lightArrayMesh);
+}
 
 void LightEnvironment2D::_draw() {
     if(displayBVH2D) {
@@ -301,17 +405,17 @@ void LightEnvironment2D::_draw() {
     }
     if(displayAABB) {
         for(Shape2D& shape : shapes) {
-            drawOneAABB(*this, shape.aabb, Color(1.0, 0.0, 0.0));
+            drawOneAABB(*this, shape.aabb, Settings::aabbColor);
         }
     }
     if(displayPoints) {
         for(Point2 point : points) {
-            draw_circle(point, 10, Color(0.0, 1.0, 1.0), true);
+            draw_circle(point, Settings::pointRadius, Settings::shapePointColor);
         }
     }
     if(displayMidpoints) {
         for(Shape2D& shape : shapes) {
-            draw_circle(shape.midPoint, 10, Color(1.0, 1.0, 0.0), true);
+            draw_circle(shape.midPoint, Settings::pointRadius, Settings::midPointColor);
         }
         drawBVH2DMidpoints(*this);
     }
@@ -333,7 +437,7 @@ void LightEnvironment2D::_draw() {
                 
                 drawRayHit(*this, startHit); 
                 drawRayHit(*this, endHit); 
-                draw_line(startHit.location, endHit.location, Color(0.0, 1.0, 0.0));
+                draw_line(startHit.location, endHit.location, Settings::rayHitColor);
                 break;
             }
             case SectionType::miss: {
@@ -361,7 +465,7 @@ void LightEnvironment2D::_draw() {
                 drawRayHit(*this, endHit); 
 
                 
-                draw_line(startHit.location, endHit.location, Color(0.0, 1.0, 0.0));
+                draw_line(startHit.location, endHit.location, Settings::rayHitColor);
                 break;
             }
             case SectionType::miss: {
@@ -370,10 +474,12 @@ void LightEnvironment2D::_draw() {
                 
                 drawRayMiss(*this, startRay); 
                 drawRayMiss(*this, endRay); 
-                for(std::size_t i = 0; i < 10000 / 20; i++) {
-                    draw_line((startRay.direction * (100 * i)) + startRay.origin, 
-                        (endRay.direction * (100 * i)) + endRay.origin, 
-                        Color(1.0, 0.0, 0.0));   
+                for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
+                    real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
+                    draw_line(
+                        (startRay.direction * localDistance) + startRay.origin, 
+                        (endRay.direction * localDistance) + endRay.origin, 
+                        Settings::rayMissColor);   
                 }
                 break;
             }
@@ -381,5 +487,11 @@ void LightEnvironment2D::_draw() {
                 break;
             }
         }
+    }
+    
+    if(displayFilledLight) {
+        generateLightMesh(*this);
+    } else {
+        generateEmptyLightMesh(*this);
     }
 }

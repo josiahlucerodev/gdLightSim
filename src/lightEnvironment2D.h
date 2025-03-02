@@ -1,14 +1,15 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
-
 //std
 #include <optional>
 #include <variant>
 #include <algorithm>
 #include <vector>
+
+//godotcpp
+#include <godot_cpp/classes/node2d.hpp>
+#include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/mesh_instance2d.hpp>
 
 //own
 #include "batchPool.h"
@@ -20,8 +21,8 @@
 
 using namespace godot;
 
-class LightEnvironment2D : public Node2D {
-	GDCLASS(LightEnvironment2D, Node2D);
+class LightEnvironment2D : public MeshInstance2D {
+	GDCLASS(LightEnvironment2D, MeshInstance2D);
 protected:
 	static void _bind_methods();
 	bool displayBVH2D;
@@ -31,6 +32,7 @@ protected:
     bool displayRays;
     bool displayRadialScanSections;
     bool displayLinearScanSections;
+    bool displayFilledLight;
     double radialRaySpread;
     double radialSectionTolerance;
     double linearRaySpread;
@@ -42,6 +44,7 @@ public:
     std::vector<RayVariant> allShotRays;
     std::vector<RadialScanSection> radialScanSections;
     std::vector<LinearScanSection> linearScanSections;
+    Ref<ArrayMesh> lightArrayMesh;
 public:
 
     LightEnvironment2D();
@@ -66,7 +69,8 @@ public:
 	void set_display_radial_scan_sections(const bool);
     bool get_display_linear_scan_sections() const;
 	void set_display_linear_scan_sections(const bool);
-
+    bool get_display_filled_light() const;
+	void set_display_filled_light(const bool);
     double get_radial_ray_spread() const;
 	void set_radial_ray_spread(const double);
     double get_radial_section_tolerance() const;

@@ -7,6 +7,9 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
 
+//own
+#include "settings.h"
+
 using namespace godot;
 
 void BeamLight2D::_bind_methods() {
@@ -60,25 +63,20 @@ void BeamLight2D::_process(double delta) {
 
 void BeamLight2D::_draw() {
     if(drawDebug) {
-        Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 5;
-		size_t distance = 10000;
-        real_t r = get_rotation();
-	
+        real_t r = get_rotation();	
         real_t piOver2 = Math_PI / 2;
         Point2 rightOffset = Point2(0, -1) * lightWidth;
         Point2 leftOffset = Point2(0, 1) * lightWidth;
 
-        draw_line(rightOffset, rightOffset + Vector2(distance, 0)
-            ,color, lineWidth);
-        draw_line(leftOffset, leftOffset + Vector2(distance, 0)
-            ,color, lineWidth);
+        draw_line(rightOffset, rightOffset + Vector2(Settings::debugDistance, 0)
+            ,Settings::debugLightColor, Settings::debugLineWidth);
+        draw_line(leftOffset, leftOffset + Vector2(Settings::debugDistance, 0)
+            ,Settings::debugLightColor, Settings::debugLineWidth);
 
-        size_t distanceBetweenSections = 100;
-        for(size_t i = 0; i < (distance / distanceBetweenSections); i++) {
-            size_t segmentDistance = (distanceBetweenSections * i);
-            draw_line(leftOffset + Vector2(segmentDistance, 0), rightOffset + Vector2(segmentDistance, 0)
-                ,color, lineWidth);
+        for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
+            draw_line(leftOffset + Vector2(localDistance, 0), rightOffset + Vector2(localDistance, 0)
+                , Settings::debugLightColor, Settings::debugLineWidth);
         }
     }
 }
