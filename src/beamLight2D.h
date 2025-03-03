@@ -17,7 +17,6 @@ class BeamLight2D : public Node2D {
 	GDCLASS(BeamLight2D, Node2D);
 private:
     double lightWidth;
-	int64_t rayCount;
 	bool drawDebug;
 protected:
 	static void _bind_methods();
@@ -32,8 +31,6 @@ public:
 
 	double get_light_width() const;
 	void set_light_width(const double);
-	int64_t get_ray_count() const;
-	void set_ray_count(const int64_t);
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool);
 };

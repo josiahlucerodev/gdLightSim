@@ -1,2 +1,5 @@
+#Binary Folder
+project/addons/lightSim/bin* binary diff=bin merge=bin merge=bin
+
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf

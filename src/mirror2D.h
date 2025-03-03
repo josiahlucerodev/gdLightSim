@@ -19,7 +19,6 @@ class Mirror2D : public Node2D {
 	GDCLASS(Mirror2D, Node2D);
 private:
     double mirrorWidth;
-    int64_t rayCount;
 	int64_t maxBounce;
 	bool drawDebug;
 protected:
@@ -34,8 +33,6 @@ public:
 
     double get_mirror_width() const;
 	void set_mirror_width(const double);
-	int64_t get_ray_count() const;
-	void set_ray_count(const int64_t);
 	int64_t get_max_bounce() const;
 	void set_max_bounce(const int64_t);
 	bool get_draw_debug() const;

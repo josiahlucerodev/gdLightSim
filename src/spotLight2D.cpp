@@ -16,12 +16,9 @@ using namespace godot;
 void SpotLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_arc"), &SpotLight2D::get_arc);
 	ClassDB::bind_method(D_METHOD("set_arc", "arc"), &SpotLight2D::set_arc);
-	ClassDB::bind_method(D_METHOD("get_ray_count"), &SpotLight2D::get_ray_count);
-	ClassDB::bind_method(D_METHOD("set_ray_count", "ray_count"), &SpotLight2D::set_ray_count);
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &SpotLight2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &SpotLight2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "arc", PROPERTY_HINT_RANGE, "1,180,0.01"), "set_arc", "get_arc");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "ray_count", PROPERTY_HINT_RANGE, "3,10000, 1"), "set_ray_count", "get_ray_count");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 }
 
@@ -31,13 +28,6 @@ double SpotLight2D::get_arc() const {
 void SpotLight2D::set_arc(const double arc) {
 	this->arc = arc;
 }
-int64_t SpotLight2D::get_ray_count() const {
-	return rayCount;
-}
-void SpotLight2D::set_ray_count(const int64_t rayCount) {
-	this->rayCount = rayCount;
-}
-
 bool SpotLight2D::get_draw_debug() const {
 	return drawDebug;
 }
@@ -47,7 +37,6 @@ void SpotLight2D::set_draw_debug(const bool drawDebug) {
 
 SpotLight2D::SpotLight2D() {
 	arc = 30;
-	rayCount = 3;
 	drawDebug = false;
 }
 
@@ -74,7 +63,7 @@ void SpotLight2D::_draw() {
 			Settings::debugLightColor);
 		
 		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
-			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
 			std::size_t numOfSegments = 6 * (i + 2) / 2;
 			
 			for(std::size_t j = 0; j < numOfSegments; j++) {
@@ -98,8 +87,7 @@ std::vector<RayVariant> shotSpotLight2D(
 	real_t spotLightAngle = spotLight.get_rotation();
 	Point2 spotLightLocation = spotLight.get_position();
 	real_t spotLightArc = Math::deg_to_rad(spotLight.get_arc());
-	int64_t spotLightRayCount = spotLight.get_ray_count();
-
+	
 	std::vector<Point2> pointsInSpotlightArc;
 	pointsInSpotlightArc.reserve(points.size());
 	std::vector<RayVariant> rays;
@@ -120,11 +108,19 @@ std::vector<RayVariant> shotSpotLight2D(
 		testRay(startRay);
 		Point2 endRay = Point2(cos(angle + spotLightArc), sin(angle + spotLightArc));
 		testRay(endRay);
+
+		/*
+		Point2 middleRay = Point2(cos(angle + (spotLightArc / 2)), sin(angle + (spotLightArc / 2)));
+		testRay(middleRay);
+		*/
 	}
 	
-	
+	Point2 spotLightDir = Point2{cos(spotLightAngle), sin(spotLightAngle)};
 	for(Point2 point : points) {
-		if(abs(spotLightLocation.angle_to_point(point)) <= spotLightArc / 2) {
+		real_t pointAngle = clockwiseAngle(spotLightLocation, point);
+		Point2 pointDir = Point2(cos(pointAngle), sin(pointAngle));
+
+		if(abs(spotLightDir.angle_to(pointDir)) < spotLightArc / 2) {
 			pointsInSpotlightArc.push_back(point);
 		}
 	}
@@ -132,11 +128,11 @@ std::vector<RayVariant> shotSpotLight2D(
 	for(size_t i = 0; i < pointsInSpotlightArc.size(); i++) {
 		Point2& point = pointsInSpotlightArc[i];
 		real_t distance = spotLightLocation.distance_to(point);
-		real_t arc = (radialRaySpread / distance) / spotLightRayCount;
+		real_t arc = (radialRaySpread / distance) / Settings::rayCount;
 
-		for(std::size_t i = 0; i < spotLightRayCount; i++) {
+		for(std::size_t i = 0; i < Settings::rayCount; i++) {
 			real_t angle = spotLightLocation.angle_to_point(point) - (arc / 2);
-			angle += ((arc / spotLightRayCount) * i);
+			angle += ((arc / Settings::rayCount) * i);
 			Point2 direction = Point2(cos(angle), sin(angle));
 			testRay(direction);
 		}
@@ -151,10 +147,12 @@ std::vector<RadialScanSection> generateSpotLight2DSections(
 	real_t radialSectionTolerance) {
 	Point2 spotLightLocation = spotLight.get_position();
 
+	real_t spotLightAngle = spotLight.get_rotation();
+	Point2 spotLightDir = Point2{cos(spotLightAngle), sin(spotLightAngle)};
 	std::sort(rays.begin(), rays.end(), 
 		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-			return clockwiseAngle(spotLightLocation, getRay(lhs).direction) 
-				< clockwiseAngle(spotLightLocation, getRay(rhs).direction);
+			return spotLightDir.angle_to(getRay(lhs).direction) 
+				< spotLightDir.angle_to(getRay(rhs).direction);
 		}
 	);
 

@@ -18,4 +18,6 @@ public:
     static inline const real_t debugLineWidth = 5;
     static inline const std::size_t debugDistance = 10000;
     static inline const std::size_t debugSegmentCount = 50;
+    static inline const std::size_t rayCount = 3;
+    static inline const real_t arcSegmentLimit = Math_PI / 3;
 };

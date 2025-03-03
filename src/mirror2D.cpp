@@ -9,20 +9,18 @@
 
 //own
 #include "angle.h"
+#include "settings.h"
 
 using namespace godot;
 
 void Mirror2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_mirror_width"), &Mirror2D::get_mirror_width);
 	ClassDB::bind_method(D_METHOD("set_mirror_width", "mirror_width"), &Mirror2D::set_mirror_width);
-	ClassDB::bind_method(D_METHOD("get_ray_count"), &Mirror2D::get_ray_count);
-	ClassDB::bind_method(D_METHOD("set_ray_count", "ray_count"), &Mirror2D::set_ray_count);
 	ClassDB::bind_method(D_METHOD("get_max_bounce"), &Mirror2D::get_max_bounce);
 	ClassDB::bind_method(D_METHOD("set_max_bounce", "max_bounce"), &Mirror2D::set_max_bounce);
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &Mirror2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &Mirror2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "mirror_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_mirror_width", "get_mirror_width");
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "ray_count", PROPERTY_HINT_RANGE, "3,10000, 1"), "set_ray_count", "get_ray_count");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_bounce", PROPERTY_HINT_RANGE, "0,1000, 1"), "set_max_bounce", "get_max_bounce");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 }
@@ -33,12 +31,6 @@ double Mirror2D::get_mirror_width() const {
 }
 void Mirror2D::set_mirror_width(const double mirrorWidth) {
 	this->mirrorWidth = mirrorWidth;
-}
-int64_t Mirror2D::get_ray_count() const {
-	return rayCount;
-}
-void Mirror2D::set_ray_count(const int64_t rayCount) {
-	this->rayCount = rayCount;
 }
 int64_t Mirror2D::get_max_bounce() const {
 	return maxBounce;
@@ -55,7 +47,6 @@ void Mirror2D::set_draw_debug(const bool drawDebug) {
 }
 
 Mirror2D::Mirror2D() {
-	rayCount = 3;
 	maxBounce = 10;
 	drawDebug = false;
 }
@@ -73,16 +64,13 @@ void Mirror2D::_process(double delta) {
 
 void Mirror2D::_draw() {
 	if(drawDebug) {
-		Color color = Color(1.0, 1.0, 0.0);
-		real_t lineWidth = 5;
-		real_t distance = 10000;
-		draw_circle(Point2(0, 0), 30, color, true);
+		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightColor, true);
 
-        Point2 rightOffset = Point2(0, -1) * mirrorWidth;
-        Point2 leftOffset = Point2(0, 1) * mirrorWidth;
+        Point2 rightOffset = Point2(0, -1) * (mirrorWidth / 2);
+        Point2 leftOffset = Point2(0, 1) * (mirrorWidth / 2);
 
         draw_line(leftOffset, rightOffset
-            ,color, lineWidth);
+			, Settings::debugLightColor, Settings::debugLineWidth);
 	}
 }
 
@@ -91,15 +79,14 @@ Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
     shape.type = Shape2DType::mirror;
     shape.shapeId = shapeId;
     shape.maxBounce = mirror.get_max_bounce();
-    shape.rayCount = mirror.get_ray_count();
     
     real_t mirrorWidth = mirror.get_mirror_width();
     Vector2 position = mirror.get_transform().get_origin();
 
     real_t rotation = mirror.get_transform().get_rotation() + (Math_PI / 2);
     Point2 dir = Point2{cos(rotation), sin(rotation)};
-    Point2 rightPoint = position + (dir * mirrorWidth);
-    Point2 leftPoint = position + ((dir * (-1)) * mirrorWidth);
+    Point2 rightPoint = position + (dir * (mirrorWidth / 2));
+    Point2 leftPoint = position + ((dir * (-1)) * (mirrorWidth / 2));
     
     shape.aabb = AABB2D{
         Point2{rightPoint.x, rightPoint.y},
@@ -146,7 +133,6 @@ std::vector<RayVariant> shotMirrorBeam(
 	Vector2 rayDir = Vector2{cos(rayAngle), sin(rayAngle)}; 
 	
 	const Shape2D& mirrorShape = shapes[mirrorHitLinearScanSection.shapeId];
-	std::size_t rayCount = mirrorShape.rayCount;
 	Vector2 unscaledRightPoint = (endRay.location - bounceMidLocation).normalized();
 	Vector2 unscaledLeftPoint = (startRay.location - bounceMidLocation).normalized();
 
@@ -178,8 +164,8 @@ std::vector<RayVariant> shotMirrorBeam(
 	for(size_t i = 0; i < beamPoints.size(); i++) {
 		Point2& beamPoint = beamPoints[i];
 
-		for(std::size_t i = 0; i < rayCount; i++) {
-			real_t offset = (linearRaySpread / -2) + ((linearRaySpread / rayCount) * i);
+		for(std::size_t i = 0; i < Settings::rayCount; i++) {
+			real_t offset = (linearRaySpread / -2) + ((linearRaySpread / Settings::rayCount) * i);
 			Vector2 spreadOrigin = beamPoint + Vector2{offset, offset};
 			testRay(Ray2D{spreadOrigin, rayDir});
 		}

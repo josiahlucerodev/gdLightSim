@@ -25,8 +25,6 @@ public:
 	void _process(double delta) override;
 	void _draw() override;
 
-	int64_t get_ray_count() const;
-	void set_ray_count(const int64_t);
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool);
 };

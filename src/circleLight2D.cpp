@@ -15,19 +15,9 @@ using namespace godot;
 
 
 void CircleLight2D::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("get_ray_count"), &CircleLight2D::get_ray_count);
-	ClassDB::bind_method(D_METHOD("set_ray_count", "ray_count"), &CircleLight2D::set_ray_count);
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &CircleLight2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &CircleLight2D::set_draw_debug);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "ray_count", PROPERTY_HINT_RANGE, "3,10000, 1"), "set_ray_count", "get_ray_count");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
-}
-
-int64_t CircleLight2D::get_ray_count() const {
-	return rayCount;
-}
-void CircleLight2D::set_ray_count(const int64_t rayCount) {
-	this->rayCount = rayCount;
 }
 
 bool CircleLight2D::get_draw_debug() const {
@@ -38,7 +28,6 @@ void CircleLight2D::set_draw_debug(const bool drawDebug) {
 }
 
 CircleLight2D::CircleLight2D() {
-	rayCount = 3;
 	drawDebug = false;
 }
 
@@ -58,7 +47,7 @@ void CircleLight2D::_draw() {
 		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightColor);
 		
 		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
-			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
 			std::size_t numOfSegments = 6 * (i + 2) / 2;
 			
 			for(std::size_t j = 0; j < numOfSegments; j++) {
@@ -80,8 +69,6 @@ std::vector<RayVariant> shotCircleLight2D(
 	BVH2D& bvh, 
 	real_t radialRaySpread) {
 	Point2 circleLightLocation = circleLight.get_position();
-	int64_t circleLightRayCount = circleLight.get_ray_count();
-
 
 	std::vector<RayVariant> rays;
 	auto testRay = [&](Ray2D ray) {
@@ -95,11 +82,11 @@ std::vector<RayVariant> shotCircleLight2D(
 
 	for(Point2 point : points) {
 		real_t distance = circleLightLocation.distance_to(point);
-		real_t arc = (radialRaySpread / distance) / circleLightRayCount;
+		real_t arc = (radialRaySpread / distance) / Settings::rayCount;
 
-		for(std::size_t i = 0; i < circleLightRayCount; i++) {
+		for(std::size_t i = 0; i < Settings::rayCount; i++) {
 			real_t angle = circleLightLocation.angle_to_point(point) - (arc / 2);
-			angle += ((arc / circleLightRayCount) * i);
+			angle += ((arc / Settings::rayCount) * i);
 			Point2 direction = Point2(cos(angle), sin(angle));
 			testRay(Ray2D{circleLightLocation, direction});
 		}

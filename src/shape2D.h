@@ -21,7 +21,6 @@ struct Shape2D {
     Shape2DType type;
     ShapeId shapeId;
     std::size_t maxBounce;
-    std::size_t rayCount;
     Point2 midPoint;
     AABB2D aabb;
     std::vector<Point2> points;

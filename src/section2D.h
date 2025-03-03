@@ -29,6 +29,8 @@ struct LinearScanSection {
     RayVariant endRay;
 };
 
+std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSection);
+
 template<typename Section, typename Predicate>
 std::vector<Section> generateSectionsBase(const std::vector<Shape2D>& shapes,
     std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {

@@ -15,12 +15,9 @@ using namespace godot;
 void BeamLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_light_width"), &BeamLight2D::get_light_width);
 	ClassDB::bind_method(D_METHOD("set_light_width", "light_width"), &BeamLight2D::set_light_width);
-	ClassDB::bind_method(D_METHOD("get_ray_count"), &BeamLight2D::get_ray_count);
-	ClassDB::bind_method(D_METHOD("set_ray_count", "ray_count"), &BeamLight2D::set_ray_count);
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &BeamLight2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &BeamLight2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "light_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_light_width", "get_light_width");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "ray_count", PROPERTY_HINT_RANGE, "3,10000, 1"), "set_ray_count", "get_ray_count");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 }
 
@@ -29,12 +26,6 @@ double BeamLight2D::get_light_width() const {
 }
 void BeamLight2D::set_light_width(const double lightWidth) {
 	this->lightWidth = lightWidth;
-}
-int64_t BeamLight2D::get_ray_count() const {
-	return rayCount;
-}
-void BeamLight2D::set_ray_count(const int64_t rayCount) {
-	this->rayCount = rayCount;
 }
 
 bool BeamLight2D::get_draw_debug() const {
@@ -46,7 +37,6 @@ void BeamLight2D::set_draw_debug(const bool drawDebug) {
 
 BeamLight2D::BeamLight2D() {
 	lightWidth = 10;
-	rayCount = 3;
 	drawDebug = false;
 }
 
@@ -65,8 +55,8 @@ void BeamLight2D::_draw() {
     if(drawDebug) {
         real_t r = get_rotation();	
         real_t piOver2 = Math_PI / 2;
-        Point2 rightOffset = Point2(0, -1) * lightWidth;
-        Point2 leftOffset = Point2(0, 1) * lightWidth;
+        Point2 rightOffset = Point2(0, -1) * (lightWidth / 2);
+        Point2 leftOffset = Point2(0, 1) * (lightWidth / 2);
 
         draw_line(rightOffset, rightOffset + Vector2(Settings::debugDistance, 0)
             ,Settings::debugLightColor, Settings::debugLineWidth);
@@ -74,7 +64,7 @@ void BeamLight2D::_draw() {
             ,Settings::debugLightColor, Settings::debugLineWidth);
 
         for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
-			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
+			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
             draw_line(leftOffset + Vector2(localDistance, 0), rightOffset + Vector2(localDistance, 0)
                 , Settings::debugLightColor, Settings::debugLineWidth);
         }
@@ -88,16 +78,15 @@ std::vector<RayVariant> shotBeamLight2D(
 	real_t linearRaySpread) {
 	Point2 beamLightLocation = beamLight.get_position();
 	real_t beamLightWidth = beamLight.get_light_width();
-	int64_t beamLightRayCount = beamLight.get_ray_count();
 	real_t beamLightRotation = beamLight.get_rotation();
 
 	Vector2 beamDirection = Vector2(cos(beamLightRotation), sin(beamLightRotation));
 	real_t piOver2 = Math_PI / 2;
 	Vector2 unscaledRightBeamPoint = Vector2(cos(beamLightRotation + piOver2), sin(beamLightRotation + piOver2));
-	Vector2 rightBeamPoint = unscaledRightBeamPoint * beamLightWidth;
+	Vector2 rightBeamPoint = unscaledRightBeamPoint * (beamLightWidth / 2);
 	rightBeamPoint += beamLightLocation;
 	Vector2 unscaledLeftBeamPoint = Vector2(cos(beamLightRotation - piOver2), sin(beamLightRotation - piOver2));
-	Vector2 leftBeamPoint = unscaledLeftBeamPoint * beamLightWidth;
+	Vector2 leftBeamPoint = unscaledLeftBeamPoint * (beamLightWidth / 2);
 	leftBeamPoint += beamLightLocation;
 
 	
@@ -128,8 +117,8 @@ std::vector<RayVariant> shotBeamLight2D(
 	for(size_t i = 0; i < beamPoints.size(); i++) {
 		Point2& beamPoint = beamPoints[i];
 
-		for(std::size_t i = 0; i < beamLightRayCount; i++) {
-			real_t offset = (linearRaySpread / -2) + ((linearRaySpread / beamLightRayCount) * i);
+		for(std::size_t i = 0; i < Settings::rayCount; i++) {
+			real_t offset = (linearRaySpread / -2) + ((linearRaySpread / Settings::rayCount) * i);
 			Vector2 spreadOrigin = beamPoint + Vector2{offset, offset};
 			testRay(Ray2D{spreadOrigin, beamDirection});
 		}
@@ -150,7 +139,7 @@ std::vector<LinearScanSection> generateBeamLight2DSections(
 	real_t piOver2 = Math_PI / 2;
 	Vector2 unscaledRightBeamPoint = Vector2(cos(beamLightRotation + piOver2), sin(beamLightRotation + piOver2));
 	real_t beamLightWidth = beamLight.get_light_width();
-	Vector2 rightBeamPoint = (unscaledRightBeamPoint * beamLightWidth) + beamLightLocation;
+	Vector2 rightBeamPoint = (unscaledRightBeamPoint * (beamLightWidth / 2)) + beamLightLocation;
 
 	std::sort(rays.begin(), rays.end(), 
 		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {

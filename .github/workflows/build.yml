@@ -172,7 +172,16 @@ jobs:
           git config user.email "actions@github.com"
       - name: Remove old binary files
         run: |
-          git rm -r --cached ${{github.workspace}}/project/addons/lightSim/bin
+          git rm -r ${{github.workspace}}/project/addons/lightSim/bin
+          mkdir -p ${{github.workspace}}/project/addons/lightSim/bin
+          echo "* \n !.gitignore" > ${{github.workspace}}/project/addons/lightSim/bin/.gitignore
+      - name: Push Remove
+        run: |
+          git add --force ${{github.workspace}}/project/addons/lightSim/bin/
+          echo "status"
+          git status
+          git commit -m "[automatic] removed platform-specific binaries"
+          git push
       - name: Move binary artifact content to project
         run: |
           mv ${{github.workspace}}/artifact/${{ github.event.repository.name }}-* ${{ github.workspace }}/${{ github.event.repository.name }}-binary-artifact

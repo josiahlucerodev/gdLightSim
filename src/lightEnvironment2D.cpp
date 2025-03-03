@@ -163,10 +163,6 @@ void LightEnvironment2D::_ready() {
 
     lightArrayMesh.instantiate();
     set_mesh(lightArrayMesh);
-    //env.lightArrayMesh;
-    //lightMeshInstance = new MeshInstance2D::;
-    //lightMeshInstance->set_mesh(lightArrayMesh); 
-    //add_child(lightMeshInstance.ptr());
 }
 
 template<typename Type>
@@ -188,10 +184,6 @@ std::vector<Type*> getChildrenOfType(Node& parent, const String& typeName) {
     std::vector<Type*> childrenOfType;
     getChildrenOfType(childrenOfType, parent, typeName);
     return childrenOfType;
-}
-
-bool isRelativelyEqual(real_t a, real_t b, real_t epsilon = 1e-6) {
-    return std::abs(a - b) < epsilon;
 }
 
 void LightEnvironment2D::_process(double delta) {
@@ -314,6 +306,18 @@ void drawRayHit(LightEnvironment2D& env, const RayHit2D& rayHit) {
     env.draw_circle(rayHit.location, Settings::pointRadius, Settings::rayHitColor);
 }
 
+void drawRayMissSegment(LightEnvironment2D& env, const Ray2D& beginRay, const Ray2D& endRay) {
+    drawRayMiss(env, beginRay);
+    drawRayMiss(env, endRay);
+    for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
+        real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
+        env.draw_line(
+            (beginRay.direction * localDistance) + beginRay.origin, 
+            (endRay.direction * localDistance) + endRay.origin, 
+            Settings::rayMissColor, Settings::debugLineWidth);   
+    }
+}
+
 void generateQuad(PackedVector3Array& vertices, PackedVector2Array& uvs,
     const Point2 p1, const Point2 p2,
     const Point2 p3, const Point2 p4) {
@@ -334,6 +338,19 @@ void generateQuad(PackedVector3Array& vertices, PackedVector2Array& uvs,
     uvs.push_back(Vector2(1, 1)); //p3
     uvs.push_back(Vector2(0, 1)); //p4
 }
+
+void generateTriangle(PackedVector3Array& vertices, PackedVector2Array& uvs,
+    const Point2 p1, const Point2 p2, const Point2 p3) {
+
+    vertices.push_back(Vector3(p1.x, p1.y, 0)); //p1
+    vertices.push_back(Vector3(p2.x, p2.y, 0)); //p2
+    vertices.push_back(Vector3(p3.x, p3.y, 0)); //p3
+
+    uvs.push_back(Vector2(0, 0)); //p1
+    uvs.push_back(Vector2(1, 0)); //p2
+    uvs.push_back(Vector2(1, 1)); //p3
+}
+
 void generateEmptyLightMesh(LightEnvironment2D& env) {
     env.lightArrayMesh->reset_state();
     env.set_mesh(nullptr);
@@ -346,12 +363,21 @@ void generateLightMesh(LightEnvironment2D& env) {
         switch (section.type) {
         case SectionType::hit: {
             const RayHit2D& startHit = std::get<1>(section.startRay);    
-            const RayHit2D& endHit = std::get<1>(section.endRay);    
+            const RayHit2D& endHit = std::get<1>(section.endRay); 
+            
+            generateTriangle(vertices, uvs, startHit.ray.origin, startHit.location, endHit.location);
             break;
         }
         case SectionType::miss: {
-            const Ray2D& startRay = std::get<0>(section.startRay);    
-            const Ray2D& endRay = std::get<0>(section.endRay); 
+            const std::vector<Ray2D> rays = generateMissSectionRays(section);
+
+            for(std::size_t i = 0; i < rays.size() - 1; i++) {
+                Ray2D ray1 = rays[i];
+                Ray2D ray2 = rays[i + 1];
+                Point2 dis1 = ray1.origin + (ray1.direction * Settings::debugDistance);
+                Point2 dis2 = ray2.origin + (ray2.direction * Settings::debugDistance);
+                generateTriangle(vertices, uvs, ray1.origin, dis1, dis2);
+            }
             break;
         }
         default:
@@ -441,12 +467,12 @@ void LightEnvironment2D::_draw() {
                 break;
             }
             case SectionType::miss: {
-                Ray2D startRay = std::get<0>(section.startRay);    
-                Ray2D endRay = std::get<0>(section.endRay);  
-                
-                drawRayMiss(*this, startRay); 
-                drawRayMiss(*this, endRay); 
-                
+                const std::vector<Ray2D> rays = generateMissSectionRays(section);
+                for(std::size_t i = 0; i < rays.size() - 1; i++) {
+                    Ray2D ray1 = rays[i];
+                    Ray2D ray2 = rays[i + 1];
+                    drawRayMissSegment(*this, ray1, ray2);
+                }
                 break;
             }
             default:
@@ -471,16 +497,7 @@ void LightEnvironment2D::_draw() {
             case SectionType::miss: {
                 Ray2D& startRay = std::get<0>(section.startRay);    
                 Ray2D& endRay = std::get<0>(section.endRay);    
-                
-                drawRayMiss(*this, startRay); 
-                drawRayMiss(*this, endRay); 
-                for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
-                    real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount) * i;
-                    draw_line(
-                        (startRay.direction * localDistance) + startRay.origin, 
-                        (endRay.direction * localDistance) + endRay.origin, 
-                        Settings::rayMissColor);   
-                }
+                drawRayMissSegment(*this, startRay, endRay);
                 break;
             }
             default:
