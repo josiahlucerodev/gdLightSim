@@ -174,7 +174,7 @@ jobs:
         run: |
           git rm -r ${{github.workspace}}/project/addons/lightSim/bin
           mkdir -p ${{github.workspace}}/project/addons/lightSim/bin
-          echo "* \n !.gitignore" > ${{github.workspace}}/project/addons/lightSim/bin/.gitignore
+          echo -e "* \n !.gitignore" > ${{github.workspace}}/project/addons/lightSim/bin/.gitignore
       - name: Push Remove
         run: |
           git add --force ${{github.workspace}}/project/addons/lightSim/bin/

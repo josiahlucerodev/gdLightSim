@@ -9,6 +9,7 @@
 
 //own
 #include "settings.h"
+#include "angle.h"
 
 using namespace godot;
 
@@ -80,12 +81,12 @@ std::vector<RayVariant> shotBeamLight2D(
 	real_t beamLightWidth = beamLight.get_light_width();
 	real_t beamLightRotation = beamLight.get_rotation();
 
-	Vector2 beamDirection = Vector2(cos(beamLightRotation), sin(beamLightRotation));
+	Vector2 beamDirection = vectorFromAngle(beamLightRotation);
 	real_t piOver2 = Math_PI / 2;
-	Vector2 unscaledRightBeamPoint = Vector2(cos(beamLightRotation + piOver2), sin(beamLightRotation + piOver2));
+	Vector2 unscaledRightBeamPoint = vectorFromAngle(beamLightRotation + piOver2);
 	Vector2 rightBeamPoint = unscaledRightBeamPoint * (beamLightWidth / 2);
 	rightBeamPoint += beamLightLocation;
-	Vector2 unscaledLeftBeamPoint = Vector2(cos(beamLightRotation - piOver2), sin(beamLightRotation - piOver2));
+	Vector2 unscaledLeftBeamPoint = vectorFromAngle(beamLightRotation - piOver2);
 	Vector2 leftBeamPoint = unscaledLeftBeamPoint * (beamLightWidth / 2);
 	leftBeamPoint += beamLightLocation;
 
@@ -135,9 +136,9 @@ std::vector<LinearScanSection> generateBeamLight2DSections(
 	Point2 beamLightLocation = beamLight.get_position();
 
 	real_t beamLightRotation = beamLight.get_rotation();
-	Vector2 beamDirection = Vector2(cos(beamLightRotation), sin(beamLightRotation));
+	Vector2 beamDirection = vectorFromAngle(beamLightRotation);
 	real_t piOver2 = Math_PI / 2;
-	Vector2 unscaledRightBeamPoint = Vector2(cos(beamLightRotation + piOver2), sin(beamLightRotation + piOver2));
+	Vector2 unscaledRightBeamPoint = vectorFromAngle(beamLightRotation + piOver2);
 	real_t beamLightWidth = beamLight.get_light_width();
 	Vector2 rightBeamPoint = (unscaledRightBeamPoint * (beamLightWidth / 2)) + beamLightLocation;
 

@@ -12,6 +12,7 @@ using namespace godot;
 //own
 #include "angle.h"
 #include "settings.h"
+#include "spotLight2D.h"
 
 
 void CircleLight2D::_bind_methods() {
@@ -55,73 +56,29 @@ void CircleLight2D::_draw() {
 				real_t localAngle = (segmentSpreadAngle * j);
 				
 				draw_line(
-					Point2{cos(localAngle), sin(localAngle)} * localDistance,
-					Point2{cos(localAngle + segmentSpreadAngle), sin(localAngle + segmentSpreadAngle)} * localDistance,
+					vectorFromAngle(localAngle) * localDistance,
+					vectorFromAngle(localAngle + segmentSpreadAngle) * localDistance,
 					Settings::debugLightColor, Settings::debugLineWidth);
 			}
 		}
 	}
 }
 
-std::vector<RayVariant> shotCircleLight2D(
-	const CircleLight2D& circleLight, 
-	const std::vector<Point2>& points, 
-	BVH2D& bvh, 
-	real_t radialRaySpread) {
+CircleLightRaySections shotCircleLight2D(
+	const CircleLight2D& circleLight, const std::vector<Point2>& points, 
+	BVH2D& bvh, const std::vector<Shape2D>& shapes,
+	const real_t& radialRaySpread, const real_t& radialSectionTolerance) {
 	Point2 circleLightLocation = circleLight.get_position();
+		
+	std::vector<RayVariant> h1Rays = shotSpotLight2D(0, circleLightLocation, Math_PI, points, bvh, radialRaySpread);
+	std::vector<RadialScanSection> h1Sections = generateSpotLight2DSections(0, h1Rays, shapes, radialSectionTolerance);
+	std::vector<RayVariant> h2Rays = shotSpotLight2D(Math_PI, circleLightLocation, Math_PI, points, bvh, radialRaySpread);
+	std::vector<RadialScanSection> h2Sections = generateSpotLight2DSections(Math_PI, h2Rays, shapes, radialSectionTolerance);
 
-	std::vector<RayVariant> rays;
-	auto testRay = [&](Ray2D ray) {
-		std::optional<RayHit2D> rayHit = shotRay(ray, {}, bvh);
-        if(rayHit.has_value()) {
-            rays.push_back(RayVariant(rayHit.value()));
-        } else {
-            rays.push_back(RayVariant(ray));
-        }
-	};
-
-	for(Point2 point : points) {
-		real_t distance = circleLightLocation.distance_to(point);
-		real_t arc = (radialRaySpread / distance) / Settings::rayCount;
-
-		for(std::size_t i = 0; i < Settings::rayCount; i++) {
-			real_t angle = circleLightLocation.angle_to_point(point) - (arc / 2);
-			angle += ((arc / Settings::rayCount) * i);
-			Point2 direction = Point2(cos(angle), sin(angle));
-			testRay(Ray2D{circleLightLocation, direction});
-		}
-	}
-
-	return rays;
-}
-
-std::vector<RadialScanSection> generateCircleLight2DSections(
-	const CircleLight2D& circleLight, 
-	std::vector<RayVariant>& rays,
-	const std::vector<Shape2D>& shapes,
-	real_t radialSectionTolerance) {
-	Point2 circleLightLocation = circleLight.get_position();
-	std::sort(rays.begin(), rays.end(), 
-		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-			return clockwiseAngle(circleLightLocation, getRay(lhs).direction) 
-				< clockwiseAngle(circleLightLocation, getRay(rhs).direction);
-		}
-	);
-
-	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
-		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
-			return (p2.y - p1.y) / (p2.x - p1.x);
-		};            
-
-		double slope1 = calculateSlope(r1.location, r2.location);
-		double slope2 = calculateSlope(r2.location, r3.location);
-		return std::abs(slope1 - slope2) > radialSectionTolerance;
-	};
-
-	if(!rays.empty()) {
-		RayVariant front = rays.front();
-		rays.push_back(front);
-	}
-
-	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
+	CircleLightRaySections raySections;
+	raySections.rays.insert(raySections.rays.end(), h1Rays.begin(), h1Rays.end());
+	raySections.rays.insert(raySections.rays.end(), h2Rays.begin(), h2Rays.end());
+	raySections.sections.insert(raySections.sections.end(), h1Sections.begin(), h1Sections.end());
+	raySections.sections.insert(raySections.sections.end(), h2Sections.begin(), h2Sections.end());
+	return raySections;
 }

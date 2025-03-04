@@ -47,13 +47,13 @@ void addLinearMirrorBounceSectionsToQueue(
 	const std::vector<LinearScanSection> linearScanSections, 
 	std::size_t bounceLimit);
 
-std::vector<RayVariant> shotMirrorBeam(
+std::vector<RayVariant> shotLinearMirrorSections(
 	const LinearScanSection& mirrorHitLinearScanSection,
 	const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, 
 	real_t linearRaySpread);
 
-std::vector<LinearScanSection> generateMirrorBeamSections(
+std::vector<LinearScanSection> generateLinearMirrorSections(
 	const LinearScanSection& mirrorHitLinearScanSection, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,

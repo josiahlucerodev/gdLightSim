@@ -29,13 +29,13 @@ public:
 	void set_draw_debug(const bool);
 };
 
-std::vector<RayVariant> shotCircleLight2D(
-	const CircleLight2D& beamLight, 
-	const std::vector<Point2>& points, 
-	BVH2D& bvh, 
-	real_t radialRaySpread);
-std::vector<RadialScanSection> generateCircleLight2DSections(
-	const CircleLight2D& beamLight, 
-	std::vector<RayVariant>& rays,
-	const std::vector<Shape2D>& shapes,
-	real_t radialSectionTolerance); 
+
+struct CircleLightRaySections {
+	std::vector<RayVariant> rays;
+	std::vector<RadialScanSection> sections;
+};
+
+CircleLightRaySections shotCircleLight2D(
+	const CircleLight2D& circleLight,  const std::vector<Point2>& points, 
+	BVH2D& bvh, const std::vector<Shape2D>& shapes,
+	const real_t& radialRaySpread, const real_t& radialSectionTolerance);

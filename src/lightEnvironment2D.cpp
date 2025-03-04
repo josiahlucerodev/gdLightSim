@@ -225,10 +225,9 @@ void LightEnvironment2D::_process(double delta) {
     
     std::vector<CircleLight2D*> circleLights = getChildrenOfType<CircleLight2D>(*this, "CircleLight2D");
     for(CircleLight2D* circleLight : circleLights) {
-        std::vector<RayVariant> rays = shotCircleLight2D(*circleLight, points, bvh,  radialRaySpread); 
-        allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-        std::vector<RadialScanSection> sections = generateCircleLight2DSections(*circleLight, rays, shapes, radialSectionTolerance);
-        radialScanSections.insert(radialScanSections.end(), sections.begin(), sections.end());
+        CircleLightRaySections raySections = shotCircleLight2D(*circleLight, points, bvh, shapes, radialRaySpread, radialSectionTolerance); 
+        allShotRays.insert(allShotRays.end(), raySections.rays.begin(), raySections.rays.end());
+        radialScanSections.insert(radialScanSections.end(), raySections.sections.begin(), raySections.sections.end());
     }
     
     std::vector<BeamLight2D*> beamLights = getChildrenOfType<BeamLight2D>(*this, "BeamLight2D");
@@ -249,9 +248,9 @@ void LightEnvironment2D::_process(double delta) {
         LinearScanSection linearMirrorSection = linearMirrorSectionQueue.front();
         linearMirrorSectionQueue.pop_front();
 
-        std::vector<RayVariant> rays = shotMirrorBeam(linearMirrorSection, shapes, bvh,  linearRaySpread); 
+        std::vector<RayVariant> rays = shotLinearMirrorSections(linearMirrorSection, shapes, bvh,  linearRaySpread); 
         allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-        std::vector<LinearScanSection> sections = generateMirrorBeamSections(linearMirrorSection, rays, shapes, linearSectionTolerance);
+        std::vector<LinearScanSection> sections = generateLinearMirrorSections(linearMirrorSection, rays, shapes, linearSectionTolerance);
         linearScanSections.insert(linearScanSections.end(), sections.begin(), sections.end());
         
 	    const Shape2D& mirrorShape = shapes[linearMirrorSection.shapeId];
@@ -356,6 +355,11 @@ void generateEmptyLightMesh(LightEnvironment2D& env) {
     env.set_mesh(nullptr);
 }
 void generateLightMesh(LightEnvironment2D& env) {
+    if(env.radialScanSections.empty() && env.linearScanSections.empty()) {
+        generateEmptyLightMesh(env);
+        return;
+    }
+
     PackedVector3Array vertices;
     PackedVector2Array uvs;
 

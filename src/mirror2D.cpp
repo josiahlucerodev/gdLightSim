@@ -84,7 +84,7 @@ Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
     Vector2 position = mirror.get_transform().get_origin();
 
     real_t rotation = mirror.get_transform().get_rotation() + (Math_PI / 2);
-    Point2 dir = Point2{cos(rotation), sin(rotation)};
+    Point2 dir = vectorFromAngle(rotation);
     Point2 rightPoint = position + (dir * (mirrorWidth / 2));
     Point2 leftPoint = position + ((dir * (-1)) * (mirrorWidth / 2));
     
@@ -116,7 +116,7 @@ void addLinearMirrorBounceSectionsToQueue(
 	}
 }
 
-std::vector<RayVariant> shotMirrorBeam(
+std::vector<RayVariant> shotLinearMirrorSections(
 	const LinearScanSection& mirrorHitLinearScanSection,
 	const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, 
@@ -130,7 +130,7 @@ std::vector<RayVariant> shotMirrorBeam(
 	real_t bounceWidth = startRay.location.distance_to(endRay.location);
 	real_t mirrorRotation = clockwiseAngle(bounceMidLocation, startRay.location);
 	real_t rayAngle = -(startRay.angle - mirrorRotation) + mirrorRotation;
-	Vector2 rayDir = Vector2{cos(rayAngle), sin(rayAngle)}; 
+	Vector2 rayDir = vectorFromAngle(rayAngle); 
 	
 	const Shape2D& mirrorShape = shapes[mirrorHitLinearScanSection.shapeId];
 	Vector2 unscaledRightPoint = (endRay.location - bounceMidLocation).normalized();
@@ -174,7 +174,7 @@ std::vector<RayVariant> shotMirrorBeam(
 	return rays;
 }
 
-std::vector<LinearScanSection> generateMirrorBeamSections(
+std::vector<LinearScanSection> generateLinearMirrorSections(
 	const LinearScanSection& mirrorHitLinearScanSection, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,

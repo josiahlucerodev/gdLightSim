@@ -29,6 +29,14 @@ struct LinearScanSection {
     RayVariant endRay;
 };
 
+struct ScatterScanSection {
+    SectionType type;
+    std::size_t shapeId;
+    std::size_t bounceIndex;
+    RayVariant startRay;
+    RayVariant endRay;
+};
+
 std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSection);
 
 template<typename Section, typename Predicate>

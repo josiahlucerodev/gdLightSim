@@ -28,3 +28,7 @@ inline real_t clockwiseAngle(Vector2 dir) {
 inline bool isRelativelyEqual(real_t a, real_t b, real_t epsilon = 1e-6) {
     return std::abs(a - b) < epsilon;
 }
+
+inline Vector2 vectorFromAngle(real_t angle) {
+    return Vector2{cos(angle), sin(angle)};
+}

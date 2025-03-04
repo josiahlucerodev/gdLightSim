@@ -53,14 +53,13 @@ void SpotLight2D::_process(double delta) {
 
 void SpotLight2D::_draw() {
 	if(drawDebug) {
-		real_t arcRad = Math::deg_to_rad(arc);
-		real_t angle = get_rotation() - (arcRad / 2);
-		draw_line(Point2(0, 0), Point2{cos(angle), sin(angle)} * Settings::debugDistance, 
+		const real_t arcRad = Math::deg_to_rad(arc);
+		const real_t halfArcRad = arcRad / 2;
+		draw_line(Point2(0, 0), vectorFromAngle(-halfArcRad) * Settings::debugDistance, 
 			Settings::debugLightColor, Settings::debugLineWidth);
-		draw_line(Point2(0, 0), Point2{cos(angle + arcRad), sin(angle + arcRad)} * Settings::debugDistance, 
+		draw_line(Point2(0, 0), vectorFromAngle(halfArcRad)  * Settings::debugDistance, 
 			Settings::debugLightColor, Settings::debugLineWidth);
-		draw_circle(Point2(0, 0), Settings::pointRadius, 
-			Settings::debugLightColor);
+		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightColor);
 		
 		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
 			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
@@ -68,11 +67,11 @@ void SpotLight2D::_draw() {
 			
 			for(std::size_t j = 0; j < numOfSegments; j++) {
 				real_t segmentSpreadAngle = arcRad / numOfSegments;
-				real_t localAngle = angle + (segmentSpreadAngle * j);
+				real_t localAngle = -halfArcRad + (segmentSpreadAngle * j);
 				
 				draw_line(
-					Point2{cos(localAngle), sin(localAngle)} * localDistance,
-					Point2{cos(localAngle + segmentSpreadAngle), sin(localAngle + segmentSpreadAngle)} * localDistance,
+					vectorFromAngle(localAngle) * localDistance,
+					vectorFromAngle(localAngle + segmentSpreadAngle) * localDistance,
 					Settings::debugLightColor, Settings::debugLineWidth);
 			}
 		}
@@ -80,14 +79,9 @@ void SpotLight2D::_draw() {
 }
 
 std::vector<RayVariant> shotSpotLight2D(
-	const SpotLight2D& spotLight, 
-	const std::vector<Point2>& points, 
-	BVH2D& bvh, 
-	real_t radialRaySpread) {
-	real_t spotLightAngle = spotLight.get_rotation();
-	Point2 spotLightLocation = spotLight.get_position();
-	real_t spotLightArc = Math::deg_to_rad(spotLight.get_arc());
-	
+	const real_t& angle, const Point2& spotLightLocation, const real_t& arc,
+	const std::vector<Point2>& points, BVH2D& bvh, const real_t& radialRaySpread) {
+
 	std::vector<Point2> pointsInSpotlightArc;
 	pointsInSpotlightArc.reserve(points.size());
 	std::vector<RayVariant> rays;
@@ -103,24 +97,19 @@ std::vector<RayVariant> shotSpotLight2D(
 	};
 	
 	{
-		real_t angle = spotLightAngle - (spotLightArc / 2);
-		Point2 startRay = Point2(cos(angle), sin(angle));
+		real_t startAngle = angle - (arc / 2);
+		Point2 startRay = vectorFromAngle(startAngle);
+		Point2 endRay = vectorFromAngle(startAngle + arc);
 		testRay(startRay);
-		Point2 endRay = Point2(cos(angle + spotLightArc), sin(angle + spotLightArc));
 		testRay(endRay);
-
-		/*
-		Point2 middleRay = Point2(cos(angle + (spotLightArc / 2)), sin(angle + (spotLightArc / 2)));
-		testRay(middleRay);
-		*/
 	}
 	
-	Point2 spotLightDir = Point2{cos(spotLightAngle), sin(spotLightAngle)};
+	Point2 lightMidDir = vectorFromAngle(angle);
 	for(Point2 point : points) {
 		real_t pointAngle = clockwiseAngle(spotLightLocation, point);
-		Point2 pointDir = Point2(cos(pointAngle), sin(pointAngle));
+		Point2 pointDir = vectorFromAngle(pointAngle);
 
-		if(abs(spotLightDir.angle_to(pointDir)) < spotLightArc / 2) {
+		if(abs(lightMidDir.angle_to(pointDir)) < arc / 2) {
 			pointsInSpotlightArc.push_back(point);
 		}
 	}
@@ -133,26 +122,28 @@ std::vector<RayVariant> shotSpotLight2D(
 		for(std::size_t i = 0; i < Settings::rayCount; i++) {
 			real_t angle = spotLightLocation.angle_to_point(point) - (arc / 2);
 			angle += ((arc / Settings::rayCount) * i);
-			Point2 direction = Point2(cos(angle), sin(angle));
+			Point2 direction = vectorFromAngle(angle);
 			testRay(direction);
 		}
 	}
     return rays;
 }
 
-std::vector<RadialScanSection> generateSpotLight2DSections(
-	const SpotLight2D& spotLight, 
-	std::vector<RayVariant>& rays,
-	const std::vector<Shape2D>& shapes,
-	real_t radialSectionTolerance) {
-	Point2 spotLightLocation = spotLight.get_position();
+std::vector<RayVariant> shotSpotLight2D(
+	const SpotLight2D& spotLight, const std::vector<Point2>& points, 
+	BVH2D& bvh, const real_t& radialRaySpread) {
+	return shotSpotLight2D(spotLight.get_rotation(), spotLight.get_position(), 
+		Math::deg_to_rad(spotLight.get_arc()), points, bvh, radialRaySpread);
+}
 
-	real_t spotLightAngle = spotLight.get_rotation();
-	Point2 spotLightDir = Point2{cos(spotLightAngle), sin(spotLightAngle)};
+std::vector<RadialScanSection> generateSpotLight2DSections(
+	const real_t& angle, std::vector<RayVariant>& rays, 
+	const std::vector<Shape2D>& shapes, real_t radialSectionTolerance) {
+	Point2 lightMidDir = vectorFromAngle(angle);
 	std::sort(rays.begin(), rays.end(), 
 		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-			return spotLightDir.angle_to(getRay(lhs).direction) 
-				< spotLightDir.angle_to(getRay(rhs).direction);
+			return lightMidDir.angle_to(getRay(lhs).direction) 
+				< lightMidDir.angle_to(getRay(rhs).direction);
 		}
 	);
 
@@ -167,4 +158,10 @@ std::vector<RadialScanSection> generateSpotLight2DSections(
 	};
 
 	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
+}
+
+std::vector<RadialScanSection> generateSpotLight2DSections(
+	const SpotLight2D& spotLight,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& radialSectionTolerance) {
+	return generateSpotLight2DSections(spotLight.get_rotation(), rays, shapes, radialSectionTolerance);
 }

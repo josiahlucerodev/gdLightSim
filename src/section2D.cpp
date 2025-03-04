@@ -10,8 +10,8 @@ std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSe
 	std::vector<Ray2D> rays;
 	rays.push_back(startRay);
 	real_t startEndAngle = startRay.direction.angle_to(endRay.direction);
-	if(startEndAngle < 0) {
-		real_t fullArc = (Math_PI * 2) - abs(startEndAngle);
+	if(startEndAngle < 0 || startEndAngle > Settings::arcSegmentLimit) {
+		real_t fullArc = startEndAngle < 0 ? (Math_PI * 2) - abs(startEndAngle) : startEndAngle;
 		std::size_t numberOfArcs = fullArc / Settings::arcSegmentLimit; 
 		real_t segmentArc = fullArc / numberOfArcs;
 		for(std::size_t i = 0; i < numberOfArcs; i++) {
@@ -19,6 +19,7 @@ std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSe
 			rays.push_back(Ray2D{startRay.origin, rayDir});   
 		}
 	}
+
 	rays.push_back(endRay);
 	return rays;
 }
