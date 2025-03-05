@@ -32,7 +32,7 @@ public:
 
 struct CircleLightRaySections {
 	std::vector<RayVariant> rays;
-	std::vector<RadialScanSection> sections;
+	std::vector<RadialSection> sections;
 };
 
 CircleLightRaySections shotCircleLight2D(

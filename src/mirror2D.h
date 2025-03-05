@@ -41,20 +41,29 @@ public:
 
 Shape2D constructShape2D(Mirror2D& mirror, ShapeId shapeId);
 
-void addLinearMirrorBounceSectionsToQueue(
-	const std::vector<Shape2D> shapes,
-	std::deque<LinearScanSection>& lssQueue,
-	const std::vector<LinearScanSection> linearScanSections, 
-	std::size_t bounceLimit);
+void addMirrorLinearSectionsToQueue(const std::vector<Shape2D> shapes, std::deque<LinearSection>& linearSectionQueue,
+	const std::vector<LinearSection> linearSections, std::size_t bounceLimit);
+std::vector<RayVariant> shotMirrorLinearSection(
+	const LinearSection& mirrorLinearSection, const std::vector<Shape2D>& shapes, 
+	BVH2D& bvh, real_t linearRaySpread);
+std::vector<LinearSection> generateMirrorLinearSections(
+	const LinearSection& mirrorLinearSection, std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, real_t linearSectionTolerance);
+				
+std::vector<RayVariant> shotMirrorRadialSection(
+	const RadialSection& mirrorRadialSection, const std::vector<Shape2D>& shapes, 
+	BVH2D& bvh, const real_t& scatterRaySpread);
+std::vector<ScatterSection> generateMirrorScatterSections(
+	const RadialSection& mirrorRadialSection,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance);
+std::vector<RadialSection> getMirrorRadialSections(const std::vector<Shape2D>& shapes, 
+	std::vector<RadialSection>& radialSections);
 
-std::vector<RayVariant> shotLinearMirrorSections(
-	const LinearScanSection& mirrorHitLinearScanSection,
-	const std::vector<Shape2D>& shapes, 
-	BVH2D& bvh, 
-	real_t linearRaySpread);
-
-std::vector<LinearScanSection> generateLinearMirrorSections(
-	const LinearScanSection& mirrorHitLinearScanSection, 
-	std::vector<RayVariant>& rays,
-	const std::vector<Shape2D>& shapes,
-	real_t linearSectionTolerance);
+std::vector<RayVariant> shotMirrorScatterSection(
+	const ScatterSection& mirrorScatterSection, const std::vector<Shape2D>& shapes, 
+	BVH2D& bvh, const real_t& scatterRaySpread);
+std::vector<ScatterSection> generateMirrorScatterSections(
+	const ScatterSection& mirrorScatterSection,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance);
+void addMirrorScatterSectionsToQueue(const std::vector<Shape2D> shapes, std::deque<ScatterSection>& scatterSectionQueue,
+	const std::vector<ScatterSection> scatterSections, std::size_t bounceLimit);

@@ -10,7 +10,7 @@
 using namespace godot;
 
 //own
-#include "angle.h"
+#include "util.h"
 #include "settings.h"
 
 void SpotLight2D::_bind_methods() {
@@ -136,7 +136,7 @@ std::vector<RayVariant> shotSpotLight2D(
 		Math::deg_to_rad(spotLight.get_arc()), points, bvh, radialRaySpread);
 }
 
-std::vector<RadialScanSection> generateSpotLight2DSections(
+std::vector<RadialSection> generateSpotLight2DSections(
 	const real_t& angle, std::vector<RayVariant>& rays, 
 	const std::vector<Shape2D>& shapes, real_t radialSectionTolerance) {
 	Point2 lightMidDir = vectorFromAngle(angle);
@@ -148,19 +148,15 @@ std::vector<RadialScanSection> generateSpotLight2DSections(
 	);
 
 	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
-		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
-			return (p2.y - p1.y) / (p2.x - p1.x);
-		};            
-
-		double slope1 = calculateSlope(r1.location, r2.location);
-		double slope2 = calculateSlope(r2.location, r3.location);
+		real_t slope1 = calculateSlope(r1.location, r2.location);
+		real_t slope2 = calculateSlope(r2.location, r3.location);
 		return std::abs(slope1 - slope2) > radialSectionTolerance;
 	};
 
-	return generateSectionsBase<RadialScanSection>(shapes, rays, predicate);
+	return generateSectionsBase<RadialSection>(shapes, rays, predicate);
 }
 
-std::vector<RadialScanSection> generateSpotLight2DSections(
+std::vector<RadialSection> generateSpotLight2DSections(
 	const SpotLight2D& spotLight,  std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, const real_t& radialSectionTolerance) {
 	return generateSpotLight2DSections(spotLight.get_rotation(), rays, shapes, radialSectionTolerance);

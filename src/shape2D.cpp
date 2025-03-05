@@ -2,8 +2,13 @@
 
 Shape2D constructShape2D(Polygon2D& polygon, std::size_t shapeId) {
     PackedVector2Array polygonPoints = polygon.get_polygon();
+    real_t rotation = polygon.get_rotation();
     if(polygonPoints.size() == 0) {
         return Shape2D{};
+    }
+
+    for(std::size_t i = 0; i < polygonPoints.size(); i++) {
+        polygonPoints[i] = polygonPoints[i].rotated(rotation);
     }
     
     Shape2D shape;

@@ -9,7 +9,7 @@
                 "debug_symbols=yes",
                 "dev_build=yes",
                 "lto=none",
-                "optimize=none"
+                "optimize=none "
             ],
             "group": {
                 "kind": "build",

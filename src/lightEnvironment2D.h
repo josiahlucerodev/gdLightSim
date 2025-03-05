@@ -30,20 +30,27 @@ protected:
     bool displayPoints;
     bool displayMidpoints;
     bool displayRays;
-    bool displayRadialScanSections;
-    bool displayLinearScanSections;
     bool displayFilledLight;
+    
+    bool displayRadialSections;
     double radialRaySpread;
     double radialSectionTolerance;
+    
+    bool displayLinearSections;
     double linearRaySpread;
     double linearSectionTolerance;
+
+    bool displayScatterSections;
+    double scatterRaySpread;
+    double scatterSectionTolerance;
 public:
 	BVH2D bvh;
 	std::vector<Shape2D> shapes;
 	std::vector<Point2> points;
     std::vector<RayVariant> allShotRays;
-    std::vector<RadialScanSection> radialScanSections;
-    std::vector<LinearScanSection> linearScanSections;
+    std::vector<RadialSection> radialSections;
+    std::vector<LinearSection> linearSections;
+    std::vector<ScatterSection> scatterSections;
     Ref<ArrayMesh> lightArrayMesh;
 public:
 
@@ -65,18 +72,28 @@ public:
 	void set_display_midpoints(const bool);
     bool get_display_rays() const;
 	void set_display_rays(const bool);
-    bool get_display_radial_scan_sections() const;
-	void set_display_radial_scan_sections(const bool);
-    bool get_display_linear_scan_sections() const;
-	void set_display_linear_scan_sections(const bool);
+    
     bool get_display_filled_light() const;
 	void set_display_filled_light(const bool);
+
+    bool get_display_radial_sections() const;
+	void set_display_radial_sections(const bool);
     double get_radial_ray_spread() const;
 	void set_radial_ray_spread(const double);
     double get_radial_section_tolerance() const;
 	void set_radial_section_tolerance(const double);
+    
+    bool get_display_linear_sections() const;
+	void set_display_linear_sections(const bool);
     double get_linear_ray_spread() const;
 	void set_linear_ray_spread(const double);
     double get_linear_section_tolerance() const;
 	void set_linear_section_tolerance(const double);
+
+    bool get_display_scatter_sections() const;
+	void set_display_scatter_sections(const bool);
+    double get_scatter_ray_spread() const;
+	void set_scatter_ray_spread(const double);
+    double get_scatter_section_tolerance() const;
+	void set_scatter_section_tolerance(const double);
 };

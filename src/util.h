@@ -1,5 +1,8 @@
 #pragma once 
 
+//std
+#include <algorithm>
+
 //godotcpp
 #include <godot_cpp/variant/vector2.hpp>
 
@@ -32,3 +35,7 @@ inline bool isRelativelyEqual(real_t a, real_t b, real_t epsilon = 1e-6) {
 inline Vector2 vectorFromAngle(real_t angle) {
     return Vector2{cos(angle), sin(angle)};
 }
+
+inline real_t calculateSlope(const Point2& p1, const Point2& p2) {
+    return (p2.y - p1.y) / (p2.x - p1.x);
+};     

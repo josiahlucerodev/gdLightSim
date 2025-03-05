@@ -10,7 +10,7 @@
 using namespace godot;
 
 //own
-#include "angle.h"
+#include "util.h"
 #include "settings.h"
 #include "spotLight2D.h"
 
@@ -71,9 +71,9 @@ CircleLightRaySections shotCircleLight2D(
 	Point2 circleLightLocation = circleLight.get_position();
 		
 	std::vector<RayVariant> h1Rays = shotSpotLight2D(0, circleLightLocation, Math_PI, points, bvh, radialRaySpread);
-	std::vector<RadialScanSection> h1Sections = generateSpotLight2DSections(0, h1Rays, shapes, radialSectionTolerance);
+	std::vector<RadialSection> h1Sections = generateSpotLight2DSections(0, h1Rays, shapes, radialSectionTolerance);
 	std::vector<RayVariant> h2Rays = shotSpotLight2D(Math_PI, circleLightLocation, Math_PI, points, bvh, radialRaySpread);
-	std::vector<RadialScanSection> h2Sections = generateSpotLight2DSections(Math_PI, h2Rays, shapes, radialSectionTolerance);
+	std::vector<RadialSection> h2Sections = generateSpotLight2DSections(Math_PI, h2Rays, shapes, radialSectionTolerance);
 
 	CircleLightRaySections raySections;
 	raySections.rays.insert(raySections.rays.end(), h1Rays.begin(), h1Rays.end());

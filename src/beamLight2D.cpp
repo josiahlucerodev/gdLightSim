@@ -9,7 +9,7 @@
 
 //own
 #include "settings.h"
-#include "angle.h"
+#include "util.h"
 
 using namespace godot;
 
@@ -128,7 +128,7 @@ std::vector<RayVariant> shotBeamLight2D(
 	return rays;
 }
 
-std::vector<LinearScanSection> generateBeamLight2DSections(
+std::vector<LinearSection> generateBeamLight2DSections(
 	const BeamLight2D& beamLight, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
@@ -151,14 +151,10 @@ std::vector<LinearScanSection> generateBeamLight2DSections(
 	);
 
 	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
-		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
-			return (p2.y - p1.y) / (p2.x - p1.x);
-		};            
-
-		double slope1 = calculateSlope(r1.location, r2.location);
-		double slope2 = calculateSlope(r2.location, r3.location);
+		real_t slope1 = calculateSlope(r1.location, r2.location);
+		real_t slope2 = calculateSlope(r2.location, r3.location);
 		return std::abs(slope1 - slope2) > linearSectionTolerance;
 	};
 
-	return generateSectionsBase<LinearScanSection>(shapes, rays, predicate);
+	return generateSectionsBase<LinearSection>(shapes, rays, predicate);
 }

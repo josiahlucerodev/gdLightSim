@@ -3,9 +3,9 @@
 //own
 #include "settings.h"
 
-std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSection) {
-	Ray2D startRay = std::get<0>(radialScanSection.startRay);    
-	Ray2D endRay = std::get<0>(radialScanSection.endRay);  
+std::vector<Ray2D> generateMissSectionRays(const RadialSection& radialSection) {
+	Ray2D startRay = std::get<0>(radialSection.startRay);    
+	Ray2D endRay = std::get<0>(radialSection.endRay);  
 	
 	std::vector<Ray2D> rays;
 	rays.push_back(startRay);

@@ -40,9 +40,9 @@ std::vector<RayVariant> shotSpotLight2D(
 	const SpotLight2D& spotLight, const std::vector<Point2>& points, 
 	BVH2D& bvh, const real_t& radialRaySpread);
 
-std::vector<RadialScanSection> generateSpotLight2DSections(
+std::vector<RadialSection> generateSpotLight2DSections(
 	const real_t& angle, std::vector<RayVariant>& rays, 
 	const std::vector<Shape2D>& shapes, real_t radialSectionTolerance);
-std::vector<RadialScanSection> generateSpotLight2DSections(
+std::vector<RadialSection> generateSpotLight2DSections(
 	const SpotLight2D& spotLight,  std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, const real_t& radialSectionTolerance);

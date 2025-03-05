@@ -13,7 +13,7 @@ enum struct SectionType {
     hit,
 };
 
-struct RadialScanSection {
+struct RadialSection {
     SectionType type;
     std::size_t shapeId;
     std::size_t bounceIndex;
@@ -21,7 +21,7 @@ struct RadialScanSection {
     RayVariant endRay;
 };
 
-struct LinearScanSection {
+struct LinearSection {
     SectionType type;
     std::size_t shapeId;
     std::size_t bounceIndex;
@@ -29,7 +29,7 @@ struct LinearScanSection {
     RayVariant endRay;
 };
 
-struct ScatterScanSection {
+struct ScatterSection {
     SectionType type;
     std::size_t shapeId;
     std::size_t bounceIndex;
@@ -37,7 +37,7 @@ struct ScatterScanSection {
     RayVariant endRay;
 };
 
-std::vector<Ray2D> generateMissSectionRays(const RadialScanSection& radialScanSection);
+std::vector<Ray2D> generateMissSectionRays(const RadialSection& radialSection);
 
 template<typename Section, typename Predicate>
 std::vector<Section> generateSectionsBase(const std::vector<Shape2D>& shapes,

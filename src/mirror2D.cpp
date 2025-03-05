@@ -8,7 +8,7 @@
 #include <godot_cpp/godot.hpp>
 
 //own
-#include "angle.h"
+#include "util.h"
 #include "settings.h"
 
 using namespace godot;
@@ -102,28 +102,49 @@ Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
     return shape;
 }
 
-void addLinearMirrorBounceSectionsToQueue(
+void addMirrorLinearSectionsToQueue(
 	const std::vector<Shape2D> shapes,
-	std::deque<LinearScanSection>& lssQueue,
-	const std::vector<LinearScanSection> linearScanSections, 
+	std::deque<LinearSection>& linearSectionQueue,
+	const std::vector<LinearSection> linearSections, 
 	std::size_t bounceLimit) {
 	
-	for(LinearScanSection lss : linearScanSections) {
+	for(LinearSection lss : linearSections) {
 		if(lss.type == SectionType::hit && shapes[lss.shapeId].type == Shape2DType::mirror
 			&& lss.bounceIndex < bounceLimit) {
-            lssQueue.push_back(lss);
+			linearSectionQueue.push_back(lss);
         }
 	}
 }
 
-std::vector<RayVariant> shotLinearMirrorSections(
-	const LinearScanSection& mirrorHitLinearScanSection,
+std::vector<RadialSection> getMirrorRadialSections(const std::vector<Shape2D>& shapes, std::vector<RadialSection>& radialSections) {
+	std::vector<RadialSection> radialMirrorSections;
+	for(RadialSection rss : radialSections) {
+		if(rss.type == SectionType::hit && shapes[rss.shapeId].type == Shape2DType::mirror) {
+			radialMirrorSections.push_back(rss);
+        }
+	}
+	return radialMirrorSections;
+}
+
+void addMirrorScatterSectionsToQueue(const std::vector<Shape2D> shapes, std::deque<ScatterSection>& scatterSectionQueue,
+	const std::vector<ScatterSection> scatterSections, std::size_t bounceLimit) {
+	
+	for(ScatterSection ss : scatterSections) {
+		if(ss.type == SectionType::hit && shapes[ss.shapeId].type == Shape2DType::mirror
+			&& ss.bounceIndex < bounceLimit) {
+			scatterSectionQueue.push_back(ss);
+        }
+	}
+}
+
+std::vector<RayVariant> shotMirrorLinearSection(
+	const LinearSection& mirrorLinearSection,
 	const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, 
 	real_t linearRaySpread) {
 
-	RayHit2D startRay = std::get<1>(mirrorHitLinearScanSection.startRay);
-	RayHit2D endRay = std::get<1>(mirrorHitLinearScanSection.endRay);
+	RayHit2D startRay = std::get<1>(mirrorLinearSection.startRay);
+	RayHit2D endRay = std::get<1>(mirrorLinearSection.endRay);
 
 	ShapeId mirrorShapeId = startRay.shapeId;
 	Point2 bounceMidLocation = (startRay.location + endRay.location) / 2;
@@ -132,7 +153,7 @@ std::vector<RayVariant> shotLinearMirrorSections(
 	real_t rayAngle = -(startRay.angle - mirrorRotation) + mirrorRotation;
 	Vector2 rayDir = vectorFromAngle(rayAngle); 
 	
-	const Shape2D& mirrorShape = shapes[mirrorHitLinearScanSection.shapeId];
+	const Shape2D& mirrorShape = shapes[mirrorLinearSection.shapeId];
 	Vector2 unscaledRightPoint = (endRay.location - bounceMidLocation).normalized();
 	Vector2 unscaledLeftPoint = (startRay.location - bounceMidLocation).normalized();
 
@@ -174,33 +195,167 @@ std::vector<RayVariant> shotLinearMirrorSections(
 	return rays;
 }
 
-std::vector<LinearScanSection> generateLinearMirrorSections(
-	const LinearScanSection& mirrorHitLinearScanSection, 
+std::vector<LinearSection> generateMirrorLinearSections(
+	const LinearSection& mirrorLinearSection, 
 	std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes,
 	real_t linearSectionTolerance) {
 
-	RayHit2D startRay = std::get<1>(mirrorHitLinearScanSection.startRay);
-	RayHit2D endRay = std::get<1>(mirrorHitLinearScanSection.endRay);
+	RayHit2D startRay = std::get<1>(mirrorLinearSection.startRay);
+	RayHit2D endRay = std::get<1>(mirrorLinearSection.endRay);
 	Point2 bounceMidLocation = (startRay.location + endRay.location) / 2;
 	std::sort(rays.begin(), rays.end(), 
 		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
 			Point2 lhsOrigin = getRay(lhs).origin;
 			Point2 rhsOrigin = getRay(rhs).origin;
-			Point2 startRayOrigin = std::get<1>(mirrorHitLinearScanSection.startRay).ray.origin;
+			Point2 startRayOrigin = std::get<1>(mirrorLinearSection.startRay).ray.origin;
 			return lhsOrigin.distance_to(startRayOrigin) < rhsOrigin.distance_to(startRayOrigin);
 		}
 	);
 
 	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
-		auto calculateSlope = [](const Point2& p1, const Point2& p2) -> double {
-			return (p2.y - p1.y) / (p2.x - p1.x);
-		};            
-
 		double slope1 = calculateSlope(r1.location, r2.location);
 		double slope2 = calculateSlope(r2.location, r3.location);
 		return std::abs(slope1 - slope2) > linearSectionTolerance;
 	};
 
-	return generateSectionsBase<LinearScanSection>(shapes, rays, predicate);
+	return generateSectionsBase<LinearSection>(shapes, rays, predicate);
+}
+
+inline Vector2 weightedSlerp(const Vector2& v1, real_t w2, const Vector2& v2, real_t w1) {
+    const real_t t = 0.5;
+    real_t dot = v1.dot(v2);
+    dot = std::clamp(dot, -1.0f, 1.0f);
+    real_t theta = std::acos(dot);
+    if (theta == 0.0f) {
+        return v1;
+    }
+    const real_t sinTheta = std::sin(theta);
+    const real_t scaleV1 = w1 * std::sin((1 - t) * theta) / sinTheta;
+    const real_t scaleV2 = w2 * std::sin(t * theta) / sinTheta;
+    return Vector2{scaleV1 * v1[0] + scaleV2 * v2[0], scaleV1 * v1[1] + scaleV2 * v2[1]}.normalized();
+}
+
+std::vector<RayVariant> shotMirrorGeneralSection(const RayHit2D startRay, const RayHit2D endRay, 
+	const std::vector<Shape2D>& shapes, BVH2D& bvh, const real_t& scatterRaySpread) {
+	
+	const ShapeId mirrorShapeId = startRay.shapeId;
+	const Point2 hitMidLocation = (startRay.location + endRay.location) / 2;
+	const real_t sectionHitWidth = startRay.location.distance_to(endRay.location);
+	const real_t mirrorRotation = clockwiseAngle(hitMidLocation, startRay.location);
+
+	const Ray2D startReflectRay = Ray2D{startRay.location, 
+		vectorFromAngle(getRayReflectionAngle(startRay.angle, mirrorRotation))
+	};
+	const Ray2D endReflectRay = Ray2D{endRay.location, 
+		vectorFromAngle(getRayReflectionAngle(endRay.angle, mirrorRotation))
+	};
+
+	const real_t mirrorSlope = calculateSlope(startReflectRay.origin, endReflectRay.origin);
+	const real_t mirrorSlopeAngle = atan(mirrorSlope);
+	const Vector2 mirrorSlopeDir = vectorFromAngle(mirrorSlopeAngle);
+	
+	std::vector<Ray2D> testRays;
+	for(Point2 point : getPointsExcluding(mirrorShapeId, shapes)) {
+		Point2 parallelLineToPointStart = (mirrorSlopeDir * 100000) + point; 
+		Point2 parallelLineToPointEnd = (-mirrorSlopeDir * 100000) + point; 
+		
+		auto getDistance = [&](Ray2D ray) -> real_t {
+			std::optional<Point2> hit = rayLineIntersection(ray, parallelLineToPointStart, parallelLineToPointEnd);
+			if(!hit.has_value()) {
+				return 10000;
+			}
+			return hit.value().distance_to(point);
+		};
+		
+		real_t distanceToStart = getDistance(startReflectRay);
+		real_t distanceToEnd = getDistance(endReflectRay);
+		Vector2 rayDir = weightedSlerp(startReflectRay.direction, distanceToStart, endReflectRay.direction, distanceToEnd);
+		
+		std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir * -1}, startReflectRay.origin, endReflectRay.origin);
+		if(rayOrigin.has_value()) {
+			testRays.push_back(Ray2D{rayOrigin.value(), rayDir});
+		}
+	}
+	
+	std::vector<RayVariant> rays;
+	auto testRay = [&](Ray2D ray) {
+		std::optional<RayHit2D> rayHit = shotRay(ray, mirrorShapeId, bvh);
+		if(rayHit.has_value()) {
+			rays.push_back(RayVariant(rayHit.value()));
+		} else {
+			rays.push_back(RayVariant(ray));
+		}
+	};
+
+	testRay(startReflectRay);
+	testRay(endReflectRay);
+
+	for(Ray2D ray : testRays) {
+		Ray2D side1 = Ray2D{ray.origin + (mirrorSlopeDir * scatterRaySpread), 
+			ray.direction.rotated(scatterRaySpread).normalized()};
+		Ray2D side2 = Ray2D{ray.origin - (mirrorSlopeDir * scatterRaySpread), 
+			ray.direction.rotated(-scatterRaySpread).normalized()};
+		testRay(side2);
+		testRay(ray);
+		testRay(side1);
+	}
+	
+	return rays;
+}
+
+std::vector<RayVariant> shotMirrorRadialSection(
+	const RadialSection& mirrorRadialSection, const std::vector<Shape2D>& shapes, 
+	BVH2D& bvh, const real_t& scatterRaySpread) {
+
+	const RayHit2D startRay = std::get<1>(mirrorRadialSection.startRay);
+	const RayHit2D endRay = std::get<1>(mirrorRadialSection.endRay);
+	return shotMirrorGeneralSection(startRay, endRay, shapes, bvh, scatterRaySpread);
+}
+
+std::vector<ScatterSection> generateMirrorScatterSections(
+	const RayHit2D startRay, const RayHit2D endRay,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance) {
+	const real_t mirrorSlope = calculateSlope(startRay.location, endRay.location);
+	const real_t mirrorSlopeAngle = atan(mirrorSlope);
+	const Vector2 mirrorSlopeDir = vectorFromAngle(mirrorSlopeAngle);
+
+	std::sort(rays.begin(), rays.end(), 
+		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
+			return startRay.location.distance_to(getRay(lhs).origin) 
+				< startRay.location.distance_to(getRay(rhs).origin);
+		}
+	);
+
+	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
+		real_t slope1 = calculateSlope(r1.location, r2.location);
+		real_t slope2 = calculateSlope(r2.location, r3.location);
+		return std::abs(slope1 - slope2) > scatterSectionTolerance;
+	};
+
+	return generateSectionsBase<ScatterSection>(shapes, rays, predicate);
+}
+
+std::vector<ScatterSection> generateMirrorScatterSections(
+	const RadialSection& mirrorRadialSection,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance) {
+	const RayHit2D startRay = std::get<1>(mirrorRadialSection.startRay);
+	const RayHit2D endRay = std::get<1>(mirrorRadialSection.endRay);
+	return generateMirrorScatterSections(startRay, endRay, rays, shapes, scatterSectionTolerance);
+}
+
+std::vector<RayVariant> shotMirrorScatterSection(
+	const ScatterSection& mirrorScatterSection, const std::vector<Shape2D>& shapes, 
+	BVH2D& bvh, const real_t& scatterRaySpread) {
+	const RayHit2D startRay = std::get<1>(mirrorScatterSection.startRay);
+	const RayHit2D endRay = std::get<1>(mirrorScatterSection.endRay);
+	return shotMirrorGeneralSection(startRay, endRay, shapes, bvh, scatterRaySpread);
+}
+
+std::vector<ScatterSection> generateMirrorScatterSections(
+	const ScatterSection& mirrorScatterSection,  std::vector<RayVariant>& rays,
+	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance) {
+	const RayHit2D startRay = std::get<1>(mirrorScatterSection.startRay);
+	const RayHit2D endRay = std::get<1>(mirrorScatterSection.endRay);
+	return generateMirrorScatterSections(startRay, endRay, rays, shapes, scatterSectionTolerance);
 }

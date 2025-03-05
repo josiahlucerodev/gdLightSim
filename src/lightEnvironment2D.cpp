@@ -19,7 +19,7 @@
 #include "beamLight2D.h"
 #include "circleLight2D.h"
 #include "mirror2D.h"
-#include "angle.h"
+#include "util.h"
 #include "settings.h"
 
 using namespace godot;
@@ -35,35 +35,50 @@ void LightEnvironment2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_display_midpoints", "display_aabb"), &LightEnvironment2D::set_display_midpoints);
     ClassDB::bind_method(D_METHOD("get_display_rays"), &LightEnvironment2D::get_display_rays);
 	ClassDB::bind_method(D_METHOD("set_display_rays", "display_aabb"), &LightEnvironment2D::set_display_rays);
-    ClassDB::bind_method(D_METHOD("get_display_radial_scan_sections"), &LightEnvironment2D::get_display_radial_scan_sections);
-	ClassDB::bind_method(D_METHOD("set_display_radial_scan_sections", "display_rss"), &LightEnvironment2D::set_display_radial_scan_sections);
-    ClassDB::bind_method(D_METHOD("get_display_linear_scan_sections"), &LightEnvironment2D::get_display_linear_scan_sections);
-	ClassDB::bind_method(D_METHOD("set_display_linear_scan_sections", "display_lss"), &LightEnvironment2D::set_display_linear_scan_sections);
+
     ClassDB::bind_method(D_METHOD("get_display_filled_light"), &LightEnvironment2D::get_display_filled_light);
 	ClassDB::bind_method(D_METHOD("set_display_filled_light", "display_filled_light"), &LightEnvironment2D::set_display_filled_light);
 
+    ClassDB::bind_method(D_METHOD("get_display_radial_sections"), &LightEnvironment2D::get_display_radial_sections);
+	ClassDB::bind_method(D_METHOD("set_display_radial_sections", "display_rs"), &LightEnvironment2D::set_display_radial_sections);
     ClassDB::bind_method(D_METHOD("get_radial_ray_spread"), &LightEnvironment2D::get_radial_ray_spread);
 	ClassDB::bind_method(D_METHOD("set_radial_ray_spread", "radial_ray_spread"), &LightEnvironment2D::set_radial_ray_spread);
     ClassDB::bind_method(D_METHOD("get_radial_section_tolerance"), &LightEnvironment2D::get_radial_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_radial_section_tolerance", "tolerance"), &LightEnvironment2D::set_radial_section_tolerance);
+
+    ClassDB::bind_method(D_METHOD("get_display_linear_sections"), &LightEnvironment2D::get_display_linear_sections);
+	ClassDB::bind_method(D_METHOD("set_display_linear_sections", "display_ls"), &LightEnvironment2D::set_display_linear_sections);
     ClassDB::bind_method(D_METHOD("get_linear_ray_spread"), &LightEnvironment2D::get_linear_ray_spread);
 	ClassDB::bind_method(D_METHOD("set_linear_ray_spread", "linear_ray_spread"), &LightEnvironment2D::set_linear_ray_spread);
     ClassDB::bind_method(D_METHOD("get_linear_section_tolerance"), &LightEnvironment2D::get_linear_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_linear_section_tolerance", "tolerance"), &LightEnvironment2D::set_linear_section_tolerance);
+
+    ClassDB::bind_method(D_METHOD("get_display_scatter_sections"), &LightEnvironment2D::get_display_scatter_sections);
+	ClassDB::bind_method(D_METHOD("set_display_scatter_sections", "display_ss"), &LightEnvironment2D::set_display_scatter_sections);
+    ClassDB::bind_method(D_METHOD("get_scatter_ray_spread"), &LightEnvironment2D::get_scatter_ray_spread);
+	ClassDB::bind_method(D_METHOD("set_scatter_ray_spread", "scatter_ray_spread"), &LightEnvironment2D::set_scatter_ray_spread);
+    ClassDB::bind_method(D_METHOD("get_scatter_section_tolerance"), &LightEnvironment2D::get_scatter_section_tolerance);
+	ClassDB::bind_method(D_METHOD("set_scatter_section_tolerance", "tolerance"), &LightEnvironment2D::set_scatter_section_tolerance);
 
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayBVH2D"), "set_display_bvh", "get_display_bvh");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayAABB"), "set_display_aabb", "get_display_aabb");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayPoints"), "set_display_points", "get_display_points");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayMidpoints"), "set_display_midpoints", "get_display_midpoints");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRays"), "set_display_rays", "get_display_rays");
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRadialScanSections"), "set_display_radial_scan_sections", "get_display_radial_scan_sections");
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayLinearScanSections"), "set_display_linear_scan_sections", "get_display_linear_scan_sections");
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayFilledLight"), "set_display_filled_light", "get_display_filled_light");
 
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayFilledLight"), "set_display_filled_light", "get_display_filled_light");
+    
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayRadialSections"), "set_display_radial_sections", "get_display_radial_sections");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_radial_ray_spread", "get_radial_ray_spread");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_radial_section_tolerance", "get_radial_section_tolerance");
+
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayLinearSections"), "set_display_linear_sections", "get_display_linear_sections");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_linear_ray_spread", "get_linear_ray_spread");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_linear_section_tolerance", "get_linear_section_tolerance");
+
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "displayScatterSections"), "set_display_scatter_sections", "get_display_scatter_sections");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "scatterRaySpread", PROPERTY_HINT_RANGE, "0.0001, 0.001, 0.0001"), "set_scatter_ray_spread", "get_scatter_ray_spread");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "scatterSectionTolerance", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_scatter_section_tolerance", "get_scatter_section_tolerance");
 }
 
 void LightEnvironment2D::_notification(int pwhat) {
@@ -99,18 +114,7 @@ bool LightEnvironment2D::get_display_rays() const {
 void LightEnvironment2D::set_display_rays(const bool displayRays) {
     this->displayRays = displayRays;
 }
-bool LightEnvironment2D::get_display_radial_scan_sections() const {
-    return displayRadialScanSections;
-}
-void LightEnvironment2D::set_display_radial_scan_sections(const bool displayRadialScanSections) {
-    this->displayRadialScanSections = displayRadialScanSections;
-}
-bool LightEnvironment2D::get_display_linear_scan_sections() const {
-    return displayLinearScanSections;
-}
-void LightEnvironment2D::set_display_linear_scan_sections(const bool displayLinearScanSections) {
-    this->displayLinearScanSections = displayLinearScanSections;
-}
+
 bool LightEnvironment2D::get_display_filled_light() const {
     return displayFilledLight;
 }
@@ -118,6 +122,12 @@ void LightEnvironment2D::set_display_filled_light(const bool displayFilledLight)
     this->displayFilledLight = displayFilledLight;
 }
 
+bool LightEnvironment2D::get_display_radial_sections() const {
+    return displayRadialSections;
+}
+void LightEnvironment2D::set_display_radial_sections(const bool displayRadialSections) {
+    this->displayRadialSections = displayRadialSections;
+}
 double LightEnvironment2D::get_radial_ray_spread() const {
     return radialRaySpread;
 }
@@ -129,6 +139,13 @@ double LightEnvironment2D::get_radial_section_tolerance() const {
 }
 void LightEnvironment2D::set_radial_section_tolerance(const double radialSectionTolerance) {
     this->radialSectionTolerance = radialSectionTolerance;
+}
+
+bool LightEnvironment2D::get_display_linear_sections() const {
+    return displayLinearSections;
+}
+void LightEnvironment2D::set_display_linear_sections(const bool displayLinearSections) {
+    this->displayLinearSections = displayLinearSections;
 }
 double LightEnvironment2D::get_linear_ray_spread() const {
     return linearRaySpread;
@@ -142,6 +159,26 @@ double LightEnvironment2D::get_linear_section_tolerance() const {
 void LightEnvironment2D::set_linear_section_tolerance(const double linearSectionTolerance) {
     this->linearSectionTolerance = linearSectionTolerance;
 }
+
+bool LightEnvironment2D::get_display_scatter_sections() const {
+    return displayScatterSections;
+}
+void LightEnvironment2D::set_display_scatter_sections(const bool displayScatterSections) {
+    this->displayScatterSections = displayScatterSections;
+}
+double LightEnvironment2D::get_scatter_ray_spread() const {
+    return scatterRaySpread;
+}
+void LightEnvironment2D::set_scatter_ray_spread(const double scatterRaySpread) {
+    this->scatterRaySpread = scatterRaySpread;
+}
+double LightEnvironment2D::get_scatter_section_tolerance() const {
+    return scatterSectionTolerance;
+}
+void LightEnvironment2D::set_scatter_section_tolerance(const double scatterSectionTolerance) {
+    this->scatterSectionTolerance = scatterSectionTolerance;
+}
+
 LightEnvironment2D::LightEnvironment2D() {}
 LightEnvironment2D::~LightEnvironment2D() {}
 
@@ -151,14 +188,22 @@ void LightEnvironment2D::_ready() {
     displayPoints = true;
     displayMidpoints = true;
     displayRays = true;
-    displayRadialScanSections = true;
-    displayLinearScanSections = true;
     
+    displayRadialSections = true;
+    radialRaySpread = 20;
     radialSectionTolerance = 0.1;
+    
+    displayLinearSections = true;
+    linearRaySpread = 10;
     linearSectionTolerance = 0.1;
+
+    displayScatterSections = true;
+    scatterRaySpread = 0.001;
+    scatterSectionTolerance = 0.1;
+
     shapes.clear();
     points.clear();
-    radialScanSections.clear();
+    radialSections.clear();
     resetBVH2D(bvh);
 
     lightArrayMesh.instantiate();
@@ -190,8 +235,9 @@ void LightEnvironment2D::_process(double delta) {
     shapes.clear();
     points.clear();
     allShotRays.clear();
-    radialScanSections.clear();
-    linearScanSections.clear();
+    radialSections.clear();
+    linearSections.clear();
+    scatterSections.clear();
     resetBVH2D(bvh);
 
     std::vector<Polygon2D*> polygons = getChildrenOfType<Polygon2D>(*this, "Polygon2D");
@@ -219,44 +265,69 @@ void LightEnvironment2D::_process(double delta) {
     for(SpotLight2D* spotLight : spotLights) {
         std::vector<RayVariant> rays = shotSpotLight2D(*spotLight, points, bvh,  radialRaySpread); 
         allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-        std::vector<RadialScanSection> sections = generateSpotLight2DSections(*spotLight, rays, shapes, radialSectionTolerance);
-        radialScanSections.insert(radialScanSections.end(), sections.begin(), sections.end());
+        std::vector<RadialSection> sections = generateSpotLight2DSections(*spotLight, rays, shapes, radialSectionTolerance);
+        radialSections.insert(radialSections.end(), sections.begin(), sections.end());
     }
     
     std::vector<CircleLight2D*> circleLights = getChildrenOfType<CircleLight2D>(*this, "CircleLight2D");
     for(CircleLight2D* circleLight : circleLights) {
         CircleLightRaySections raySections = shotCircleLight2D(*circleLight, points, bvh, shapes, radialRaySpread, radialSectionTolerance); 
         allShotRays.insert(allShotRays.end(), raySections.rays.begin(), raySections.rays.end());
-        radialScanSections.insert(radialScanSections.end(), raySections.sections.begin(), raySections.sections.end());
+        radialSections.insert(radialSections.end(), raySections.sections.begin(), raySections.sections.end());
     }
     
     std::vector<BeamLight2D*> beamLights = getChildrenOfType<BeamLight2D>(*this, "BeamLight2D");
     for(BeamLight2D* beamLight : beamLights) {
         std::vector<RayVariant> rays = shotBeamLight2D(*beamLight, points, bvh,  linearRaySpread); 
         allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-        std::vector<LinearScanSection> sections = generateBeamLight2DSections(*beamLight, rays, shapes, linearSectionTolerance);
-        linearScanSections.insert(linearScanSections.end(), sections.begin(), sections.end());
+        std::vector<LinearSection> sections = generateBeamLight2DSections(*beamLight, rays, shapes, linearSectionTolerance);
+        linearSections.insert(linearSections.end(), sections.begin(), sections.end());
     }
 
 
-    std::deque<LinearScanSection> linearMirrorSectionQueue;
-    addLinearMirrorBounceSectionsToQueue(shapes, linearMirrorSectionQueue, 
-        linearScanSections, 100);
+    std::deque<LinearSection> mirrorLinearSectionQueue;
+    addMirrorLinearSectionsToQueue(shapes, mirrorLinearSectionQueue, linearSections, 100);
 
     std::size_t lssIndex = 0;
-    while(!linearMirrorSectionQueue.empty() && lssIndex < 1000) {
-        LinearScanSection linearMirrorSection = linearMirrorSectionQueue.front();
-        linearMirrorSectionQueue.pop_front();
+    while(!mirrorLinearSectionQueue.empty() && lssIndex < 1000) {
+        LinearSection linearMirrorSection = mirrorLinearSectionQueue.front();
+        mirrorLinearSectionQueue.pop_front();
 
-        std::vector<RayVariant> rays = shotLinearMirrorSections(linearMirrorSection, shapes, bvh,  linearRaySpread); 
+        std::vector<RayVariant> rays = shotMirrorLinearSection(linearMirrorSection, shapes, bvh,  linearRaySpread); 
         allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-        std::vector<LinearScanSection> sections = generateLinearMirrorSections(linearMirrorSection, rays, shapes, linearSectionTolerance);
-        linearScanSections.insert(linearScanSections.end(), sections.begin(), sections.end());
+        std::vector<LinearSection> sections = generateMirrorLinearSections(linearMirrorSection, rays, shapes, linearSectionTolerance);
+        linearSections.insert(linearSections.end(), sections.begin(), sections.end());
         
 	    const Shape2D& mirrorShape = shapes[linearMirrorSection.shapeId];
-        addLinearMirrorBounceSectionsToQueue(shapes, linearMirrorSectionQueue, sections, mirrorShape.maxBounce);
+        addMirrorLinearSectionsToQueue(shapes, mirrorLinearSectionQueue, sections, mirrorShape.maxBounce);
 
         lssIndex++;
+	}
+
+    std::vector<RadialSection> radialMirrorSections = getMirrorRadialSections(shapes, radialSections);
+    for(RadialSection mirrorRadialSection : radialMirrorSections) {
+        std::vector<RayVariant> rays = shotMirrorRadialSection(mirrorRadialSection, shapes, bvh,  scatterRaySpread); 
+        allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+        std::vector<ScatterSection> sections = generateMirrorScatterSections(mirrorRadialSection, rays, shapes, scatterSectionTolerance);
+        scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
+    }
+
+    std::deque<ScatterSection> mirrorScatterSectionQueue;
+    addMirrorScatterSectionsToQueue(shapes, mirrorScatterSectionQueue, scatterSections, 100);
+
+    std::size_t ssIndex = 0;
+    while(!mirrorScatterSectionQueue.empty() && ssIndex < 1000) {
+        ScatterSection scatterSection = mirrorScatterSectionQueue.front();
+        mirrorScatterSectionQueue.pop_front();
+
+        std::vector<RayVariant> rays = shotMirrorScatterSection(scatterSection, shapes, bvh,  scatterRaySpread); 
+        allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+        std::vector<ScatterSection> sections = generateMirrorScatterSections(scatterSection, rays, shapes, scatterSectionTolerance);
+        scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
+        
+	    const Shape2D& mirrorShape = shapes[scatterSection.shapeId];
+        addMirrorScatterSectionsToQueue(shapes, mirrorScatterSectionQueue, sections, mirrorShape.maxBounce);
+        ssIndex++;
 	}
 
     queue_redraw();
@@ -355,7 +426,7 @@ void generateEmptyLightMesh(LightEnvironment2D& env) {
     env.set_mesh(nullptr);
 }
 void generateLightMesh(LightEnvironment2D& env) {
-    if(env.radialScanSections.empty() && env.linearScanSections.empty()) {
+    if(env.radialSections.empty() && env.linearSections.empty() && env.scatterSections.empty()) {
         generateEmptyLightMesh(env);
         return;
     }
@@ -363,7 +434,7 @@ void generateLightMesh(LightEnvironment2D& env) {
     PackedVector3Array vertices;
     PackedVector2Array uvs;
 
-    for(const RadialScanSection& section : env.radialScanSections) {
+    for(const RadialSection& section : env.radialSections) {
         switch (section.type) {
         case SectionType::hit: {
             const RayHit2D& startHit = std::get<1>(section.startRay);    
@@ -389,7 +460,7 @@ void generateLightMesh(LightEnvironment2D& env) {
         }
     }
 
-    for(const LinearScanSection& section : env.linearScanSections) {
+    for(const LinearSection& section : env.linearSections) {
         switch (section.type) {
         case SectionType::hit: {
             const RayHit2D& startHit = std::get<1>(section.startRay);    
@@ -402,10 +473,33 @@ void generateLightMesh(LightEnvironment2D& env) {
         case SectionType::miss: {
             const Ray2D& startRay = std::get<0>(section.startRay);    
             const Ray2D& endRay = std::get<0>(section.endRay);    
-
             Point2 startDis = startRay.origin + (startRay.direction * Settings::debugDistance);
             Point2 endDis = endRay.origin + (endRay.direction * Settings::debugDistance);
+            generateQuad(vertices, uvs,
+                startRay.origin, startDis, 
+                endDis, endRay.origin);
+            break;
+        }
+        default:
+            break;
+        }
+    }
 
+    for(const ScatterSection& section : env.scatterSections) {
+        switch (section.type) {
+        case SectionType::hit: {
+            const RayHit2D& startHit = std::get<1>(section.startRay);    
+            const RayHit2D& endHit = std::get<1>(section.endRay);    
+            generateQuad(vertices, uvs,
+                startHit.ray.origin, startHit.location, 
+                endHit.location, endHit.ray.origin);
+            break;
+        }
+        case SectionType::miss: {
+            const Ray2D& startRay = std::get<0>(section.startRay);    
+            const Ray2D& endRay = std::get<0>(section.endRay);    
+            Point2 startDis = startRay.origin + (startRay.direction * Settings::debugDistance);
+            Point2 endDis = endRay.origin + (endRay.direction * Settings::debugDistance);
             generateQuad(vertices, uvs,
                 startRay.origin, startDis, 
                 endDis, endRay.origin);
@@ -458,8 +552,8 @@ void LightEnvironment2D::_draw() {
             }
         }
     }
-    if(displayRadialScanSections) {
-        for(RadialScanSection& section : radialScanSections) {
+    if(displayRadialSections) {
+        for(RadialSection& section : radialSections) {
             switch (section.type) {
             case SectionType::hit: {
                 RayHit2D& startHit = std::get<1>(section.startRay);    
@@ -484,17 +578,36 @@ void LightEnvironment2D::_draw() {
             }
         }
     }
-    if(displayLinearScanSections) {
-        for(LinearScanSection& section : linearScanSections) {
+    if(displayLinearSections) {
+        for(LinearSection& section : linearSections) {
             switch (section.type) {
             case SectionType::hit: {
                 RayHit2D& startHit = std::get<1>(section.startRay);    
                 RayHit2D& endHit = std::get<1>(section.endRay);    
-                
                 drawRayHit(*this, startHit); 
-                drawRayHit(*this, endHit); 
-
-                
+                drawRayHit(*this, endHit);                 
+                draw_line(startHit.location, endHit.location, Settings::rayHitColor);
+                break;
+            }
+            case SectionType::miss: {
+                Ray2D& startRay = std::get<0>(section.startRay);    
+                Ray2D& endRay = std::get<0>(section.endRay);    
+                drawRayMissSegment(*this, startRay, endRay);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
+    if(displayScatterSections) {
+        for(ScatterSection& section : scatterSections) {
+            switch (section.type) {
+            case SectionType::hit: {
+                RayHit2D& startHit = std::get<1>(section.startRay);    
+                RayHit2D& endHit = std::get<1>(section.endRay);    
+                drawRayHit(*this, startHit); 
+                drawRayHit(*this, endHit);                 
                 draw_line(startHit.location, endHit.location, Settings::rayHitColor);
                 break;
             }

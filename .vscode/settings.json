@@ -64,6 +64,7 @@
         "xutility": "cpp",
         "variant": "cpp",
         "fstream": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "numeric": "cpp"
     }
 }

@@ -1,5 +1,5 @@
 #include "ray2D.h"
-#include "angle.h"
+#include "util.h"
 
 bool isRayIntersectsAABB(const Ray2D& ray, const AABB2D& aabb) {
     if (ray.origin.x >= aabb.min.x && ray.origin.x <= aabb.max.x &&
@@ -76,3 +76,7 @@ const Ray2D& getRay(const RayVariant& rayVariant) {
         }
     }, rayVariant);
 } ;
+
+const real_t getRayReflectionAngle(const real_t& rayAngle, const real_t& mirrorRotation) {
+    return -(rayAngle - mirrorRotation) + mirrorRotation;
+}
