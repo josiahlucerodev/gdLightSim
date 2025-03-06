@@ -16,8 +16,9 @@ using namespace godot;
 class BeamLight2D : public Node2D {
 	GDCLASS(BeamLight2D, Node2D);
 private:
-    double lightWidth;
 	bool drawDebug;
+    double lightWidth;
+	Color color;
 protected:
 	static void _bind_methods();
 
@@ -29,17 +30,18 @@ public:
 	void _process(double delta) override;
 	void _draw() override;
 
-	double get_light_width() const;
-	void set_light_width(const double);
 	bool get_draw_debug() const;
-	void set_draw_debug(const bool);
+	void set_draw_debug(const bool debugDraw);
+	real_t get_light_width() const;
+	void set_light_width(const real_t lightWidth);
+	Color get_color() const;
+	void set_color(const Color color);
 };
 
 std::vector<RayVariant> shotBeamLight2D(
-	const BeamLight2D& beamLight, 
-	const std::vector<Point2>& points, 
-	BVH2D& bvh, 
-	real_t linearRaySpread);
+	const BeamLight2D& beamLight, const std::vector<Point2>& points, 
+	const BVH2D& bvh, real_t linearRaySpread);
+
 std::vector<LinearSection> generateBeamLight2DSections(
 	const BeamLight2D& beamLight, 
 	std::vector<RayVariant>& rays,

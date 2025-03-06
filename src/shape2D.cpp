@@ -14,7 +14,6 @@ Shape2D constructShape2D(Polygon2D& polygon, std::size_t shapeId) {
     Shape2D shape;
     shape.type = Shape2DType::wall;
     shape.shapeId = shapeId;
-    shape.maxBounce = 0;
     shape.points.reserve(polygonPoints.size());
 
     Point2 point = polygon.get_transform().get_origin() + polygonPoints[0];

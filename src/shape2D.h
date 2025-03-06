@@ -12,7 +12,8 @@
 enum struct Shape2DType {
     unknown,
     wall,
-    mirror
+    mirror,
+    filter,
 };
 
 using ShapeId = std::size_t;
@@ -20,7 +21,7 @@ using ShapeId = std::size_t;
 struct Shape2D {
     Shape2DType type;
     ShapeId shapeId;
-    std::size_t maxBounce;
+    Color filterColor;
     Point2 midPoint;
     AABB2D aabb;
     std::vector<Point2> points;

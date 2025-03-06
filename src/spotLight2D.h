@@ -15,6 +15,7 @@ class SpotLight2D : public Node2D {
 private:
     double arc;
 	bool drawDebug;
+	Color color;
 protected:
 	static void _bind_methods();
 
@@ -30,7 +31,9 @@ public:
 	double get_arc() const;
 	void set_arc(const double);
 	bool get_draw_debug() const;
-	void set_draw_debug(const bool);
+	void set_draw_debug(const bool debugDraw);
+	Color get_color() const;
+	void set_color(const Color color);
 };
 
 std::vector<RayVariant> shotSpotLight2D(
@@ -40,9 +43,6 @@ std::vector<RayVariant> shotSpotLight2D(
 	const SpotLight2D& spotLight, const std::vector<Point2>& points, 
 	BVH2D& bvh, const real_t& radialRaySpread);
 
-std::vector<RadialSection> generateSpotLight2DSections(
-	const real_t& angle, std::vector<RayVariant>& rays, 
-	const std::vector<Shape2D>& shapes, real_t radialSectionTolerance);
 std::vector<RadialSection> generateSpotLight2DSections(
 	const SpotLight2D& spotLight,  std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, const real_t& radialSectionTolerance);

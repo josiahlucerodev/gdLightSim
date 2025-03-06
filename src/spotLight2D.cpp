@@ -16,10 +16,15 @@ using namespace godot;
 void SpotLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_arc"), &SpotLight2D::get_arc);
 	ClassDB::bind_method(D_METHOD("set_arc", "arc"), &SpotLight2D::set_arc);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "arc", PROPERTY_HINT_RANGE, "1,180,0.01"), "set_arc", "get_arc");
+
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &SpotLight2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &SpotLight2D::set_draw_debug);
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "arc", PROPERTY_HINT_RANGE, "1,180,0.01"), "set_arc", "get_arc");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
+	
+	ClassDB::bind_method(D_METHOD("get_color"), &SpotLight2D::get_color);
+	ClassDB::bind_method(D_METHOD("set_color", "color"), &SpotLight2D::set_color);
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "color"), "set_color", "get_color");
 }
 
 double SpotLight2D::get_arc() const {
@@ -28,6 +33,7 @@ double SpotLight2D::get_arc() const {
 void SpotLight2D::set_arc(const double arc) {
 	this->arc = arc;
 }
+
 bool SpotLight2D::get_draw_debug() const {
 	return drawDebug;
 }
@@ -35,9 +41,17 @@ void SpotLight2D::set_draw_debug(const bool drawDebug) {
 	this->drawDebug = drawDebug;
 }
 
+Color SpotLight2D::get_color() const {
+	return color;
+}
+void SpotLight2D::set_color(const Color color) {
+	this->color = color;
+}
+
 SpotLight2D::SpotLight2D() {
 	arc = 30;
 	drawDebug = false;
+	color = Settings::defaultLightColor;
 }
 
 SpotLight2D::~SpotLight2D() {
@@ -56,10 +70,10 @@ void SpotLight2D::_draw() {
 		const real_t arcRad = Math::deg_to_rad(arc);
 		const real_t halfArcRad = arcRad / 2;
 		draw_line(Point2(0, 0), vectorFromAngle(-halfArcRad) * Settings::debugDistance, 
-			Settings::debugLightColor, Settings::debugLineWidth);
+			Settings::debugLightEmitterColor, Settings::debugLineWidth);
 		draw_line(Point2(0, 0), vectorFromAngle(halfArcRad)  * Settings::debugDistance, 
-			Settings::debugLightColor, Settings::debugLineWidth);
-		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightColor);
+			Settings::debugLightEmitterColor, Settings::debugLineWidth);
+		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::debugLightEmitterColor);
 		
 		for(std::size_t i = 0; i < Settings::debugDistance / Settings::debugSegmentCount; i++) {
 			real_t localDistance = (Settings::debugDistance / Settings::debugSegmentCount / 4) * i;
@@ -72,7 +86,7 @@ void SpotLight2D::_draw() {
 				draw_line(
 					vectorFromAngle(localAngle) * localDistance,
 					vectorFromAngle(localAngle + segmentSpreadAngle) * localDistance,
-					Settings::debugLightColor, Settings::debugLineWidth);
+					Settings::debugLightEmitterColor, Settings::debugLineWidth);
 			}
 		}
 	}
@@ -137,27 +151,7 @@ std::vector<RayVariant> shotSpotLight2D(
 }
 
 std::vector<RadialSection> generateSpotLight2DSections(
-	const real_t& angle, std::vector<RayVariant>& rays, 
-	const std::vector<Shape2D>& shapes, real_t radialSectionTolerance) {
-	Point2 lightMidDir = vectorFromAngle(angle);
-	std::sort(rays.begin(), rays.end(), 
-		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-			return lightMidDir.angle_to(getRay(lhs).direction) 
-				< lightMidDir.angle_to(getRay(rhs).direction);
-		}
-	);
-
-	auto predicate = [&](const RayHit2D& r1, const RayHit2D& r2, const RayHit2D& r3)-> bool {
-		real_t slope1 = calculateSlope(r1.location, r2.location);
-		real_t slope2 = calculateSlope(r2.location, r3.location);
-		return std::abs(slope1 - slope2) > radialSectionTolerance;
-	};
-
-	return generateSectionsBase<RadialSection>(shapes, rays, predicate);
-}
-
-std::vector<RadialSection> generateSpotLight2DSections(
 	const SpotLight2D& spotLight,  std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, const real_t& radialSectionTolerance) {
-	return generateSpotLight2DSections(spotLight.get_rotation(), rays, shapes, radialSectionTolerance);
+	return generateRadialSections(spotLight.get_color(), spotLight.get_rotation(), rays, shapes, radialSectionTolerance);
 }

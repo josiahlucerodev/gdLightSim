@@ -13,8 +13,8 @@ using namespace godot;
 class CircleLight2D : public Node2D {
 	GDCLASS(CircleLight2D, Node2D);
 private:
-    int64_t rayCount;
 	bool drawDebug;
+	Color color;
 protected:
 	static void _bind_methods();
 public:
@@ -26,16 +26,18 @@ public:
 	void _draw() override;
 
 	bool get_draw_debug() const;
-	void set_draw_debug(const bool);
+	void set_draw_debug(const bool debugDraw);
+	Color get_color() const;
+	void set_color(const Color color);
 };
 
 
-struct CircleLightRaySections {
+struct ShotCircleLight2DInfo {
 	std::vector<RayVariant> rays;
 	std::vector<RadialSection> sections;
 };
 
-CircleLightRaySections shotCircleLight2D(
+ShotCircleLight2DInfo shotCircleLight2D(
 	const CircleLight2D& circleLight,  const std::vector<Point2>& points, 
 	BVH2D& bvh, const std::vector<Shape2D>& shapes,
 	const real_t& radialRaySpread, const real_t& radialSectionTolerance);

@@ -31,6 +31,8 @@ protected:
     bool displayMidpoints;
     bool displayRays;
     bool displayFilledLight;
+    bool displayLightColor;
+    int64_t maxActions;
     
     bool displayRadialSections;
     double radialRaySpread;
@@ -75,6 +77,11 @@ public:
     
     bool get_display_filled_light() const;
 	void set_display_filled_light(const bool);
+    bool get_display_light_color() const;
+	void set_display_light_color(const bool);
+
+    int64_t get_max_actions() const;
+	void set_max_actions(const int64_t);
 
     bool get_display_radial_sections() const;
 	void set_display_radial_sections(const bool);
