@@ -65,7 +65,7 @@ void LightEnvironment2D::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("get_radial_ray_spread"), &LightEnvironment2D::get_radial_ray_spread);
 	ClassDB::bind_method(D_METHOD("set_radial_ray_spread", "radial_ray_spread"), &LightEnvironment2D::set_radial_ray_spread);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_radial_ray_spread", "get_radial_ray_spread");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "radialRaySpread", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_radial_ray_spread", "get_radial_ray_spread");
     
     ClassDB::bind_method(D_METHOD("get_radial_section_tolerance"), &LightEnvironment2D::get_radial_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_radial_section_tolerance", "tolerance"), &LightEnvironment2D::set_radial_section_tolerance);
@@ -78,7 +78,7 @@ void LightEnvironment2D::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("get_linear_ray_spread"), &LightEnvironment2D::get_linear_ray_spread);
 	ClassDB::bind_method(D_METHOD("set_linear_ray_spread", "linear_ray_spread"), &LightEnvironment2D::set_linear_ray_spread);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearRaySpread", PROPERTY_HINT_RANGE, "1, 50, 0.1"), "set_linear_ray_spread", "get_linear_ray_spread");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "linearRaySpread", PROPERTY_HINT_RANGE, "0.001, 0.5, 0.001"), "set_linear_ray_spread", "get_linear_ray_spread");
     
     ClassDB::bind_method(D_METHOD("get_linear_section_tolerance"), &LightEnvironment2D::get_linear_section_tolerance);
 	ClassDB::bind_method(D_METHOD("set_linear_section_tolerance", "tolerance"), &LightEnvironment2D::set_linear_section_tolerance);
@@ -223,11 +223,11 @@ void LightEnvironment2D::_ready() {
     displayLightColor = true;
     
     displayRadialSections = true;
-    radialRaySpread = 20;
+    radialRaySpread = 10;
     radialSectionTolerance = 0.1;
     
     displayLinearSections = true;
-    linearRaySpread = 10;
+    linearRaySpread = 0.01;
     linearSectionTolerance = 0.1;
 
     displayScatterSections = true;

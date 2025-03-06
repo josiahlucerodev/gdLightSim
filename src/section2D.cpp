@@ -62,16 +62,11 @@ std::vector<Ray2D> generateMissSectionRays(const RadialSection& radialSection) {
 	return rays;
 }
 
-bool isDirectionRelativelyEqual(Vector2 a, Vector2 b, real_t epsilon = 1e-6) {
-    return std::abs(a.angle_to(b)) < epsilon;
-}
-
 template<typename Section, typename Predicate>
 std::vector<Section> generateSectionsBase(const Color& color, const std::vector<Shape2D>& shapes,
     std::vector<RayVariant>& rays, Predicate&& simplificationPredicate) {
     std::vector<Section> sections;
     size_t i = 0;
-
 
 	std::optional<RayHit2D> lastHitRay;
     while(i < rays.size()) {
@@ -158,12 +153,12 @@ std::vector<Section> generateSectionsBase(const Color& color, const std::vector<
 
 			const real_t angleEpsolon = 0.01;
 			Ray2D startRay = missGroup.front();
-			if(lastHitRay.has_value() && isDirectionRelativelyEqual(startRay.direction, lastHitRay.value().ray.direction, angleEpsolon)) {
+			if(lastHitRay.has_value()) {
 				startRay = lastHitRay.value().ray;
 			}
 
 			Ray2D endRay = missGroup.back();
-			if(nextHitRay.has_value() && isDirectionRelativelyEqual(endRay.direction, nextHitRay.value().ray.direction, angleEpsolon)) {
+			if(nextHitRay.has_value()) {
 				endRay = nextHitRay.value().ray;
 			}
 

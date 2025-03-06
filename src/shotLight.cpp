@@ -13,12 +13,66 @@
 
 using namespace godot;
 
+bool areRayLocationsRelativelyClose(const Point2& a, const Point2& b, const real_t& distanceThreshold) {
+    return a.distance_to(b) <= distanceThreshold;
+}
+
+void shotAndAddRaysAtPoint(
+    std::vector<RayVariant>& raysDst, const std::optional<ShapeId>& shapeOriginId,
+    const BVH2D& bvh, const real_t& linearRaySpread, const Point2& point,
+    const Ray2D& leftRay, const Ray2D& middleRay, const Ray2D& rightRay) {
+    const std::optional<RayHit2D> leftHit = shotRay(leftRay, shapeOriginId, bvh);
+    const std::optional<RayHit2D> middleHit = shotRay(middleRay, shapeOriginId, bvh);
+    const std::optional<RayHit2D> rightHit = shotRay(rightRay, shapeOriginId, bvh);
+    
+    auto alignHit = [&](const RayHit2D& rayHit) -> RayHit2D {
+        RayHit2D aHit = rayHit;
+        aHit.location = point;
+        return rayHit;
+    };
+    
+    const real_t distanceThreshold = 0.01;
+    if(middleHit.has_value()) {
+        raysDst.push_back(middleHit.value());
+
+        if(!leftHit.has_value()) {
+            raysDst.push_back(leftRay);
+        } else if (!areRayLocationsRelativelyClose(
+            leftHit.value().location, middleHit.value().location, distanceThreshold)) { 
+            raysDst.push_back(leftHit.value());
+        }
+
+        if(!rightHit.has_value()) {
+            raysDst.push_back(rightRay);
+        } else if (!areRayLocationsRelativelyClose(
+            rightHit.value().location, middleHit.value().location, distanceThreshold)) {
+            raysDst.push_back(rightHit.value());
+        }
+    } else {
+        raysDst.push_back(middleRay);
+
+        if(leftHit.has_value()) { //only hit
+            raysDst.push_back(alignHit(leftHit.value()));
+        } else if(rightHit.has_value()) { //only hit
+            raysDst.push_back(alignHit(rightHit.value()));
+        }
+    }
+}
 
 std::vector<RayVariant> shotLinearLight(
     const std::optional<ShapeId>& shapeOriginId, 
-    const Point2& leftPoint, const Point2& rightPoint, const Vector2& direction, 
+    const Point2& startPoint, const Point2& endPoint, const Vector2& direction, 
     const std::vector<Point2>& points, const BVH2D& bvh, real_t linearRaySpread) {
    
+    std::vector<Point2> testPoints;
+    testPoints.reserve(points.size());
+    for(Point2 point : points) {
+            std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, direction * -1}, startPoint, endPoint);
+            if(rayOrigin.has_value()) {
+                testPoints.push_back(rayOrigin.value());
+        }
+    }
+    
     std::vector<RayVariant> rays;
     auto testRay = [&](Ray2D ray) {
         std::optional<RayHit2D> rayHit = shotRay(ray, shapeOriginId, bvh);
@@ -28,30 +82,38 @@ std::vector<RayVariant> shotLinearLight(
             rays.push_back(RayVariant(ray));
         }
     };
-    
-    std::vector<Point2> beamPoints;
-    beamPoints.reserve(points.size());
-    for(Point2 point : points) {
-        std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, direction * -1}, leftPoint, rightPoint);
-        if(rayOrigin.has_value()) {
-            beamPoints.push_back(rayOrigin.value());
-        }
-    }
-    
-    {
-        testRay(Ray2D{leftPoint, direction});
-        testRay(Ray2D{rightPoint, direction});
-    }
 
-    for(size_t i = 0; i < beamPoints.size(); i++) {
-        Point2& beamPoint = beamPoints[i];
-        for(std::size_t i = 0; i < Settings::rayCount; i++) {
-            real_t offset = (linearRaySpread / -2) + ((linearRaySpread / Settings::rayCount) * i);
-            Vector2 spreadOrigin = beamPoint + Vector2{offset, offset};
-            testRay(Ray2D{spreadOrigin, direction});
-        }
-    }
+    const Ray2D startRay = Ray2D{startPoint, direction};
+    const Ray2D endRay = Ray2D{endPoint, direction};
+    testRay(startRay);
+    testRay(endRay);
+    
+    const real_t surfuceSlope = calculateSlope(startRay.origin, endRay.origin);
+	const real_t surfaceSlopeAngle = atan(surfuceSlope);
+	const Vector2 surfaceSlopeDir = vectorFromAngle(surfaceSlopeAngle);
 
+    const Vector2 leftOffset = surfaceSlopeDir * linearRaySpread;
+    const Vector2 rightOffset = -surfaceSlopeDir * linearRaySpread;
+
+    for(size_t i = 0; i < testPoints.size(); i++) {
+        const Point2& point = testPoints[i];
+        
+        const Point2 leftPoint = point + leftOffset;
+        const Point2 rightPoint = point + rightOffset;
+        
+        const Ray2D leftRay = Ray2D{leftPoint, direction};
+        const Ray2D middleRay = Ray2D{point, direction};
+        const Ray2D rightRay = Ray2D{rightPoint, direction};
+
+        testRay(leftRay);
+        testRay(middleRay);
+        testRay(rightRay);
+        /*
+        shotAndAddRaysAtPoint(rays, shapeOriginId, bvh, linearRaySpread,
+        point, leftRay, middleRay, rightRay);
+        */
+    }
+    
     return rays;
 }
 
