@@ -7,13 +7,13 @@ shader = ExtResource("1_ewo7l")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ewo7l"]
 _surfaces = [{
-"aabb": AABB(7035, -1586.34, 0, 15153.5, 15126.2, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-1917, -1975.68, 0, 2104.88, 2077.06, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 12,
-"vertex_data": PackedByteArray("/NfbRdCKisQAAAAA4AE3RhoSX0UAAAAA5Hk+RggyQUUAAAAA/NfbRdCKisQAAAAA5Hk+RggyQUUAAAAABMjqRfNKxsQAAAAA4AE3RhoSX0UAAAAA+xErRqCPU0YAAAAA6FitRlSiNEUAAAAA4AE3RhoSX0UAAAAA6FitRlSiNEUAAAAA5Hk+RggyQUUAAAAA")
+"vertex_count": 36,
+"vertex_data": PackedByteArray("EaDvxLI1u8QAAAAAkPmew2C/ykIAAAAAeCCZwxCShEIAAAAAEaDvxLI1u8QAAAAAeCCZwxCShEIAAAAAhLPsxEEivsQAAAAAhLPsxEEivsQAAAAAeCCZwxCShEIAAAAAACCZw6CMhEIAAAAAhLPsxEEivsQAAAAAACCZw6CMhEIAAAAASrPsxHsivsQAAAAASrPsxHsivsQAAAAAACCZw6CMhEIAAAAAkB+ZwzCHhEIAAAAASrPsxHsivsQAAAAAkB+ZwzCHhEIAAAAAELPsxLUivsQAAAAAELPsxLUivsQAAAAAkB+ZwzCHhEIAAAAA6AAdw4C7vsMAAAAAELPsxLUivsQAAAAA6AAdw4C7vsMAAAAAg2PHxEJy48QAAAAAg2PHxEJy48QAAAAA6AAdw4C7vsMAAAAACAAdw+C8vsMAAAAAg2PHxEJy48QAAAAACAAdw+C8vsMAAAAASWPHxHxy48QAAAAASWPHxHxy48QAAAAACAAdw+C8vsMAAAAAsOA7Q1BnrsMAAAAASWPHxHxy48QAAAAAsOA7Q1BnrsMAAAAA79+zxNX19sQAAAAA")
 }]
 
 [node name="World" type="Node2D"]
@@ -24,6 +24,7 @@ displayAABB = true
 displayPoints = true
 displayMidpoints = true
 displayRays = true
+displayFilledLight = true
 displayLightColor = true
 max_actions = 1000
 displayRadialSections = true
@@ -31,10 +32,10 @@ radialRaySpread = 10.0
 radialSectionTolerance = 0.1
 displayLinearSections = true
 linearRaySpread = 0.01
-linearSectionTolerance = 0.5
+linearSectionTolerance = 0.1
 displayScatterSections = true
 scatterRaySpread = 0.001
-scatterSectionTolerance = 0.001
+scatterSectionTolerance = 0.1
 material = SubResource("ShaderMaterial_pjvrk")
 scale = Vector2(1, 0.976)
 mesh = SubResource("ArrayMesh_ewo7l")
@@ -61,7 +62,7 @@ rotation = 0.785398
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D/DebugEnvironment"]
 light_width = 676.0
-position = Vector2(7274, -1347.34)
+position = Vector2(-1678, -1736.68)
 rotation = 0.785398
 
 [node name="ColorFilter2D" type="ColorFilter2D" parent="LightEnvironment2D/DebugEnvironment"]
@@ -81,57 +82,12 @@ position = Vector2(-15338, -11255.1)
 draw_debug = true
 lens_width = 2081.0
 focal_length = -306.3
-position = Vector2(11965, 3316.6)
+position = Vector2(838, 1543.03)
 rotation = 0.785398
 
-[node name="P1" type="Polygon2D" parent="LightEnvironment2D/DebugEnvironment"]
-position = Vector2(9789, 4074.79)
-rotation = 1.83259
-polygon = PackedVector2Array(-238.905, -345.775, 19.438, -303.692, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="TestEnvironment" type="Node2D" parent="LightEnvironment2D"]
-visible = false
-
-[node name="P2" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(10215.4, 2664)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P3" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(9491.47, 119)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P4" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(3715.41, 4798)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P5" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(2375.79, -38)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P6" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(4886.24, -614)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P7" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(8498.22, 3137)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P8" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(4106.66, 658)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P9" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(2578.74, 3667)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P10" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(933.731, 1545)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P11" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(7387.89, 707)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
-
-[node name="P12" type="Polygon2D" parent="LightEnvironment2D/TestEnvironment"]
-position = Vector2(5471.65, 3133)
-polygon = PackedVector2Array(-238.905, -345.775, 415.234, -239.216, 422.234, 27.7839, -109.187, 274.599, -481.186, 17.6452)
+[node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D/DebugEnvironment"]
+is_hit = true
+position = Vector2(436, 688.525)
+scale = Vector2(1, 1.02459)
+polygon = PackedVector2Array(-593, -1070, 1170, -903, -80, 40, -987, 112)
+uv = PackedVector2Array(-132, -110, -196, -20, -80, 40, -18, -60)

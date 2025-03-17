@@ -13,7 +13,6 @@
 #include <godot_cpp/classes/mesh_instance2d.hpp>
 #include <godot_cpp/classes/packed_data_container.hpp>
 
-
 //own
 #include "spotLight2D.h"
 #include "beamLight2D.h"
@@ -289,6 +288,14 @@ void preformAdditionalLinearSectionOperations(
 }
 */
 
+void updateColliderHit(std::unordered_map<ShapeId, LightColider2D*>& shapeIdToLightColider, ShapeId shapeId) {
+    auto findIter = shapeIdToLightColider.find(shapeId);
+    if(findIter == shapeIdToLightColider.end()) {
+        return;
+    }
+    findIter->second->set_is_hit(true);
+}
+
 void LightEnvironment2D::_process(double delta) {
     shapes.clear();
     points.clear();
@@ -296,21 +303,24 @@ void LightEnvironment2D::_process(double delta) {
     radialSections.clear();
     linearSections.clear();
     scatterSections.clear();
+    shapeIdToLightColider.clear();
     resetBVH2D(bvh);
 
-    std::vector<Polygon2D*> polygons = getChildrenOfType<Polygon2D>(*this, "Polygon2D");
+    std::vector<LightColider2D*> lightColiders = getChildrenOfType<LightColider2D>(*this, "LightColider2D");
     std::vector<Mirror2D*> mirrors = getChildrenOfType<Mirror2D>(*this, "Mirror2D");
     std::vector<ColorFilter2D*> filters = getChildrenOfType<ColorFilter2D>(*this, "ColorFilter2D");
     std::vector<Lens2D*> lenses = getChildrenOfType<Lens2D>(*this, "Lens2D");
 
-    if(mirrors.empty() && polygons.empty() && filters.empty() && lenses.empty()) {
+    if(mirrors.empty() && lightColiders.empty() && filters.empty() && lenses.empty()) {
         queue_redraw();
         return;
     }
 
-    for(Polygon2D* polygon : polygons) {
-        Shape2D shape = constructShape2D(*polygon, shapes.size());
+    for(LightColider2D* lightColider : lightColiders) {
+        Shape2D shape = constructShape2D(*lightColider, shapes.size());
         shapes.push_back(shape);
+        shapeIdToLightColider.insert({shape.shapeId, lightColider});
+        lightColider->set_is_hit(false);
     }
 
     for(Mirror2D* mirror : mirrors) {
@@ -449,9 +459,17 @@ void LightEnvironment2D::_process(double delta) {
 
         actionCount++;
 	}
-    
-    //const Shape2D& mirrorShape = shapes[scatterSection.shapeId];
-    //addMirrorScatterSectionsToQueue(shapes, mirrorScatterSectionQueue, sections, mirrorShape.maxBounce);
+
+    //check hit 
+    for(const LinearSection& linearSection : linearSections) {
+        updateColliderHit(shapeIdToLightColider, linearSection.shapeId);
+    }
+    for(const RadialSection& radialSection : radialSections) {
+        updateColliderHit(shapeIdToLightColider, radialSection.shapeId);
+    }
+    for(const ScatterSection& scatterSection : scatterSections) {
+        updateColliderHit(shapeIdToLightColider, scatterSection.shapeId);
+    }
 
     queue_redraw();
 }

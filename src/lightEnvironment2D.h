@@ -5,6 +5,7 @@
 #include <variant>
 #include <algorithm>
 #include <vector>
+#include <unordered_map>
 
 //godotcpp
 #include <godot_cpp/classes/node2d.hpp>
@@ -18,6 +19,7 @@
 #include "ray2D.h"
 #include "bvh2D.h"
 #include "section2D.h"
+#include "lightCollider2D.h"
 
 using namespace godot;
 
@@ -54,6 +56,7 @@ public:
     std::vector<LinearSection> linearSections;
     std::vector<ScatterSection> scatterSections;
     Ref<ArrayMesh> lightArrayMesh;
+    std::unordered_map<ShapeId, LightColider2D*> shapeIdToLightColider;
 public:
 
     LightEnvironment2D();
