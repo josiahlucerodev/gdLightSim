@@ -20,8 +20,10 @@
 #include "circleLight2D.h"
 #include "mirror2D.h"
 #include "colorFilter2D.h"
+#include "lens2D.h"
 #include "util.h"
 #include "settings.h"
+#include "shotLight.h"
 
 using namespace godot;
 
@@ -299,8 +301,9 @@ void LightEnvironment2D::_process(double delta) {
     std::vector<Polygon2D*> polygons = getChildrenOfType<Polygon2D>(*this, "Polygon2D");
     std::vector<Mirror2D*> mirrors = getChildrenOfType<Mirror2D>(*this, "Mirror2D");
     std::vector<ColorFilter2D*> filters = getChildrenOfType<ColorFilter2D>(*this, "ColorFilter2D");
+    std::vector<Lens2D*> lenses = getChildrenOfType<Lens2D>(*this, "Lens2D");
 
-    if(mirrors.empty() && polygons.empty()) {
+    if(mirrors.empty() && polygons.empty() && filters.empty() && lenses.empty()) {
         queue_redraw();
         return;
     }
@@ -317,6 +320,11 @@ void LightEnvironment2D::_process(double delta) {
 
     for(ColorFilter2D* filter : filters) {
         Shape2D shape = constructShape2D(*filter, shapes.size());
+        shapes.push_back(shape);
+    }
+
+    for(Lens2D* lens : lenses) {
+        Shape2D shape = constructShape2D(*lens, shapes.size());
         shapes.push_back(shape);
     }
 
@@ -404,6 +412,32 @@ void LightEnvironment2D::_process(double delta) {
                     std::vector<RayVariant> rays = shotFilterScatterSection(session, shapes, bvh,  scatterRaySpread); 
                     allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
                     std::vector<ScatterSection> sections = generateFilterScatterSections(session, rays, shapes, scatterSectionTolerance);
+                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
+                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                }
+            }, sessionAction.section);
+            break;
+        case SectionActionType::lens:
+        std::visit([&](auto&& session) -> void {
+            using session_type = std::decay_t<decltype(session)>;
+            if constexpr(std::is_same_v<session_type, RadialSection>) {
+                    std::vector<RayVariant> rays = shotLensRadialSection(session, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
+                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
+                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                }
+                if constexpr(std::is_same_v<session_type, LinearSection>) {
+                    std::vector<RayVariant> rays = shotLensLinearSection(session, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
+                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
+                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                }
+                if constexpr(std::is_same_v<session_type, ScatterSection>) {
+                    std::vector<RayVariant> rays = shotLensScatterSection(session, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
+                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
                     scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
                     addScatterSectionActionsToQueue(actionQueue, shapes, sections);
                 }

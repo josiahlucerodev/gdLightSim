@@ -193,5 +193,3 @@ std::vector<ScatterSection> generateFilterScatterSections(
 
 	return generateScatterSections(color, startRay, endRay, rays, shapes, scatterSectionTolerance);
 }
-
-

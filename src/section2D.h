@@ -50,6 +50,7 @@ struct ScatterSection {
 enum struct SectionActionType {
     mirror,
     filter,
+    lens,
 };
 
 using SectionVariant = std::variant<RadialSection, LinearSection, ScatterSection>;

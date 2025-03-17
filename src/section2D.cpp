@@ -21,6 +21,9 @@ const void addSectionActionsToQueue(SectionActionQueue& queue, const std::vector
 			case Shape2DType::filter:
 				queue.push_back(SectionAction{SectionActionType::filter, section});
 				break;
+			case Shape2DType::lens:
+				queue.push_back(SectionAction{SectionActionType::lens, section});
+				break;
 			default:
 				break;
 			}
@@ -154,12 +157,12 @@ std::vector<Section> generateSectionsBase(const Color& color, const std::vector<
 			const real_t angleEpsolon = 0.01;
 			Ray2D startRay = missGroup.front();
 			if(lastHitRay.has_value()) {
-				startRay = lastHitRay.value().ray;
+				//startRay = lastHitRay.value().ray;
 			}
 
 			Ray2D endRay = missGroup.back();
 			if(nextHitRay.has_value()) {
-				endRay = nextHitRay.value().ray;
+				//endRay = nextHitRay.value().ray;
 			}
 
             sections.push_back(

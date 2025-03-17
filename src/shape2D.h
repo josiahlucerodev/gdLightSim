@@ -14,6 +14,7 @@ enum struct Shape2DType {
     wall,
     mirror,
     filter,
+    lens,
 };
 
 using ShapeId = std::size_t;
@@ -23,6 +24,7 @@ struct Shape2D {
     ShapeId shapeId;
     Color filterColor;
     Point2 midPoint;
+    real_t focalLength;
     AABB2D aabb;
     std::vector<Point2> points;
 };

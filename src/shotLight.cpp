@@ -140,29 +140,46 @@ std::vector<RayVariant> shotScatterLight(
 	const Vector2 surfaceSlopeDir = vectorFromAngle(surfaceSlopeAngle);
 	
 	std::vector<Ray2D> testRays;
+    std::vector<RayVariant> rays;
 	for(Point2 point : points) {
-		Point2 parallelLineToPointStart = (surfaceSlopeDir * 100000) + point; 
-		Point2 parallelLineToPointEnd = (-surfaceSlopeDir * 100000) + point; 
+		Point2 parallelLineToPointStart = (surfaceSlopeDir * 1000000) + point; 
+		Point2 parallelLineToPointEnd = (-surfaceSlopeDir * 1000000) + point; 
 		
-		auto getDistance = [&](Ray2D ray) -> real_t {
-			std::optional<Point2> hit = rayLineIntersection(ray, parallelLineToPointStart, parallelLineToPointEnd);
+		auto getDistance = [&](Ray2D ray) -> std::optional<real_t> {
+            std::optional<Point2> hit = rayLineIntersection(ray, parallelLineToPointStart, parallelLineToPointEnd);
 			if(!hit.has_value()) {
-				return 10000;
+                return {};
 			}
 			return hit.value().distance_to(point);
 		};
 		
-		real_t distanceToStart = getDistance(startRay);
-		real_t distanceToEnd = getDistance(endRay);
+		std::optional<real_t> distanceToStart = getDistance(startRay);
+        if(!distanceToStart.has_value()) {
+            continue;
+        }
+		std::optional<real_t> distanceToEnd = getDistance(endRay);
+        if(!distanceToEnd.has_value()) {
+            continue;
+        }
+
+        Vector2 directionToStart = point.direction_to(startRay.origin);
+        Vector2 directionToEnd = point.direction_to(endRay.origin);
+
+        /*
 		Vector2 rayDir = weightedSlerp(startRay.direction, distanceToStart, endRay.direction, distanceToEnd);
-		
-		std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir * -1}, startRay.origin, endRay.origin);
+        rays.push_back(Ray2D{point, rayDir * -1});
+        std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir * -1}, startRay.origin, endRay.origin);
+        */
+       
+        Vector2 rayDir = weightedSlerp(directionToStart, distanceToStart.value(), directionToEnd, distanceToEnd.value());
+        //rays.push_back(Ray2D{point, rayDir});
+        std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir}, startRay.origin, endRay.origin);
+
 		if(rayOrigin.has_value()) {
-			testRays.push_back(Ray2D{rayOrigin.value(), rayDir});
+			testRays.push_back(Ray2D{rayOrigin.value(), rayDir * -1});
 		}
 	}
 	
-	std::vector<RayVariant> rays;
 	auto testRay = [&](Ray2D ray) {
 		std::optional<RayHit2D> rayHit = shotRay(ray, shapeOriginId, bvh);
 		if(rayHit.has_value()) {
