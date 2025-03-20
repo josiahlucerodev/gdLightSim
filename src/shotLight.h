@@ -18,6 +18,10 @@ std::vector<RayVariant> shotLinearLight(
     const Point2& leftPoint, const Point2& rightPoint, const Vector2& direction, 
     const std::vector<Point2>& points, const BVH2D& bvh, const real_t linearRaySpread);
 
-std::vector<RayVariant> shotScatterLight(
+ShotScatterReturn shotScatterLight(
     const std::optional<ShapeId>& shapeOriginId, const Ray2D& startRay, const Ray2D& endRay,
     const std::vector<Point2>& points, const BVH2D& bvh, const real_t scatterRaySpread);
+
+std::vector<RayVariant> shotScatterSecondRadialLight(
+    const std::optional<ShapeId>& shapeOriginId, const Ray2D& startRay, const Ray2D& endRay,
+    const std::vector<Point2>& points, const BVH2D& bvh, const real_t radialRaySpread);

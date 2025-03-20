@@ -30,4 +30,5 @@ bool isRayIntersectsAABB(const Ray2D& ray, const AABB2D& aabb);
 std::optional<Point2> rayLineIntersection(const Ray2D& ray, const Point2& lineStart, const Point2& lineEnd);
 std::optional<RayHit2D> rayLineHit(std::size_t shapeId, const Ray2D& ray, const Point2& lineStart, const Point2& lineEnd);
 const Ray2D& getRay(const RayVariant& rayVariant);
-const real_t getRayReflectionAngle(const real_t& rayAngle, const real_t& mirrorRotation);
+real_t getRayReflectionAngle(const real_t& rayAngle, const real_t& mirrorRotation);
+bool doLinesIntersect(const Point2& p1, const Point2& q1, const Point2& p2, const Point2& q2);

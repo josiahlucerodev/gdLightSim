@@ -5,7 +5,7 @@
 #include <godot_cpp/classes/polygon2d.hpp>
 
 //own
-#include "shape2d.h"
+#include "shape2D.h"
 
 using namespace godot;
 

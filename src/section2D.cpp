@@ -219,17 +219,16 @@ std::vector<LinearSection> generateLinearSections(
 	return generateSectionsBase<LinearSection>(color, shapes, rays, predicate);
 }
 
-std::vector<ScatterSection> generateScatterSections(const Color& color,
-	const RayHit2D startRay, const RayHit2D endRay,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateScatterSections(const Color& color,
+	const RayHit2D startRay, const RayHit2D endRay,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance) {
 	const real_t mirrorSlope = calculateSlope(startRay.location, endRay.location);
-	const real_t mirrorSlopeAngle = atan(mirrorSlope);
-	const Vector2 mirrorSlopeDir = vectorFromAngle(mirrorSlopeAngle);
 
 	std::sort(rays.begin(), rays.end(), 
 		[&](const RayVariant& lhs, const RayVariant& rhs) -> bool {
-			return startRay.location.distance_to(getRay(lhs).origin) 
-				< startRay.location.distance_to(getRay(rhs).origin);
+			Point2 lhsOrigin = getRay(lhs).origin;
+			Point2 rhsOrigin = getRay(rhs).origin;
+			return lhsOrigin.distance_to(startRay.location) < rhsOrigin.distance_to(startRay.location);
 		}
 	);
 
@@ -239,5 +238,109 @@ std::vector<ScatterSection> generateScatterSections(const Color& color,
 		return std::abs(slope1 - slope2) > scatterSectionTolerance;
 	};
 
-	return generateSectionsBase<ScatterSection>(color, shapes, rays, predicate);
+	std::vector<ScatterSection> scatterSections = generateSectionsBase<ScatterSection>(color, shapes, rays, predicate);
+
+	std::vector<RadialSection> secondShotRadialSections;
+	if(behavior == ScatterSectionBehavior::converges) {
+		std::optional<RayHit2D> perviousHit;
+		for(std::size_t i = 0; i < rays.size(); i++) {
+			const RayVariant& currentRay = rays[i];
+			if(std::holds_alternative<RayHit2D>(currentRay)) {
+				perviousHit = std::get<1>(currentRay);
+			} else {
+				const Ray2D currentRayMiss = std::get<0>(currentRay);
+				if(i + 1 < rays.size()) {
+					const RayVariant& nextRay = rays[i + 1];
+					if(std::holds_alternative<RayHit2D>(nextRay)) {
+						const RayHit2D& nextRayHit = std::get<1>(nextRay);
+						std::optional<Vector2> nextRayHitPoint =
+							rayLineIntersection(currentRayMiss, 
+								nextRayHit.location,  nextRayHit.ray.origin);
+						if(nextRayHitPoint.has_value()) {
+							Ray2D secondShotStartRay = Ray2D{nextRayHitPoint.value(), currentRayMiss.direction};
+							Ray2D secondShotEndRay = Ray2D{nextRayHitPoint.value(), nextRayHit.ray.direction};
+							RadialSection secondShotSection = RadialSection{
+								SectionType::miss, color, 0, 0, secondShotStartRay, secondShotEndRay,
+							};
+							secondShotRadialSections.push_back(secondShotSection);
+
+							RayHit2D hitStart = nextRayHit;
+							RayHit2D hitEnd = nextRayHit;
+							hitStart.location = nextRayHitPoint.value();
+							hitEnd.location = nextRayHitPoint.value();
+							hitStart.ray = currentRayMiss;
+
+							ScatterSection section = ScatterSection{
+								SectionType::hit, color, 0, 0, hitStart, hitEnd, nextRayHitPoint, ScatterSectionBehavior::converges
+							};
+							scatterSections.push_back(section);
+						}
+					}
+				}
+
+				if(perviousHit.has_value()) {
+					const RayHit2D& perviousRayHit = perviousHit.value();
+					std::optional<Vector2> perviousRayHitPoint =
+						rayLineIntersection(currentRayMiss, 
+							perviousRayHit.location,  perviousRayHit.ray.origin);
+					if(perviousRayHitPoint.has_value()) {
+						const Ray2D secondShotStartRay = Ray2D{perviousRayHitPoint.value(), perviousRayHit.ray.direction};
+						const Ray2D secondShotEndRay = Ray2D{perviousRayHitPoint.value(), currentRayMiss.direction};
+						RadialSection secondShotSection = RadialSection{
+							SectionType::miss, color, 0, 0, secondShotStartRay, secondShotEndRay,
+						};
+						secondShotRadialSections.push_back(secondShotSection);
+
+						RayHit2D hitStart = perviousRayHit;
+						RayHit2D hitEnd = perviousRayHit;
+						hitStart.location = perviousRayHitPoint.value();
+						hitEnd.location = perviousRayHitPoint.value();
+						hitEnd.ray = currentRayMiss;
+
+						ScatterSection section = ScatterSection{
+							SectionType::hit, color, 0, 0, hitStart, hitEnd, perviousRayHitPoint, ScatterSectionBehavior::converges
+						};
+						scatterSections.push_back(section);
+					}
+				}
+
+				perviousHit.reset();
+			}
+		}
+	}
+
+	for(ScatterSection& scatterSection : scatterSections) {
+		if(scatterSection.type == SectionType::miss) {
+			scatterSection.intersectionPoint = findRayIntersection(getRay(scatterSection.startRay), getRay(scatterSection.endRay));
+		} else {
+			RayHit2D startHitRay = std::get<1>(scatterSection.startRay);
+			RayHit2D endHitRay = std::get<1>(scatterSection.endRay);
+			scatterSection.intersectionPoint =  fineLineIntersection(
+				startHitRay.location, startHitRay.ray.origin,
+				endHitRay.location,  endHitRay.ray.origin);		
+		}
+
+		if(scatterSection.intersectionPoint.has_value()) {
+			Ray2D secondShotStartRay = Ray2D{scatterSection.intersectionPoint.value(), getRay(scatterSection.endRay).direction};
+			Ray2D secondShotEndRay = Ray2D{scatterSection.intersectionPoint.value(), getRay(scatterSection.startRay).direction};
+
+			RadialSection secondShotSection = RadialSection{
+				SectionType::miss, color, 0, 0, secondShotStartRay, secondShotEndRay,
+			};
+			secondShotRadialSections.push_back(secondShotSection);
+		}
+	}
+
+	GenerateScatterSectionsReturn result;
+	result.sections = std::move(scatterSections);
+	result.secondShotSections = std::move(secondShotRadialSections);
+	return result;
+}
+
+std::vector<RadialSection> generateScatterSecondRadialSections(const Color& color,
+    const Ray2D startRay, const Ray2D endRay,  std::vector<RayVariant>& rays,
+    const std::vector<Shape2D>& shapes, const real_t radialSectionTolerance) {
+	const Vector2 midpoint = ((startRay.direction.normalized() + endRay.direction.normalized()) / 2.0f).normalized();
+	const real_t angle = clockwiseAngle(midpoint);
+	return generateRadialSections(color, angle, rays, shapes, radialSectionTolerance);
 }

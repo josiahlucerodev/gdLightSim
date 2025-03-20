@@ -41,20 +41,20 @@ Shape2D constructShape2D(Mirror2D& mirror, ShapeId shapeId);
 std::vector<RayVariant> shotMirrorLinearSection(
 	const LinearSection& mirrorLinearSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t linearRaySpread);
-std::vector<LinearSection> generateMirrorLinearSections(
+std::vector<LinearSection> generateMirrorLinearSectionsFromLinear(
 	const LinearSection& mirrorLinearSection, std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, real_t linearSectionTolerance);
 				
-std::vector<RayVariant> shotMirrorRadialSection(
+ShotScatterReturn shotMirrorRadialSection(
 	const RadialSection& mirrorRadialSection, const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, const real_t& scatterRaySpread);
-std::vector<ScatterSection> generateMirrorScatterSections(
-	const RadialSection& mirrorRadialSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateMirrorScatterSectionsFromRadial(
+	const RadialSection& mirrorRadialSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance);
 	
-std::vector<RayVariant> shotMirrorScatterSection(
+ShotScatterReturn shotMirrorScatterSection(
 	const ScatterSection& mirrorScatterSection, const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, const real_t& scatterRaySpread);
-std::vector<ScatterSection> generateMirrorScatterSections(
-	const ScatterSection& mirrorScatterSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateMirrorScatterSectionsFromScatter(
+	const ScatterSection& mirrorScatterSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance);

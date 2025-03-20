@@ -210,10 +210,7 @@ void LightEnvironment2D::set_scatter_section_tolerance(const double scatterSecti
     this->scatterSectionTolerance = scatterSectionTolerance;
 }
 
-LightEnvironment2D::LightEnvironment2D() {}
-LightEnvironment2D::~LightEnvironment2D() {}
-
-void LightEnvironment2D::_ready() {
+LightEnvironment2D::LightEnvironment2D() {
     displayAABB = true;
     displayBVH2D = true;
     displayPoints = true;
@@ -234,7 +231,10 @@ void LightEnvironment2D::_ready() {
     displayScatterSections = true;
     scatterRaySpread = 0.001;
     scatterSectionTolerance = 0.1;
+}
+LightEnvironment2D::~LightEnvironment2D() {}
 
+void LightEnvironment2D::_ready() {
     shapes.clear();
     points.clear();
     radialSections.clear();
@@ -265,35 +265,37 @@ std::vector<Type*> getChildrenOfType(Node& parent, const String& typeName) {
     return childrenOfType;
 }
 
-/*
-void preformAdditionalLinearSectionOperations(
-    std::vector<RayVariant>& allShotRaysDst, 
-    std::vector<LinearSection>& linearSectionsDst, std::vector<ScatterSection>& scatterSectionsDst, 
-    const std::vector<Shape2D>& shapes, const BVH2D& bvh,
-    const real_t linearRaySpread, const real_t linearSectionTolerance, 
-    const real_t scatterRaySpread, const real_t scatterSectionTolerance,
-    const std::vector<LinearSection>& newLinearSections) {
-        
-    const std::vector<LinearSection> filterLinearSections = getFilterLinearSections(shapes, newLinearSections);
-    for(const LinearSection& filterLinearSection : filterLinearSections) {
-        std::vector<RayVariant> rays = shotFilterLinearSection(filterLinearSection, shapes, bvh,  linearRaySpread); 
-        allShotRaysDst.insert(allShotRaysDst.end(), rays.begin(), rays.end());
-        std::vector<LinearSection> sections = generateFilterLinearSections(filterLinearSection, rays, shapes, linearSectionTolerance);
-        linearSectionsDst.insert(linearSectionsDst.end(), sections.begin(), sections.end());
-        
-        preformAdditionalLinearSectionOperations(allShotRaysDst, linearSectionsDst, scatterSectionsDst, shapes, bvh,
-        linearRaySpread, linearSectionTolerance, scatterRaySpread, scatterSectionTolerance, sections
-    );
-}
-}
-*/
-
 void updateColliderHit(std::unordered_map<ShapeId, LightColider2D*>& shapeIdToLightColider, ShapeId shapeId) {
     auto findIter = shapeIdToLightColider.find(shapeId);
     if(findIter == shapeIdToLightColider.end()) {
         return;
     }
     findIter->second->set_is_hit(true);
+}
+
+void handleGenaratedScatterSections(LightEnvironment2D& env, 
+    SectionActionQueue& actionQueue, GenerateScatterSectionsReturn& generationResult) {
+    env.scatterSections.insert(env.scatterSections.begin(), generationResult.sections.begin(), generationResult.sections.end());
+    
+    std::vector<ScatterSection> actionScatterSections;
+    for(ScatterSection& scatterSection : generationResult.sections) {
+        if(!scatterSection.intersectionPoint.has_value()) {
+            actionScatterSections.push_back(scatterSection);
+        }
+    }
+    addScatterSectionActionsToQueue(actionQueue, env.shapes, actionScatterSections);
+
+    for(RadialSection& secondShot : generationResult.secondShotSections) {
+        const Ray2D startRay = getRay(secondShot.startRay);
+        const Ray2D endRay = getRay(secondShot.endRay);
+        std::vector<RayVariant> rays = shotScatterSecondRadialLight(secondShot.shapeId, 
+            startRay, endRay, env.points, env.bvh, env.radialRaySpread);
+        env.allShotRays.insert(env.allShotRays.end(), rays.begin(), rays.end());
+        std::vector<RadialSection> sections = generateScatterSecondRadialSections(secondShot.color, 
+            startRay, endRay, rays, env.shapes, env.radialSectionTolerance);
+        env.radialSections.insert(env.radialSections.end(), sections.begin(), sections.end());
+        addRadialSectionActionsToQueue(actionQueue, env.shapes, sections);
+    }
 }
 
 void LightEnvironment2D::_process(double delta) {
@@ -371,87 +373,87 @@ void LightEnvironment2D::_process(double delta) {
 
     std::size_t actionCount = 0;
     while(!actionQueue.empty() && actionCount < 1000) {
-        SectionAction sessionAction = actionQueue.front();
+        SectionAction sectionAction = actionQueue.front();
         actionQueue.pop_front();
         
-        switch(sessionAction.type) {
+        switch(sectionAction.type) {
         case SectionActionType::mirror:
-            std::visit([&](auto&& session) -> void {
-                using session_type = std::decay_t<decltype(session)>;
-                if constexpr(std::is_same_v<session_type, RadialSection>) {
-                    std::vector<RayVariant> rays = shotMirrorRadialSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateMirrorScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+            std::visit([&](auto&& section) -> void {
+                using section_type = std::decay_t<decltype(section)>;
+                if constexpr(std::is_same_v<section_type, RadialSection>) {
+                    ShotScatterReturn shotResults = shotMirrorRadialSection(section, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateMirrorScatterSectionsFromRadial(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-                if constexpr(std::is_same_v<session_type, LinearSection>) {
-                    std::vector<RayVariant> rays = shotMirrorLinearSection(session, shapes, bvh,  linearRaySpread); 
+                if constexpr(std::is_same_v<section_type, LinearSection>) {
+                    std::vector<RayVariant> rays = shotMirrorLinearSection(section, shapes, bvh,  linearRaySpread); 
                     allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<LinearSection> sections = generateMirrorLinearSections(session, rays, shapes, linearSectionTolerance);
+                    std::vector<LinearSection> sections = generateMirrorLinearSectionsFromLinear(section, rays, shapes, linearSectionTolerance);
                     linearSections.insert(linearSections.end(), sections.begin(), sections.end());
                     addLinearSectionActionsToQueue(actionQueue, shapes, sections);
                 }
-                if constexpr(std::is_same_v<session_type, ScatterSection>) {
-                    std::vector<RayVariant> rays = shotMirrorScatterSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateMirrorScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                if constexpr(std::is_same_v<section_type, ScatterSection>) {
+                    ShotScatterReturn shotResults = shotMirrorScatterSection(section, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateMirrorScatterSectionsFromScatter(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-            }, sessionAction.section);
+            }, sectionAction.section);
             break;
         case SectionActionType::filter:
-            std::visit([&](auto&& session) -> void {
-                using session_type = std::decay_t<decltype(session)>;
-                if constexpr(std::is_same_v<session_type, RadialSection>) {
-                    std::vector<RayVariant> rays = shotFilterRadialSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateFilterScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+            std::visit([&](auto&& section) -> void {
+                using section_type = std::decay_t<decltype(section)>;
+                if constexpr(std::is_same_v<section_type, RadialSection>) {
+                    ShotScatterReturn shotResults = shotFilterRadialSection(section, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateFilterScatterSections(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-                if constexpr(std::is_same_v<session_type, LinearSection>) {
-                    std::vector<RayVariant> rays = shotFilterLinearSection(session, shapes, bvh,  linearRaySpread); 
+                if constexpr(std::is_same_v<section_type, LinearSection>) {
+                    std::vector<RayVariant> rays = shotFilterLinearSection(section, shapes, bvh,  linearRaySpread); 
                     allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<LinearSection> sections = generateFilterLinearSections(session, rays, shapes, linearSectionTolerance);
+                    std::vector<LinearSection> sections = generateFilterLinearSections(section, rays, shapes, linearSectionTolerance);
                     linearSections.insert(linearSections.end(), sections.begin(), sections.end());
                     addLinearSectionActionsToQueue(actionQueue, shapes, sections);
                 }
-                if constexpr(std::is_same_v<session_type, ScatterSection>) {
-                    std::vector<RayVariant> rays = shotFilterScatterSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateFilterScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                if constexpr(std::is_same_v<section_type, ScatterSection>) {
+                    ShotScatterReturn shotResults = shotFilterScatterSection(section, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateFilterScatterSections(section, shotResults.rays,
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-            }, sessionAction.section);
+            }, sectionAction.section);
             break;
         case SectionActionType::lens:
-        std::visit([&](auto&& session) -> void {
-            using session_type = std::decay_t<decltype(session)>;
-            if constexpr(std::is_same_v<session_type, RadialSection>) {
-                    std::vector<RayVariant> rays = shotLensRadialSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+        std::visit([&](auto&& section) -> void {
+            using section_type = std::decay_t<decltype(section)>;
+            if constexpr(std::is_same_v<section_type, RadialSection>) {
+                ShotScatterReturn shotResults = shotLensRadialSection(section, shapes, bvh,  scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateLensScatterSectionsFromRadial(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-                if constexpr(std::is_same_v<session_type, LinearSection>) {
-                    std::vector<RayVariant> rays = shotLensLinearSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                if constexpr(std::is_same_v<section_type, LinearSection>) {
+                    ShotScatterReturn shotResults = shotLensLinearSection(section, shapes, bvh, scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateLensScatterSectionsFromLinear(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-                if constexpr(std::is_same_v<session_type, ScatterSection>) {
-                    std::vector<RayVariant> rays = shotLensScatterSection(session, shapes, bvh,  scatterRaySpread); 
-                    allShotRays.insert(allShotRays.end(), rays.begin(), rays.end());
-                    std::vector<ScatterSection> sections = generateLensScatterSections(session, rays, shapes, scatterSectionTolerance);
-                    scatterSections.insert(scatterSections.end(), sections.begin(), sections.end());
-                    addScatterSectionActionsToQueue(actionQueue, shapes, sections);
+                if constexpr(std::is_same_v<section_type, ScatterSection>) {
+                    ShotScatterReturn shotResults = shotLensScatterSection(section, shapes, bvh, scatterRaySpread); 
+                    allShotRays.insert(allShotRays.end(), shotResults.rays.begin(), shotResults.rays.end());
+                    GenerateScatterSectionsReturn generationResult = generateLensScatterSectionsFromScatter(section, shotResults.rays, 
+                        shotResults.behavior, shapes, scatterSectionTolerance);
+                    handleGenaratedScatterSections(*this, actionQueue, generationResult);
                 }
-            }, sessionAction.section);
+            }, sectionAction.section);
             break;
         default:
             break;
@@ -574,11 +576,26 @@ void generateTriangle(
     colors.push_back(color); //p2
     colors.push_back(color); //p3
 }
+void generateScatterSectionMeshGeometry(
+    PackedVector3Array& vertices, PackedVector2Array& uvs, PackedColorArray& colors,
+    const Color& color, 
+    const Point2 segmentStart1, const Point2 segmentEnd1, 
+    const Point2 segmentStart2, const Point2 segmentEnd2,
+    const bool isRadial) {
+    if(isRadial) {
+        generateTriangle(vertices, uvs, colors, color,
+            segmentStart1, segmentEnd1, segmentEnd2);
+    } else {
+        generateQuad(vertices, uvs, colors, color, segmentStart1, segmentEnd1, segmentStart2, segmentEnd2);
+    }
+}
 
 void generateEmptyLightMesh(LightEnvironment2D& env) {
     env.lightArrayMesh->reset_state();
     env.set_mesh(nullptr);
 }
+
+
 void generateLightMesh(LightEnvironment2D& env) {
     if(env.radialSections.empty() && env.linearSections.empty() && env.scatterSections.empty()) {
         generateEmptyLightMesh(env);
@@ -653,19 +670,30 @@ void generateLightMesh(LightEnvironment2D& env) {
         case SectionType::hit: {
             const RayHit2D& startHit = std::get<1>(section.startRay);    
             const RayHit2D& endHit = std::get<1>(section.endRay);    
-            generateQuad(vertices, uvs, colors, pickColor(section.color),
-                startHit.ray.origin, startHit.location, 
-                endHit.location, endHit.ray.origin);
+            if(section.intersectionPoint.has_value()) {
+                generateTriangle(vertices, uvs, colors, pickColor(section.color),
+                    startHit.ray.origin, endHit.ray.origin, section.intersectionPoint.value());
+            } else {
+                generateQuad(vertices, uvs, colors, pickColor(section.color),
+                    startHit.ray.origin, startHit.location, 
+                    endHit.location, endHit.ray.origin);
+            }
             break;
         }
         case SectionType::miss: {
             const Ray2D& startRay = std::get<0>(section.startRay);    
             const Ray2D& endRay = std::get<0>(section.endRay);    
-            Point2 startDis = startRay.origin + (startRay.direction * Settings::debugDistance);
-            Point2 endDis = endRay.origin + (endRay.direction * Settings::debugDistance);
-            generateQuad(vertices, uvs, colors, pickColor(section.color),
-                startRay.origin, startDis, 
-                endDis, endRay.origin);
+
+            if(section.intersectionPoint.has_value()) {
+                generateTriangle(vertices, uvs, colors, pickColor(section.color),
+                    startRay.origin, endRay.origin, section.intersectionPoint.value());
+            } else {
+                Point2 startDis = startRay.origin + (startRay.direction * Settings::debugDistance);
+                Point2 endDis = endRay.origin + (endRay.direction * Settings::debugDistance);
+                generateQuad(vertices, uvs, colors, pickColor(section.color),
+                    startRay.origin, startDis, 
+                    endDis, endRay.origin);
+            }
             break;
         }
         default:

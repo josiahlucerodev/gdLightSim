@@ -36,23 +36,23 @@ public:
 
 Shape2D constructShape2D(Lens2D& lens, ShapeId shapeId);
 
-std::vector<RayVariant> shotLensRadialSection(
+ShotScatterReturn shotLensRadialSection(
 	const RadialSection& lensRadialSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread);
-std::vector<ScatterSection> generateLensScatterSections(
-	const RadialSection& lensRadialSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateLensScatterSectionsFromRadial(
+	const RadialSection& lensRadialSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 	
-std::vector<RayVariant> shotLensLinearSection(
-	const LinearSection& lensLinearSection, const std::vector<Shape2D>& shapes, 
+ShotScatterReturn shotLensLinearSection(
+	const LinearSection& lensLinearSection, const std::vector<Shape2D>& shapes,
 	const BVH2D& bvh, const real_t scatterRaySpread);
-std::vector<ScatterSection> generateLensScatterSections(
-	const LinearSection& lensLinearSection, std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateLensScatterSectionsFromLinear(
+	const LinearSection& lensLinearSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 				
-std::vector<RayVariant> shotLensScatterSection(
+ShotScatterReturn shotLensScatterSection(
 	const ScatterSection& lensScatterSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread);
-std::vector<ScatterSection> generateLensScatterSections(
-	const ScatterSection& lensScatterSection, std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateLensScatterSectionsFromScatter(
+	const ScatterSection& lensScatterSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);

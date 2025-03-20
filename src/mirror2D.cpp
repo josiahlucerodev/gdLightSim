@@ -112,14 +112,14 @@ std::vector<RayVariant> shotMirrorLinearSection(
 		getPointsExcluding(mirrorShapeId, shapes), bvh, linearRaySpread);
 }
 
-std::vector<LinearSection> generateMirrorLinearSections(
+std::vector<LinearSection> generateMirrorLinearSectionsFromLinear(
 	const LinearSection& mirrorLinearSection, std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, real_t linearSectionTolerance) {
 	RayHit2D startRay = std::get<1>(mirrorLinearSection.startRay);
 	return generateLinearSections(mirrorLinearSection.color, startRay.ray.origin, rays, shapes, linearSectionTolerance);
 }
 
-std::vector<RayVariant> shotMirrorScatterLight(const RayHit2D startRay, const RayHit2D endRay, 
+ShotScatterReturn shotMirrorScatterLight(const RayHit2D startRay, const RayHit2D endRay,
 	const std::vector<Shape2D>& shapes, BVH2D& bvh, const real_t& scatterRaySpread) {
 	
 	const ShapeId mirrorShapeId = startRay.shapeId;
@@ -138,7 +138,7 @@ std::vector<RayVariant> shotMirrorScatterLight(const RayHit2D startRay, const Ra
 		getPointsExcluding(mirrorShapeId, shapes), bvh, scatterRaySpread);
 }
 
-std::vector<RayVariant> shotMirrorRadialSection(
+ShotScatterReturn shotMirrorRadialSection(
 	const RadialSection& mirrorRadialSection, const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, const real_t& scatterRaySpread) {
 
@@ -147,15 +147,15 @@ std::vector<RayVariant> shotMirrorRadialSection(
 	return shotMirrorScatterLight(startRay, endRay, shapes, bvh, scatterRaySpread);
 }
 
-std::vector<ScatterSection> generateMirrorScatterSections(
-	const RadialSection& mirrorRadialSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateMirrorScatterSectionsFromRadial(
+	const RadialSection& mirrorRadialSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance) {
 	const RayHit2D startRay = std::get<1>(mirrorRadialSection.startRay);
 	const RayHit2D endRay = std::get<1>(mirrorRadialSection.endRay);
-	return generateScatterSections(mirrorRadialSection.color, startRay, endRay, rays, shapes, scatterSectionTolerance);
+	return generateScatterSections(mirrorRadialSection.color, startRay, endRay, rays, behavior, shapes, scatterSectionTolerance);
 }
 
-std::vector<RayVariant> shotMirrorScatterSection(
+ShotScatterReturn shotMirrorScatterSection(
 	const ScatterSection& mirrorScatterSection, const std::vector<Shape2D>& shapes, 
 	BVH2D& bvh, const real_t& scatterRaySpread) {
 	const RayHit2D startRay = std::get<1>(mirrorScatterSection.startRay);
@@ -163,10 +163,10 @@ std::vector<RayVariant> shotMirrorScatterSection(
 	return shotMirrorScatterLight(startRay, endRay, shapes, bvh, scatterRaySpread);
 }
 
-std::vector<ScatterSection> generateMirrorScatterSections(
-	const ScatterSection& mirrorScatterSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateMirrorScatterSectionsFromScatter(
+	const ScatterSection& mirrorScatterSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior, 
 	const std::vector<Shape2D>& shapes, const real_t& scatterSectionTolerance) {
 	const RayHit2D startRay = std::get<1>(mirrorScatterSection.startRay);
 	const RayHit2D endRay = std::get<1>(mirrorScatterSection.endRay);
-	return generateScatterSections(mirrorScatterSection.color, startRay, endRay, rays, shapes, scatterSectionTolerance);
+	return generateScatterSections(mirrorScatterSection.color, startRay, endRay, rays, behavior, shapes, scatterSectionTolerance);
 }

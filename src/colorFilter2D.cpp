@@ -140,7 +140,7 @@ std::vector<LinearSection> generateFilterLinearSections(
 }
 
 //radial
-std::vector<RayVariant> shotFilterRadialSection(
+ShotScatterReturn shotFilterRadialSection(
 	const RadialSection& filterRadialSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread) {
 	
@@ -154,8 +154,8 @@ std::vector<RayVariant> shotFilterRadialSection(
 	return shotScatterLight(filterShapeId, filterStartRay, filterEndRay,  
 		getPointsExcluding(filterShapeId, shapes), bvh, scatterRaySpread);
 }
-std::vector<ScatterSection> generateFilterScatterSections(
-	const RadialSection& filterRadialSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateFilterScatterSections(
+	const RadialSection& filterRadialSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance) {
 	const RayHit2D& startRay = std::get<1>(filterRadialSection.startRay);
 	const RayHit2D& endRay = std::get<1>(filterRadialSection.endRay);
@@ -164,11 +164,11 @@ std::vector<ScatterSection> generateFilterScatterSections(
 	const Color& filterColor = shapes[originShapeId].filterColor;
 	const Color& color = applyFilter(filterRadialSection.color, filterColor);
 
-	return generateScatterSections(color, startRay, endRay, rays, shapes, scatterSectionTolerance);
+	return generateScatterSections(color, startRay, endRay, rays, behavior, shapes, scatterSectionTolerance);
 }
 
 //scatter
-std::vector<RayVariant> shotFilterScatterSection(
+ShotScatterReturn shotFilterScatterSection(
 	const ScatterSection& filterScatterSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread) {
 	const RayHit2D& startRay = std::get<1>(filterScatterSection.startRay);
@@ -181,8 +181,8 @@ std::vector<RayVariant> shotFilterScatterSection(
 	return shotScatterLight(filterShapeId, filterStartRay, filterEndRay,  
 		getPointsExcluding(filterShapeId, shapes), bvh, scatterRaySpread);
 }
-std::vector<ScatterSection> generateFilterScatterSections(
-	const ScatterSection& filterScatterSection, std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateFilterScatterSections(
+	const ScatterSection& filterScatterSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance) {
 	const RayHit2D& startRay = std::get<1>(filterScatterSection.startRay);
 	const RayHit2D& endRay = std::get<1>(filterScatterSection.endRay);
@@ -191,5 +191,5 @@ std::vector<ScatterSection> generateFilterScatterSections(
 	const Color& filterColor = shapes[originShapeId].filterColor;
 	const Color& color = applyFilter(filterScatterSection.color, filterColor);
 
-	return generateScatterSections(color, startRay, endRay, rays, shapes, scatterSectionTolerance);
+	return generateScatterSections(color, startRay, endRay, rays, behavior, shapes, scatterSectionTolerance);
 }

@@ -36,6 +36,7 @@ protected:
     bool displayLightColor;
     int64_t maxActions;
     
+public:
     bool displayRadialSections;
     double radialRaySpread;
     double radialSectionTolerance;
@@ -47,7 +48,6 @@ protected:
     bool displayScatterSections;
     double scatterRaySpread;
     double scatterSectionTolerance;
-public:
 	BVH2D bvh;
 	std::vector<Shape2D> shapes;
 	std::vector<Point2> points;

@@ -10,53 +10,12 @@
 //own
 #include "settings.h"
 #include "util.h"
+#include "spotLight2D.h"
 
 using namespace godot;
 
 bool areRayLocationsRelativelyClose(const Point2& a, const Point2& b, const real_t& distanceThreshold) {
     return a.distance_to(b) <= distanceThreshold;
-}
-
-void shotAndAddRaysAtPoint(
-    std::vector<RayVariant>& raysDst, const std::optional<ShapeId>& shapeOriginId,
-    const BVH2D& bvh, const real_t& linearRaySpread, const Point2& point,
-    const Ray2D& leftRay, const Ray2D& middleRay, const Ray2D& rightRay) {
-    const std::optional<RayHit2D> leftHit = shotRay(leftRay, shapeOriginId, bvh);
-    const std::optional<RayHit2D> middleHit = shotRay(middleRay, shapeOriginId, bvh);
-    const std::optional<RayHit2D> rightHit = shotRay(rightRay, shapeOriginId, bvh);
-    
-    auto alignHit = [&](const RayHit2D& rayHit) -> RayHit2D {
-        RayHit2D aHit = rayHit;
-        aHit.location = point;
-        return rayHit;
-    };
-    
-    const real_t distanceThreshold = 0.01;
-    if(middleHit.has_value()) {
-        raysDst.push_back(middleHit.value());
-
-        if(!leftHit.has_value()) {
-            raysDst.push_back(leftRay);
-        } else if (!areRayLocationsRelativelyClose(
-            leftHit.value().location, middleHit.value().location, distanceThreshold)) { 
-            raysDst.push_back(leftHit.value());
-        }
-
-        if(!rightHit.has_value()) {
-            raysDst.push_back(rightRay);
-        } else if (!areRayLocationsRelativelyClose(
-            rightHit.value().location, middleHit.value().location, distanceThreshold)) {
-            raysDst.push_back(rightHit.value());
-        }
-    } else {
-        raysDst.push_back(middleRay);
-
-        if(leftHit.has_value()) { //only hit
-            raysDst.push_back(alignHit(leftHit.value()));
-        } else if(rightHit.has_value()) { //only hit
-            raysDst.push_back(alignHit(rightHit.value()));
-        }
-    }
 }
 
 std::vector<RayVariant> shotLinearLight(
@@ -117,21 +76,7 @@ std::vector<RayVariant> shotLinearLight(
     return rays;
 }
 
-inline Vector2 weightedSlerp(const Vector2& v1, real_t w2, const Vector2& v2, real_t w1) {
-    const real_t t = 0.5;
-    real_t dot = v1.dot(v2);
-    dot = std::clamp(dot, -1.0f, 1.0f);
-    real_t theta = std::acos(dot);
-    if (theta == 0.0f) {
-        return v1;
-    }
-    const real_t sinTheta = std::sin(theta);
-    const real_t scaleV1 = w1 * std::sin((1 - t) * theta) / sinTheta;
-    const real_t scaleV2 = w2 * std::sin(t * theta) / sinTheta;
-    return Vector2{scaleV1 * v1[0] + scaleV2 * v2[0], scaleV1 * v1[1] + scaleV2 * v2[1]}.normalized();
-}
-
-std::vector<RayVariant> shotScatterLight(
+ShotScatterReturn shotScatterLight(
     const std::optional<ShapeId>& shapeOriginId, const Ray2D& startRay, const Ray2D& endRay,
     const std::vector<Point2>& points, const BVH2D& bvh, const real_t scatterRaySpread) {
 
@@ -139,68 +84,98 @@ std::vector<RayVariant> shotScatterLight(
 	const real_t surfaceSlopeAngle = atan(surfuceSlope);
 	const Vector2 surfaceSlopeDir = vectorFromAngle(surfaceSlopeAngle);
 	
-	std::vector<Ray2D> testRays;
+    const real_t intersectTestLineDistance = 1000000;
+    const Point2 intersectTestLineStart = startRay.origin 
+        + (startRay.direction * intersectTestLineDistance); 
+    const Point2 intersectTestLineEnd = startRay.origin 
+        + (startRay.direction * -intersectTestLineDistance);
+
+    const Ray2D backwardEndRay = Ray2D{endRay.origin, -endRay.direction };
+    const std::optional<Point2> convergePoint = rayLineIntersection(endRay, intersectTestLineStart, intersectTestLineEnd);
+    const std::optional<Point2> divergePoint = rayLineIntersection(backwardEndRay, intersectTestLineStart, intersectTestLineEnd);
+    
+    std::vector<Ray2D> testRays;
     std::vector<RayVariant> rays;
-	for(Point2 point : points) {
-		Point2 parallelLineToPointStart = (surfaceSlopeDir * 1000000) + point; 
-		Point2 parallelLineToPointEnd = (-surfaceSlopeDir * 1000000) + point; 
-		
-		auto getDistance = [&](Ray2D ray) -> std::optional<real_t> {
-            std::optional<Point2> hit = rayLineIntersection(ray, parallelLineToPointStart, parallelLineToPointEnd);
-			if(!hit.has_value()) {
-                return {};
-			}
-			return hit.value().distance_to(point);
-		};
-		
-		std::optional<real_t> distanceToStart = getDistance(startRay);
-        if(!distanceToStart.has_value()) {
-            continue;
+    ScatterSectionBehavior behavior;
+    if(!convergePoint.has_value() && !divergePoint.has_value()) {
+        //light is a beam
+        behavior = ScatterSectionBehavior::parallel;
+        const Vector2 linearDirection = startRay.direction;
+        const Vector2 startPoint = startRay.origin;
+        const Vector2 endPoint = endRay.origin;
+        for(Point2 point : points) {
+            std::optional<Point2> rayOrigin = rayLineIntersection(
+                Ray2D{point, -linearDirection}, startPoint, endPoint);
+            if(rayOrigin.has_value()) {
+                testRays.push_back(Ray2D{rayOrigin.value(), linearDirection});
+            }
         }
-		std::optional<real_t> distanceToEnd = getDistance(endRay);
-        if(!distanceToEnd.has_value()) {
-            continue;
+    } else if (convergePoint.has_value()) {
+        //converging light
+        behavior = ScatterSectionBehavior::converges;
+        for(Point2 point : points) {
+            const Vector2 startPoint = startRay.origin;
+            const Vector2 endPoint = endRay.origin;
+            const Vector2 direction = getDirectionVectorToFrom(point, convergePoint.value());
+
+            std::optional<Point2> rayOrigin = rayLineIntersection(
+                Ray2D{point, -direction}, startPoint, endPoint);
+            if(rayOrigin.has_value()) {
+                testRays.push_back(Ray2D{rayOrigin.value(), direction});
+            }
         }
-
-        Vector2 directionToStart = point.direction_to(startRay.origin);
-        Vector2 directionToEnd = point.direction_to(endRay.origin);
-
-        /*
-		Vector2 rayDir = weightedSlerp(startRay.direction, distanceToStart, endRay.direction, distanceToEnd);
-        rays.push_back(Ray2D{point, rayDir * -1});
-        std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir * -1}, startRay.origin, endRay.origin);
-        */
-       
-        Vector2 rayDir = weightedSlerp(directionToStart, distanceToStart.value(), directionToEnd, distanceToEnd.value());
-        //rays.push_back(Ray2D{point, rayDir});
-        std::optional<Point2> rayOrigin = rayLineIntersection(Ray2D{point, rayDir}, startRay.origin, endRay.origin);
-
-		if(rayOrigin.has_value()) {
-			testRays.push_back(Ray2D{rayOrigin.value(), rayDir * -1});
-		}
-	}
+        
+    } else {
+        //diverging light
+        behavior = ScatterSectionBehavior::diverges;
+         for(Point2 point : points) {
+            const Vector2 startPoint = startRay.origin;
+            const Vector2 endPoint = endRay.origin;
+            const Vector2 direction = getDirectionVectorToFrom(point, divergePoint.value());
+            
+            std::optional<Point2> rayOrigin = rayLineIntersection(
+                Ray2D{point, direction}, startPoint, endPoint);
+            if(rayOrigin.has_value()) {
+                testRays.push_back(Ray2D{rayOrigin.value(), -direction});
+            }
+        }
+    }
 	
 	auto testRay = [&](Ray2D ray) {
-		std::optional<RayHit2D> rayHit = shotRay(ray, shapeOriginId, bvh);
+        std::optional<RayHit2D> rayHit = shotRay(ray, shapeOriginId, bvh);
 		if(rayHit.has_value()) {
-			rays.push_back(RayVariant(rayHit.value()));
+            rays.push_back(RayVariant(rayHit.value()));
 		} else {
-			rays.push_back(RayVariant(ray));
+            rays.push_back(RayVariant(ray));
 		}
 	};
-
+    
 	testRay(startRay);
 	testRay(endRay);
-
+    
 	for(Ray2D ray : testRays) {
-		Ray2D side1 = Ray2D{ray.origin + (surfaceSlopeDir * scatterRaySpread), 
+        Ray2D side1 = Ray2D{ray.origin - (surfaceSlopeDir * scatterRaySpread), 
 			ray.direction.rotated(scatterRaySpread).normalized()};
-		Ray2D side2 = Ray2D{ray.origin - (surfaceSlopeDir * scatterRaySpread), 
+            Ray2D side2 = Ray2D{ray.origin + (surfaceSlopeDir * scatterRaySpread), 
 			ray.direction.rotated(-scatterRaySpread).normalized()};
 		testRay(side2);
 		testRay(ray);
 		testRay(side1);
 	}
-	
-	return rays;
+
+    ShotScatterReturn result;
+	result.rays = std::move(rays);
+    result.behavior = behavior;
+	return result;
+}
+
+std::vector<RayVariant> shotScatterSecondRadialLight(
+    const std::optional<ShapeId>& shapeOriginId, const Ray2D& startRay, const Ray2D& endRay,
+    const std::vector<Point2>& points, const BVH2D& bvh, const real_t radialRaySpread) {
+    const real_t arc = startRay.direction.angle_to(endRay.direction);
+    const Point2 startLocation = startRay.origin;
+
+    const Vector2 midpoint = ((startRay.direction.normalized() + endRay.direction.normalized()) / 2.0f).normalized();
+    const real_t angle = clockwiseAngle(midpoint);
+    return shotSpotLight2D(angle, startLocation, arc, points, bvh, radialRaySpread);
 }

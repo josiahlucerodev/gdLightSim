@@ -38,6 +38,12 @@ struct LinearSection {
     RayVariant endRay;
 };
 
+enum struct ScatterSectionBehavior {
+    parallel,
+    converges,
+    diverges
+};
+
 struct ScatterSection {
     SectionType type;
     Color color;
@@ -45,6 +51,8 @@ struct ScatterSection {
     std::size_t bounceIndex;
     RayVariant startRay;
     RayVariant endRay;
+    std::optional<Point2> intersectionPoint;
+    ScatterSectionBehavior behavior;
 };
 
 enum struct SectionActionType {
@@ -79,6 +87,23 @@ std::vector<LinearSection> generateLinearSections(
 	const Color& color, const Point2& rightPoint, std::vector<RayVariant>& rays, 
 	const std::vector<Shape2D>& shapes, const real_t linearSectionTolerance);
 
-std::vector<ScatterSection> generateScatterSections(const Color& color,
-	const RayHit2D startRay, const RayHit2D endRay,  std::vector<RayVariant>& rays,
+struct GenerateScatterSectionsReturn {
+    std::vector<ScatterSection> sections;
+    std::vector<RadialSection> secondShotSections; 
+    //second shot sections occur when a section when the section cross and a radial section 
+    //needs to be shot from that convergent point forward 
+};
+
+GenerateScatterSectionsReturn generateScatterSections(const Color& color,
+	const RayHit2D startRay, const RayHit2D endRay,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
+
+std::vector<RadialSection> generateScatterSecondRadialSections(const Color& color,
+    const Ray2D startRay, const Ray2D endRay, std::vector<RayVariant>& rays, 
+    const std::vector<Shape2D>& shapes, const real_t radialSectionTolerance);
+
+struct ShotScatterReturn {
+    ScatterSectionBehavior behavior;
+    std::vector<RayVariant> rays;
+};
+    

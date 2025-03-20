@@ -77,6 +77,24 @@ const Ray2D& getRay(const RayVariant& rayVariant) {
     }, rayVariant);
 } ;
 
-const real_t getRayReflectionAngle(const real_t& rayAngle, const real_t& mirrorRotation) {
+real_t getRayReflectionAngle(const real_t& rayAngle, const real_t& mirrorRotation) {
     return -(rayAngle - mirrorRotation) + mirrorRotation;
+}
+
+bool doLinesIntersect(const Point2& p1, const Point2& q1, const Point2& p2, const Point2& q2) {
+    Point2 r = q1 - p1;
+    Point2 s = q2 - p2;
+
+    real_t rxs = r.cross(s);
+    real_t qp1xr = (p2 - p1).cross(r);
+    real_t qp1xs = (p2 - p1).cross(s);
+
+    if (rxs == 0) {
+        return false;
+    }
+
+    real_t t = qp1xs / rxs;
+    real_t u = qp1xr / rxs;
+
+    return (t >= 0 && t <= 1 && u >= 0 && u <= 1);
 }

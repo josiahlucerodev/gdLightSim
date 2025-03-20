@@ -36,11 +36,11 @@ public:
 
 Shape2D constructShape2D(ColorFilter2D& filter, ShapeId shapeId);
 
-std::vector<RayVariant> shotFilterRadialSection(
+ShotScatterReturn shotFilterRadialSection(
 	const RadialSection& filterRadialSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread);
-std::vector<ScatterSection> generateFilterScatterSections(
-	const RadialSection& filterRadialSection,  std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateFilterScatterSections(
+	const RadialSection& filterRadialSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 	
 std::vector<RayVariant> shotFilterLinearSection(
@@ -50,10 +50,10 @@ std::vector<LinearSection> generateFilterLinearSections(
 	const LinearSection& filterLinearSection, std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, const real_t linearSectionTolerance);
 				
-std::vector<RayVariant> shotFilterScatterSection(
+ShotScatterReturn shotFilterScatterSection(
 	const ScatterSection& filterScatterSection, const std::vector<Shape2D>& shapes, 
 	const BVH2D& bvh, const real_t scatterRaySpread);
-std::vector<ScatterSection> generateFilterScatterSections(
-	const ScatterSection& filterScatterSection, std::vector<RayVariant>& rays,
+GenerateScatterSectionsReturn generateFilterScatterSections(
+	const ScatterSection& filterScatterSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 
