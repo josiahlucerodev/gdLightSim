@@ -85,9 +85,9 @@ Shape2D constructShape2D(Lens2D& lens, ShapeId shapeId) {
     shape.focalLength = lens.get_focal_length();
     
     real_t width = lens.get_lens_width();
-    Vector2 position = lens.get_transform().get_origin();
+    Vector2 position = lens.get_global_transform().get_origin();
 
-    real_t rotation = lens.get_transform().get_rotation() + (Math_PI / 2);
+    real_t rotation = lens.get_global_transform().get_rotation() + (Math_PI / 2);
     Point2 dir = vectorFromAngle(rotation);
     Point2 rightPoint = position + (dir * (width / 2));
     Point2 leftPoint = position + ((dir * (-1)) * (width / 2));

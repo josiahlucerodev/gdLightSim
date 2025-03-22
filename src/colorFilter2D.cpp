@@ -85,9 +85,9 @@ Shape2D constructShape2D(ColorFilter2D& filter, ShapeId shapeId) {
 	shape.filterColor = filter.get_filter_color();
     
     real_t filterWidth = filter.get_filter_width();
-    Vector2 position = filter.get_transform().get_origin();
+    Vector2 position = filter.get_global_transform().get_origin();
 
-    real_t rotation = filter.get_transform().get_rotation() + (Math_PI / 2);
+    real_t rotation = filter.get_global_transform().get_rotation() + (Math_PI / 2);
     Point2 dir = vectorFromAngle(rotation);
     Point2 rightPoint = position + (dir * (filterWidth / 2));
     Point2 leftPoint = position + ((dir * (-1)) * (filterWidth / 2));

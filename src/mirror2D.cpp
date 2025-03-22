@@ -73,9 +73,9 @@ Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
     shape.shapeId = shapeId;
     
     real_t mirrorWidth = mirror.get_mirror_width();
-    Vector2 position = mirror.get_transform().get_origin();
+    Vector2 position = mirror.get_global_transform().get_origin();
 
-    real_t rotation = mirror.get_transform().get_rotation() + (Math_PI / 2);
+    real_t rotation = mirror.get_global_transform().get_rotation() + (Math_PI / 2);
     Point2 dir = vectorFromAngle(rotation);
     Point2 rightPoint = position + (dir * (mirrorWidth / 2));
     Point2 leftPoint = position + ((dir * (-1)) * (mirrorWidth / 2));

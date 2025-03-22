@@ -8,15 +8,15 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = ExtResource("1_ewo7l")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_2ssnh"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_gcgup"]
 _surfaces = [{
-"aabb": AABB(-10000, -113.525, 0, 10270, 100, 1e-05),
+"aabb": AABB(-10000, -104.303, 0, 10251.3, 100, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 18,
-"vertex_data": PackedByteArray("AADLw7hkWMEAAAAAAAAAALhkWMEAAAAAAAAAAAAASMIAAAAAAADLw7hkWMEAAAAAAAAAAAAASMIAAAAAAADLwwAASMIAAAAAAADLwz0KSMIAAAAAUgGHQz0KSMIAAAAAzCR+Q5cM48IAAAAAAADLwz0KSMIAAAAAzCR+Q5cM48IAAAAAAADLw5cM48IAAAAAAAAAALhkWMEAAAAAAEAcxk1oWMEAAAAAAEAcxuUASMIAAAAAAAAAALhkWMEAAAAAAEAcxuUASMIAAAAAAAAAAAAASMIAAAAA")
+"vertex_data": PackedByteArray("AADLw5C0icAAAAAAAAAAAJC0icAAAAAAAAAAAAAASMIAAAAAAADLw5C0icAAAAAAAAAAAAAASMIAAAAAAADLwwAASMIAAAAAAADLwz0KSMIAAAAADEF7Qz0KSMIAAAAA7LBtQ0mb0MIAAAAAAADLwz0KSMIAAAAA7LBtQ0mb0MIAAAAAAADLw0mb0MIAAAAAAAAAAJC0icAAAAAAAEAcxrm7icAAAAAAAEAcxuUASMIAAAAAAAAAAJC0icAAAAAAAEAcxuUASMIAAAAAAAAAAAAASMIAAAAA")
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
@@ -30,9 +30,7 @@ displayScatterSections = false
 scatterRaySpread = 0.0001
 scatterSectionTolerance = 0.5
 material = SubResource("ShaderMaterial_pjvrk")
-position = Vector2(621, -975)
-scale = Vector2(1, 0.976)
-mesh = SubResource("ArrayMesh_2ssnh")
+mesh = SubResource("ArrayMesh_gcgup")
 
 [node name="Player" type="CharacterBody2D" parent="LightEnvironment2D"]
 visibility_layer = 2
@@ -51,11 +49,12 @@ position = Vector2(-25, 10.2459)
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
 light_width = 100.0
-position = Vector2(-406, -63.5246)
+position = Vector2(-406, -54.3033)
 
 [node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D"]
 is_hit = true
-position = Vector2(293, 126.025)
+position = Vector2(258, 61)
+scale = Vector2(0.995638, 0.986528)
 polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
 
 [node name="Node2D" type="Node2D" parent="LightEnvironment2D"]
