@@ -19,6 +19,7 @@
 #include "circleLight2D.h"
 #include "mirror2D.h"
 #include "colorFilter2D.h"
+#include "lightSensor2D.h"
 #include "lens2D.h"
 #include "util.h"
 #include "settings.h"
@@ -315,8 +316,10 @@ void LightEnvironment2D::_process(double delta) {
     std::vector<Mirror2D*> mirrors = getChildrenOfType<Mirror2D>(*this, "Mirror2D");
     std::vector<ColorFilter2D*> filters = getChildrenOfType<ColorFilter2D>(*this, "ColorFilter2D");
     std::vector<Lens2D*> lenses = getChildrenOfType<Lens2D>(*this, "Lens2D");
+    std::vector<LightSensor2D*> lightSensors = getChildrenOfType<LightSensor2D>(*this, "LightSensor2D");
+    std::unordered_map<LightSensor2D*, ShapeId> lightSensorsToShapeId;
 
-    if(mirrors.empty() && lightColiders.empty() && filters.empty() && lenses.empty()) {
+    if(mirrors.empty() && lightColiders.empty() && filters.empty() && lenses.empty() && lightSensors.empty()) {
         queue_redraw();
         return;
     }
@@ -342,6 +345,13 @@ void LightEnvironment2D::_process(double delta) {
     for(Lens2D* lens : lenses) {
         Shape2D shape = constructShape2D(*lens, shapes.size());
         shapes.push_back(shape);
+    }
+
+    for(LightSensor2D* lightSensor : lightSensors) {
+        Shape2D shape = constructShape2D(*lightSensor, shapes.size());
+        shapes.push_back(shape);
+        lightSensor->set_is_hit(false);\
+        lightSensorsToShapeId.insert({lightSensor, shape.shapeId});
     }
 
     constructBVH2D(bvh, shapes);
@@ -476,6 +486,13 @@ void LightEnvironment2D::_process(double delta) {
     for(const ScatterSection& scatterSection : scatterSections) {
         updateColliderHit(shapeIdToLightColider, scatterSection.shapeId);
     }
+
+    for(LightSensor2D* lightSensor : lightSensors) {
+       if(bvh.shapeIsHit[lightSensorsToShapeId.find(lightSensor)->second] == true) {
+            lightSensor->set_is_hit(true);
+       }
+    }
+
 
     queue_redraw();
 }

@@ -117,7 +117,7 @@ Ray2D refractRayThroughLens(const Vector2& lensMidpoint, const real_t focalLengt
 template<typename Section>
 ShotScatterReturn shotLensSection(
 	const Section& section, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t scatterRaySpread) {
+	BVH2D& bvh, const real_t scatterRaySpread) {
 
 	RayHit2D startRay = std::get<1>(section.startRay);
 	RayHit2D endRay = std::get<1>(section.endRay);
@@ -148,7 +148,7 @@ GenerateScatterSectionsReturn generateLensSections(
 
 ShotScatterReturn shotLensRadialSection(
 	const RadialSection& lensRadialSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t scatterRaySpread) {
+	BVH2D& bvh, const real_t scatterRaySpread) {
 	return shotLensSection<RadialSection>(lensRadialSection, shapes, bvh, scatterRaySpread);
 }
 GenerateScatterSectionsReturn generateLensScatterSectionsFromRadial(
@@ -163,7 +163,7 @@ GenerateScatterSectionsReturn generateLensScatterSectionsFromRadial(
 
 ShotScatterReturn shotLensLinearSection(
 	const LinearSection& lensLinearSection, const std::vector<Shape2D>& shapes,
-	const BVH2D& bvh, const real_t scatterRaySpread) {
+	BVH2D& bvh, const real_t scatterRaySpread) {
 	return shotLensSection<LinearSection>(lensLinearSection, shapes, bvh, scatterRaySpread);
 }
 GenerateScatterSectionsReturn generateLensScatterSectionsFromLinear(
@@ -174,7 +174,7 @@ GenerateScatterSectionsReturn generateLensScatterSectionsFromLinear(
 				
 ShotScatterReturn shotLensScatterSection(
 	const ScatterSection& lensScatterSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t scatterRaySpread) {
+	BVH2D& bvh, const real_t scatterRaySpread) {
 	return shotLensSection<ScatterSection>(lensScatterSection, shapes, bvh, scatterRaySpread);
 }
 GenerateScatterSectionsReturn generateLensScatterSectionsFromScatter(

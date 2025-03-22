@@ -38,21 +38,21 @@ Shape2D constructShape2D(Lens2D& lens, ShapeId shapeId);
 
 ShotScatterReturn shotLensRadialSection(
 	const RadialSection& lensRadialSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t scatterRaySpread);
+	BVH2D& bvh, const real_t scatterRaySpread);
 GenerateScatterSectionsReturn generateLensScatterSectionsFromRadial(
 	const RadialSection& lensRadialSection,  std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 	
 ShotScatterReturn shotLensLinearSection(
 	const LinearSection& lensLinearSection, const std::vector<Shape2D>& shapes,
-	const BVH2D& bvh, const real_t scatterRaySpread);
+	BVH2D& bvh, const real_t scatterRaySpread);
 GenerateScatterSectionsReturn generateLensScatterSectionsFromLinear(
 	const LinearSection& lensLinearSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);
 				
 ShotScatterReturn shotLensScatterSection(
 	const ScatterSection& lensScatterSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t scatterRaySpread);
+	BVH2D& bvh, const real_t scatterRaySpread);
 GenerateScatterSectionsReturn generateLensScatterSectionsFromScatter(
 	const ScatterSection& lensScatterSection, std::vector<RayVariant>& rays, const ScatterSectionBehavior& behavior,
 	const std::vector<Shape2D>& shapes, const real_t scatterSectionTolerance);

@@ -96,7 +96,7 @@ Shape2D constructShape2D(Mirror2D& mirror, std::size_t shapeId) {
 
 std::vector<RayVariant> shotMirrorLinearSection(
 	const LinearSection& mirrorLinearSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t linearRaySpread) {
+	BVH2D& bvh, const real_t linearRaySpread) {
 
 	RayHit2D startRay = std::get<1>(mirrorLinearSection.startRay);
 	RayHit2D endRay = std::get<1>(mirrorLinearSection.endRay);

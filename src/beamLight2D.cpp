@@ -86,7 +86,7 @@ void BeamLight2D::_draw() {
 
 std::vector<RayVariant> shotBeamLight2D(
 	const BeamLight2D& beamLight, const std::vector<Point2>& points, 
-	const BVH2D& bvh, real_t linearRaySpread) {
+	BVH2D& bvh, real_t linearRaySpread) {
 	Point2 beamLightLocation = beamLight.get_position();
 	real_t beamLightWidth = beamLight.get_light_width();
 	real_t beamLightRotation = beamLight.get_rotation();

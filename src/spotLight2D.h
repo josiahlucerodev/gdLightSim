@@ -38,10 +38,10 @@ public:
 
 std::vector<RayVariant> shotSpotLight2D(
 	const real_t& angle, const Point2& spotLightLocation, const real_t& arc,
-	const std::vector<Point2>& points, const BVH2D& bvh, const real_t& radialRaySpread);
+	const std::vector<Point2>& points, BVH2D& bvh, const real_t& radialRaySpread);
 std::vector<RayVariant> shotSpotLight2D(
 	const SpotLight2D& spotLight, const std::vector<Point2>& points, 
-	const BVH2D& bvh, const real_t& radialRaySpread);
+	BVH2D& bvh, const real_t& radialRaySpread);
 
 std::vector<RadialSection> generateSpotLight2DSections(
 	const SpotLight2D& spotLight, std::vector<RayVariant>& rays,

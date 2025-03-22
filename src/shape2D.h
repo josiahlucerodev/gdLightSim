@@ -15,6 +15,7 @@ enum struct Shape2DType {
     mirror,
     filter,
     lens,
+    sensor,
 };
 
 using ShapeId = std::size_t;

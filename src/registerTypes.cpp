@@ -13,6 +13,7 @@
 #include "colorFilter2D.h"
 #include "lens2D.h"
 #include "lightCollider2D.h"
+#include "lightSensor2D.h"
 
 void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -25,6 +26,7 @@ void gdextension_initialize(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<ColorFilter2D>();
 		ClassDB::register_class<Lens2D>();
 		ClassDB::register_class<LightColider2D>();
+		ClassDB::register_class<LightSensor2D>();
 	}
 }
 

@@ -40,7 +40,7 @@ Shape2D constructShape2D(Mirror2D& mirror, ShapeId shapeId);
 
 std::vector<RayVariant> shotMirrorLinearSection(
 	const LinearSection& mirrorLinearSection, const std::vector<Shape2D>& shapes, 
-	const BVH2D& bvh, const real_t linearRaySpread);
+	BVH2D& bvh, const real_t linearRaySpread);
 std::vector<LinearSection> generateMirrorLinearSectionsFromLinear(
 	const LinearSection& mirrorLinearSection, std::vector<RayVariant>& rays,
 	const std::vector<Shape2D>& shapes, real_t linearSectionTolerance);

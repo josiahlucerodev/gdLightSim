@@ -94,7 +94,7 @@ void SpotLight2D::_draw() {
 
 std::vector<RayVariant> shotSpotLight2D(
 	const real_t& angle, const Point2& spotLightLocation, const real_t& arc,
-	const std::vector<Point2>& points, const BVH2D& bvh, const real_t& radialRaySpread) {
+	const std::vector<Point2>& points, BVH2D& bvh, const real_t& radialRaySpread) {
 
 	std::vector<Point2> pointsInSpotlightArc;
 	pointsInSpotlightArc.reserve(points.size());
@@ -145,7 +145,7 @@ std::vector<RayVariant> shotSpotLight2D(
 
 std::vector<RayVariant> shotSpotLight2D(
 	const SpotLight2D& spotLight, const std::vector<Point2>& points, 
-	const BVH2D& bvh, const real_t& radialRaySpread) {
+	BVH2D& bvh, const real_t& radialRaySpread) {
 	return shotSpotLight2D(spotLight.get_rotation(), spotLight.get_position(), 
 		Math::deg_to_rad(spotLight.get_arc()), points, bvh, radialRaySpread);
 }
