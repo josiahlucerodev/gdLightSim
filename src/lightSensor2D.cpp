@@ -13,6 +13,8 @@ void LightSensor2D::set_is_hit(const bool isHit) {
 	this->isHit = isHit;
 }
 
+
+
 Shape2D constructShape2D(LightSensor2D& polygon, ShapeId shapeId) {
     PackedVector2Array polygonPoints = polygon.get_polygon();
     real_t rotation = polygon.get_rotation();

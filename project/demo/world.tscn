@@ -1,14 +1,16 @@
-[gd_scene load_steps=8 format=4 uid="uid://c8bbq8f2ctmn"]
+[gd_scene load_steps=10 format=4 uid="uid://c8bbq8f2ctmn"]
 
 [ext_resource type="Shader" uid="uid://ctqmmjb0maaex" path="res://demo/light.gdshader" id="1_ewo7l"]
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_k5q1k"]
 [ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="2_pjvrk"]
 [ext_resource type="Texture2D" uid="uid://d370wt6felklx" path="res://icon.svg" id="3_2ssnh"]
 [ext_resource type="Script" uid="uid://docg4bkkv3kjm" path="res://demo/node_2d.gd" id="4_gcgup"]
+[ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/flower_sensor.gd" id="6_k5q1k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = ExtResource("1_ewo7l")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_gcgup"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_0a0pc"]
 _surfaces = [{
 "aabb": AABB(-10000, -104.303, 0, 10251.3, 100, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -23,6 +25,7 @@ _surfaces = [{
 radius = 74.2083
 
 [node name="World" type="Node2D"]
+script = ExtResource("1_k5q1k")
 
 [node name="LightEnvironment2D" type="LightEnvironment2D" parent="."]
 linearSectionTolerance = 0.5
@@ -30,7 +33,7 @@ displayScatterSections = false
 scatterRaySpread = 0.0001
 scatterSectionTolerance = 0.5
 material = SubResource("ShaderMaterial_pjvrk")
-mesh = SubResource("ArrayMesh_gcgup")
+mesh = SubResource("ArrayMesh_0a0pc")
 
 [node name="Player" type="CharacterBody2D" parent="LightEnvironment2D"]
 visibility_layer = 2
@@ -43,9 +46,6 @@ texture = ExtResource("3_2ssnh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LightEnvironment2D/Player"]
 shape = SubResource("CircleShape2D_pjvrk")
-
-[node name="Camera2D" type="Camera2D" parent="LightEnvironment2D"]
-position = Vector2(-25, 10.2459)
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
 light_width = 100.0
@@ -62,8 +62,36 @@ script = ExtResource("4_gcgup")
 
 [node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/Node2D"]
 
-[node name="LightSensor2D" type="LightSensor2D" parent="LightEnvironment2D"]
+[node name="Flower" type="LightSensor2D" parent="LightEnvironment2D"]
 is_hit = false
-position = Vector2(141, -179)
-polygon = PackedVector2Array(-385, -70, -166, -69, -204, 22, -360, 36)
-uv = PackedVector2Array(-385, -70, -166, -69, -204, 22, -360, 36)
+position = Vector2(-30, -210)
+polygon = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
+uv = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
+script = ExtResource("6_k5q1k")
+metadata/_custom_type_script = ExtResource("6_k5q1k")
+
+[node name="Level Complete" type="CanvasLayer" parent="."]
+visible = false
+follow_viewport_enabled = true
+
+[node name="Label" type="Label" parent="Level Complete"]
+offset_left = -419.0
+offset_top = -275.0
+offset_right = 350.0
+offset_bottom = -138.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "Level Complete!"
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="Level Complete"]
+offset_left = -95.0
+offset_top = 124.0
+offset_right = 76.0
+offset_bottom = 180.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Next Level"
+metadata/_edit_use_anchors_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
