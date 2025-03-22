@@ -1,20 +1,26 @@
-[gd_scene load_steps=4 format=4 uid="uid://c8bbq8f2ctmn"]
+[gd_scene load_steps=8 format=4 uid="uid://c8bbq8f2ctmn"]
 
 [ext_resource type="Shader" uid="uid://ctqmmjb0maaex" path="res://demo/light.gdshader" id="1_ewo7l"]
+[ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="2_pjvrk"]
+[ext_resource type="Texture2D" uid="uid://d370wt6felklx" path="res://icon.svg" id="3_2ssnh"]
+[ext_resource type="Script" uid="uid://docg4bkkv3kjm" path="res://demo/node_2d.gd" id="4_gcgup"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = ExtResource("1_ewo7l")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ewo7l"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_2ssnh"]
 _surfaces = [{
-"aabb": AABB(-13936.5, -21939.3, 0, 32374.8, 31469.3, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-10000, -113.525, 0, 10270, 100, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 156,
-"vertex_data": PackedByteArray("AMBJRB/dz8QAAAAAAEiURX03FMUAAAAAAEiURYiWbsQAAAAAezTORQAA68MAAAAAejTORQCYI8YAAAAA8nBmRoTIw8UAAAAAezTORQAA68MAAAAAz+IaRhGUMMUAAAAA7LwURtmazcQAAAAAezTORQAA68MAAAAA7LwURtmazcQAAAAA674URvB6zcQAAAAAezTORQAA68MAAAAA674URvB6zcQAAAAAkjwfRjhQqsQAAAAAezTORQAA68MAAAAAZGl5RkaULsUAAAAALL9oRsTW18QAAAAAezTORQAA68MAAAAA/MuARjzH9cQAAAAAezTORQDoFEYAAAAAezTORQAA68MAAAAAezTORQDoFEYAAAAAejTORQDoFEYAAAAAezTORQAA68MAAAAAejTORQDoFEYAAAAAsINqxP+0vkUAAAAAezTORQAA68MAAAAAqj0ZRRePREUAAAAAxzNhRYaeBUUAAAAAezTORQAA68MAAAAAxzNhRYaeBUUAAAAAyEDmRHZi9kQAAAAAezTORQAA68MAAAAAxrIPxWrgf0UAAAAAQiZQxXD7M0QAAAAAezTORQAA68MAAAAABC+mxIKB70MAAAAAwFVmxDDDjUIAAAAAezTORQAA68MAAAAAwHKEwkAsBEEAAAAAIMYNw8wjLsMAAAAAezTORQAA68MAAAAAIMYNw8wjLsMAAAAAgC8Pw2gwL8MAAAAAezTORQAA68MAAAAAgC8Pw2gwL8MAAAAAgOO1wxhrhsMAAAAAezTORQAA68MAAAAAALsSxKjEg8MAAAAAgC2nQgqDacQAAAAAezTORQAA68MAAAAAxgBTxZTFk8QAAAAA4kFSxVqlpsQAAAAAezTORQAA68MAAAAAAEiURVDtHcQAAAAAAEiURcJkJMUAAAAAezTORQAA68MAAAAAnGKWRI9a08UAAAAAFDOpRAnoScYAAAAAezTORQAA68MAAAAAFDOpRAnoScYAAAAANDWpRNvyScYAAAAAezTORQAA68MAAAAA1eMpRdZZF8YAAAAAezTORQCYI8YAAAAAunUFRgIRyMQAAAAAi2kVRsPJ3cQAAAAAwbwURsmWzcQAAAAAunUFRgIRyMQAAAAAwbwURsmWzcQAAAAAzsAURp50zcQAAAAAunUFRgIRyMQAAAAAzsAURp50zcQAAAAA1jcfRhhgqsQAAAAAunUFRgIRyMQAAAAAiAyQRrjPJ8MAAAAA00qPRtzEwkMAAAAAGEU4xbBI5MIAAAAAqqtJxqDKf8QAAAAAgsdAxlAoXsUAAAAAbA5wxaQH5MIAAAAA+vVUxsZq8UQAAAAAchlYxlqArEMAAAAAss6PxRdtwsUAAAAA/cFZxi5BGcYAAAAAewBOxkVpMcYAAAAAonRFRFsslEQAAAAARFfeRMncBkUAAAAAkqTXRNXoEEUAAAAAIs5FRJhYlEQAAAAA8izRREKcGkUAAAAAYJLFRB4ELEUAAAAAEaDvxLI1u8QAAAAADLkexFCRV8MAAAAAKOMcw5xkLcQAAAAAEaDvxLI1u8QAAAAAKOMcw5xkLcQAAAAA79+zxNX19sQAAAAADLkexFCRV8MAAAAAVfDzw3BKtcMAAAAAonRFRFsslEQAAAAAVfDzw3BKtcMAAAAAk6TXRNXoEEUAAAAAAYC2w5GthsMAAAAAVfDzw3BKtcMAAAAAAYC2w5GthsMAAAAA1FLmw+/nwsMAAAAA1FLmw+/nwsMAAAAAAYC2w5GthsMAAAAA2BAOw762LsMAAAAA1FLmw+/nwsMAAAAA2BAOw762LsMAAAAAQ4qzw4Ww9cMAAAAAQ4qzw4Ww9cMAAAAA2BAOw762LsMAAAAA8yzRREOcGkUAAAAAQ4qzw4Ww9cMAAAAA8yzRREOcGkUAAAAAQYqzw4ew9cMAAAAAQYqzw4ew9cMAAAAAKOMcw5xkLcQAAAAAIs5FRJhYlEQAAAAAFDOpRAnoScYAAAAAqJexRYJgq8YAAAAARpKxRaJmq8YAAAAAFDOpRAnoScYAAAAARpKxRaJmq8YAAAAANDWpRNvyScYAAAAAnGKWRI9a08UAAAAAW1f8RaAwW8YAAAAA4oexRWhiq8YAAAAAnGKWRI9a08UAAAAA4oexRWhiq8YAAAAAFDOpRAnoScYAAAAAAEiURVDtHcQAAAAAAEiURcJkJMUAAAAAss6PxRdtwsUAAAAAALsSxKjEg8MAAAAAgC2nQgqDacQAAAAAbA5wxaQH5MIAAAAABC+mxIKB70MAAAAAwFVmxDDDjUIAAAAAGEU4xbBI5MIAAAAAZGl5RkaULsUAAAAA4ISPRvhLQ8YAAAAAohKARsp3NcYAAAAAZGl5RkaULsUAAAAAohKARsp3NcYAAAAALL9oRsTW18QAAAAAAEiURX03FMUAAAAAunUFRgIRyMQAAAAAunUFRgIRyMQAAAAAAEiURX03FMUAAAAAunUFRgIRyMQAAAAAAEiURYiWbsQAAAAA")
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AADLw7hkWMEAAAAAAAAAALhkWMEAAAAAAAAAAAAASMIAAAAAAADLw7hkWMEAAAAAAAAAAAAASMIAAAAAAADLwwAASMIAAAAAAADLwz0KSMIAAAAAUgGHQz0KSMIAAAAAzCR+Q5cM48IAAAAAAADLwz0KSMIAAAAAzCR+Q5cM48IAAAAAAADLw5cM48IAAAAAAAAAALhkWMEAAAAAAEAcxk1oWMEAAAAAAEAcxuUASMIAAAAAAAAAALhkWMEAAAAAAEAcxuUASMIAAAAAAAAAAAAASMIAAAAA")
 }]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
+radius = 74.2083
 
 [node name="World" type="Node2D"]
 
@@ -24,69 +30,35 @@ displayScatterSections = false
 scatterRaySpread = 0.0001
 scatterSectionTolerance = 0.5
 material = SubResource("ShaderMaterial_pjvrk")
+position = Vector2(621, -975)
 scale = Vector2(1, 0.976)
-mesh = SubResource("ArrayMesh_ewo7l")
+mesh = SubResource("ArrayMesh_2ssnh")
 
-[node name="DebugEnvironment" type="Node2D" parent="LightEnvironment2D"]
+[node name="Player" type="CharacterBody2D" parent="LightEnvironment2D"]
+visibility_layer = 2
+z_index = -1
+position = Vector2(-386, 127.049)
+script = ExtResource("2_pjvrk")
 
-[node name="CircleLight2D" type="CircleLight2D" parent="LightEnvironment2D/DebugEnvironment"]
-position = Vector2(6598.56, -470)
+[node name="Sprite2D" type="Sprite2D" parent="LightEnvironment2D/Player"]
+texture = ExtResource("3_2ssnh")
 
-[node name="Mirror2D2" type="Mirror2D" parent="LightEnvironment2D/DebugEnvironment"]
-draw_debug = true
-mirror_width = 7588.0
-position = Vector2(1261, -9133.2)
-rotation = 0.0244346
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LightEnvironment2D/Player"]
+shape = SubResource("CircleShape2D_pjvrk")
 
-[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/DebugEnvironment"]
-draw_debug = true
-mirror_width = 1708.0
-position = Vector2(15499, -2329.92)
-rotation = 0.785398
+[node name="Camera2D" type="Camera2D" parent="LightEnvironment2D"]
+position = Vector2(-25, 10.2459)
 
-[node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D/DebugEnvironment"]
-light_width = 676.0
-position = Vector2(-1678, -1736.68)
-rotation = 0.785398
+[node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
+light_width = 100.0
+position = Vector2(-406, -63.5246)
 
-[node name="ColorFilter2D" type="ColorFilter2D" parent="LightEnvironment2D/DebugEnvironment"]
-draw_debug = true
-filter_width = 160.0
-filter_color = Color(0, 0.807843, 0, 1)
-visible = false
-position = Vector2(7788.9, -514)
-rotation = 0.785398
-
-[node name="SpotLight2D" type="SpotLight2D" parent="LightEnvironment2D/DebugEnvironment"]
-arc = 20.4
-position = Vector2(807, -1662.91)
-
-[node name="Lens2D2" type="Lens2D" parent="LightEnvironment2D/DebugEnvironment"]
-draw_debug = true
-lens_width = 2000.0
-focal_length = 1964.0
-position = Vector2(4745, -1631.15)
-
-[node name="Lens2D" type="Lens2D" parent="LightEnvironment2D/DebugEnvironment"]
-lens_width = 2000.0
-focal_length = 2000.0
-position = Vector2(-623, -227.459)
-rotation = 0.785398
-
-[node name="LightColider2D2" type="LightColider2D" parent="LightEnvironment2D/DebugEnvironment"]
+[node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D"]
 is_hit = true
-position = Vector2(56, 864.754)
-polygon = PackedVector2Array(-421, -1134.11, -198, -1039.44, -122, -855.952, -255, -877.424)
-uv = PackedVector2Array(-132, -110, -196, -20, -80, 40, -18, -60)
+position = Vector2(293, 126.025)
+polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
 
-[node name="LightColider2D3" type="LightColider2D" parent="LightEnvironment2D/DebugEnvironment"]
-is_hit = true
-position = Vector2(10506, -1756.15)
-polygon = PackedVector2Array(-593, -1070, 1170, -903, -314, 394, -987, 112)
-uv = PackedVector2Array(-132, -110, -196, -20, -80, 40, -18, -60)
+[node name="Node2D" type="Node2D" parent="LightEnvironment2D"]
+script = ExtResource("4_gcgup")
 
-[node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D/DebugEnvironment"]
-is_hit = true
-position = Vector2(2434, 3040.98)
-polygon = PackedVector2Array(-593, -1070, 1170, -903, -314, 394, -987, 112)
-uv = PackedVector2Array(-132, -110, -196, -20, -80, 40, -18, -60)
+[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/Node2D"]
