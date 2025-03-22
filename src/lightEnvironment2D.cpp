@@ -266,6 +266,9 @@ std::vector<Type*> getChildrenOfType(Node& parent, const String& typeName) {
 }
 
 void updateColliderHit(std::unordered_map<ShapeId, LightColider2D*>& shapeIdToLightColider, ShapeId shapeId) {
+    if(shapeId == 0) {
+        return;
+    }
     auto findIter = shapeIdToLightColider.find(shapeId);
     if(findIter == shapeIdToLightColider.end()) {
         return;
@@ -318,6 +321,7 @@ void LightEnvironment2D::_process(double delta) {
         return;
     }
 
+    shapes.push_back(constructShape2D());
     for(LightColider2D* lightColider : lightColiders) {
         Shape2D shape = constructShape2D(*lightColider, shapes.size());
         shapes.push_back(shape);

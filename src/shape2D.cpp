@@ -16,3 +16,10 @@ std::vector<Point2> getPointsExcluding(ShapeId excludeId, const std::vector<Shap
     }
     return points;
 }
+Shape2D constructShape2D() {
+    Shape2D shape{};
+    shape.type = Shape2DType::wall;
+    shape.shapeId = 0;
+    shape.aabb = AABB2D{};
+    return shape;
+}

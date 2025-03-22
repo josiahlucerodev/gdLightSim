@@ -33,3 +33,4 @@ struct Shape2D {
 
 std::vector<Point2> getPoints(const std::vector<Shape2D>& shapes);
 std::vector<Point2> getPointsExcluding(ShapeId excludeId, const std::vector<Shape2D>& shapes);
+Shape2D constructShape2D();
