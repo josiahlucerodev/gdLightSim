@@ -5,26 +5,30 @@
 #include <godot_cpp/classes/engine.hpp>
 
 //own
-#include "spotLight2D.h"
-#include "circleLight2D.h"
-#include "beamLight2D.h"
-#include "lightEnvironment2D.h"
-#include "mirror2D.h"
-#include "colorFilter2D.h"
-#include "lens2D.h"
-#include "lightCollider2D.h"
-#include "lightSensor2D.h"
+#include "light/emitter/spotLight2D.h"
+#include "light/emitter/beamLight2D.h"
+#include "light/emitter/circleLight2D.h"
+#include "light/interactor/mirror2D.h"
+#include "light/interactor/lens2D.h"
+#include "light/interactor/colorFilter2D.h"
+#include "light/interactor/lightCollider2D.h"
+#include "light/interactor/lightSensor2D.h"
+#include "light/lightEnvironment2D.h"
 
 void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
-		ClassDB::register_class<SpotLight2D>();
 		ClassDB::register_class<LightEnvironment2D>();
+
+		//emitters
+		ClassDB::register_class<SpotLight2D>();
 		ClassDB::register_class<BeamLight2D>();
 		ClassDB::register_class<CircleLight2D>();
-		ClassDB::register_class<Mirror2D>();
+		
+		//interactors
 		ClassDB::register_class<ColorFilter2D>();
 		ClassDB::register_class<Lens2D>();
+		ClassDB::register_class<Mirror2D>();
 		ClassDB::register_class<LightColider2D>();
 		ClassDB::register_class<LightSensor2D>();
 	}
