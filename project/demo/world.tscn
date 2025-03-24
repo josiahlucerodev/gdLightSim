@@ -10,15 +10,15 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = ExtResource("1_ewo7l")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_0a0pc"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_k5q1k"]
 _surfaces = [{
-"aabb": AABB(-10000, -104.303, 0, 10251.3, 100, 1e-05),
+"aabb": AABB(-9934, -225, 0, 10157, 100, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 18,
-"vertex_data": PackedByteArray("AADLw6C0icAAAAAAAAAAAKC0icAAAAAAAAAAAAAASMIAAAAAAADLw6C0icAAAAAAAAAAAAAASMIAAAAAAADLwwAASMIAAAAAAADLwz0KSMIAAAAADEF7Qz0KSMIAAAAA7LBtQ0qb0MIAAAAAAADLwz0KSMIAAAAA7LBtQ0qb0MIAAAAAAADLw0qb0MIAAAAAAAAAAKC0icAAAAAAAEAcxsm7icAAAAAAAEAcxuUASMIAAAAAAAAAAKC0icAAAAAAAEAcxuUASMIAAAAAAAAAAAAASMIAAAAA")
+"vertex_data": PackedByteArray("AABTwwAA+sIAAAAAAACEQgAA+sIAAAAAAACEQgAAI8MAAAAAAABTwwAA+sIAAAAAAACEQgAAI8MAAAAAAABTwwAAI8MAAAAAAABTw48CI8MAAAAAkgZfQ48CI8MAAAAAPIpPQwAAYcMAAAAAAABTw48CI8MAAAAAPIpPQwAAYcMAAAAAAABTwwAAYcMAAAAAAACEQgAA+sIAAAAAADgbxnMA+sIAAAAAADgbxjkAI8MAAAAAAACEQgAA+sIAAAAAADgbxjkAI8MAAAAAAACEQgAAI8MAAAAA")
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
@@ -33,7 +33,7 @@ displayScatterSections = false
 scatterRaySpread = 0.0001
 scatterSectionTolerance = 0.5
 material = SubResource("ShaderMaterial_pjvrk")
-mesh = SubResource("ArrayMesh_0a0pc")
+mesh = SubResource("ArrayMesh_k5q1k")
 
 [node name="Player" type="CharacterBody2D" parent="LightEnvironment2D"]
 visibility_layer = 2
@@ -49,7 +49,7 @@ shape = SubResource("CircleShape2D_pjvrk")
 
 [node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
 light_width = 100.0
-position = Vector2(-406, -54.3033)
+position = Vector2(-211, -175)
 
 [node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D"]
 is_hit = true
@@ -61,14 +61,27 @@ polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299
 script = ExtResource("4_gcgup")
 
 [node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/Node2D"]
+position = Vector2(-87, -52)
 
 [node name="Flower" type="LightSensor2D" parent="LightEnvironment2D"]
-is_hit = false
-position = Vector2(-30, -210)
+is_hit = true
+position = Vector2(9, -280)
 polygon = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 uv = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 script = ExtResource("6_k5q1k")
 metadata/_custom_type_script = ExtResource("6_k5q1k")
+
+[node name="SensorTypes" type="LightSensor2D" parent="LightEnvironment2D"]
+position = Vector2(-219, -231)
+polygon = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
+uv = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
+script = ExtResource("6_k5q1k")
+type = 1
+metadata/_custom_type_script = ExtResource("6_k5q1k")
+
+[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D"]
+draw_debug = true
+position = Vector2(66, -113)
 
 [node name="Level Complete" type="CanvasLayer" parent="."]
 visible = false
@@ -95,3 +108,4 @@ text = "Next Level"
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(44, 4)
