@@ -16,10 +16,14 @@ void LightSensor2D::set_is_hit(const bool isHit) {
 }
 
 LightSensor2DInfo LightSensor2D::getInfo() const {
+    const Transform2D globalTransform = get_global_transform();
+    auto points = get_polygon();
+    for(Point2& point : points) {
+        point = globalTransform.xform(point);
+    }
+
     LightSensor2DInfo info;
-    info.points = get_polygon();
-	info.position = get_global_position();
-	info.rotation = get_global_rotation();
+    info.points = points;
     return info;
 }
 

@@ -35,5 +35,5 @@ struct Shape2D {
 std::vector<Point2> getPoints(const std::vector<Shape2D>& shapes);
 std::vector<Point2> getPointsExcluding(ShapeId excludeId, const std::vector<Shape2D>& shapes);
 Shape2D constructShape2D(const ShapeId shapeId = 0);
-Shape2D constructShape2D(const ShapeId shapeId, real_t rotation, Point2 position, const PackedVector2Array& points);
+Shape2D constructShape2D(const ShapeId shapeId, const PackedVector2Array& points);
 Shape2D constructShape2D(const ShapeId shapeId, real_t width, real_t rotation, Point2 position);

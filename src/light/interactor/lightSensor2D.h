@@ -5,8 +5,6 @@
 #include "../lightActor2D.h"
 
 struct LightSensor2DInfo {
-    real_t rotation;
-    Point2 position;
     PackedVector2Array points;
 };
 
@@ -34,7 +32,7 @@ struct LightInteractor<LightSensor2D> {
     using no_shoting = void;
 
 	static Shape2D constructShape(const source_info& source, const ShapeId shapeId) {
-        Shape2D shape = constructShape2D(shapeId, source.rotation, source.position, source.points);
+        Shape2D shape = constructShape2D(shapeId, source.points);
         shape.type = Shape2DType::sensor;
         return shape;
 	}

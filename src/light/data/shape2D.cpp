@@ -26,7 +26,7 @@ Shape2D constructShape2D(const ShapeId shapeId) {
     shape.aabb = AABB2D{};
     return shape;
 }
-Shape2D constructShape2D(const ShapeId shapeId, real_t rotation, Point2 position, const PackedVector2Array& points) {
+Shape2D constructShape2D(const ShapeId shapeId, const PackedVector2Array& points) {
     if(points.size() == 0) {
         return constructShape2D(shapeId);
     }
@@ -37,10 +37,10 @@ Shape2D constructShape2D(const ShapeId shapeId, real_t rotation, Point2 position
     
     shape.midPoint = Point2(0, 0);
     shape.points.reserve(points.size());
-    shape.aabb = createAABB(position + points[0].rotated(rotation));
+    shape.aabb = createAABB(points[0]);
 
     for(std::size_t i = 0; i < points.size(); i++) {
-        Point2 point = position + points[i].rotated(rotation);
+        Point2 point = points[i];
         shape.aabb = updateAABB(shape.aabb, point);
         shape.midPoint += point;
         shape.points.push_back(point);

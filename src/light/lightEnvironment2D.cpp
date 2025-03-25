@@ -266,22 +266,22 @@ void LightEnvironment2D::_process(double delta) {
     std::vector<Mirror2D*> mirrors = getLightInteractor<Mirror2D>(env, "Mirror2D");
     constructLightInteractorShapes<Mirror2D>(envData.shapes, mirrors);
     
+    ShapeId shapeId = envData.shapes.size();
     std::unordered_map<ShapeId, LightColider2D*> shapeIdToColider;
     std::vector<LightColider2D*> lightColiders = getLightInteractor<LightColider2D>(env, "LightColider2D");
     constructLightInteractorShapes<LightColider2D>(envData.shapes, lightColiders);
     {
-        ShapeId shapeId = envData.shapes.size() - 1;
         for(LightColider2D* lightColider : lightColiders) {
             shapeIdToColider.insert({shapeId, lightColider});
             shapeId++;
         }
     }
     
+    shapeId = envData.shapes.size();
     std::unordered_map<LightSensor2D*, ShapeId> sensorsToShapeId;
     std::vector<LightSensor2D*> lightSensors = getLightInteractor<LightSensor2D>(env, "LightSensor2D");
     constructLightInteractorShapes<LightSensor2D>(envData.shapes, lightSensors);
     { 
-        ShapeId shapeId = envData.shapes.size() - 1;
         for(LightSensor2D* lightSensor : lightSensors) {
             sensorsToShapeId.insert({lightSensor, shapeId});
             shapeId++;

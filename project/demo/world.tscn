@@ -26,7 +26,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = SubResource("Shader_gcgup")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_k5q1k"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_wfs5x"]
 _surfaces = [{
 "aabb": AABB(-8.74228e-07, -20, 0, 10000, 40, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -60,7 +60,7 @@ linearRaySpread = 0.001
 displayScatterSections = false
 scatterRaySpread = 0.0001
 material = SubResource("ShaderMaterial_pjvrk")
-mesh = SubResource("ArrayMesh_k5q1k")
+mesh = SubResource("ArrayMesh_wfs5x")
 
 [node name="Player" type="CharacterBody2D" parent="lightEnvironment2D"]
 visibility_layer = 2
@@ -76,23 +76,27 @@ texture = ExtResource("3_2ssnh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="lightEnvironment2D/Player"]
 shape = SubResource("CircleShape2D_pjvrk")
 
+[node name="LightColider2D2" type="LightColider2D" parent="lightEnvironment2D"]
+position = Vector2(85, 389)
+polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
+
 [node name="LightColider2D" type="LightColider2D" parent="lightEnvironment2D"]
-position = Vector2(-168, -277)
-scale = Vector2(0.995638, 0.986528)
+position = Vector2(709, -149)
+scale = Vector2(2, 2)
 polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
 
 [node name="Node2D" type="Node2D" parent="lightEnvironment2D"]
 script = SubResource("GDScript_wfs5x")
 
 [node name="Flower" type="LightSensor2D" parent="lightEnvironment2D"]
-position = Vector2(-643, -24)
+position = Vector2(834, 171)
 polygon = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 uv = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 script = ExtResource("6_k5q1k")
 metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
 [node name="SensorTypes" type="LightSensor2D" parent="lightEnvironment2D"]
-position = Vector2(-516, -273)
+position = Vector2(310, -123)
 polygon = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 uv = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 script = ExtResource("6_k5q1k")
