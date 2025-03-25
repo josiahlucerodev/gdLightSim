@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=4 uid="uid://c8bbq8f2ctmn"]
+[gd_scene load_steps=12 format=4 uid="uid://c8bbq8f2ctmn"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_k5q1k"]
 [ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/prefab/player.tscn" id="2_wfs5x"]
 [ext_resource type="PackedScene" uid="uid://cbd85kmnqs4tb" path="res://demo/prefab/light/standard_lens.tscn" id="5_k5q1k"]
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/prefab/light/standard_beam_light.tscn" id="5_wfs5x"]
+[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="6_0a0pc"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/prefab/light/lightEnvironment.tscn" id="6_dpv1i"]
 [ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/plant.gd" id="6_k5q1k"]
 
@@ -27,7 +28,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = SubResource("Shader_gcgup")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_0a0pc"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_34gvb"]
 _surfaces = [{
 "aabb": AABB(-85, -374.693, 0, 10268.4, 2760.05, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -58,7 +59,7 @@ linearRaySpread = 0.001
 displayScatterSections = false
 scatterRaySpread = 0.0001
 material = SubResource("ShaderMaterial_pjvrk")
-mesh = SubResource("ArrayMesh_0a0pc")
+mesh = SubResource("ArrayMesh_34gvb")
 
 [node name="LightColider2D2" type="LightColider2D" parent="lightEnvironment2D"]
 position = Vector2(113, -4.00001)
@@ -98,29 +99,7 @@ position = Vector2(-85, -55)
 [node name="Lens2D" parent="lightEnvironment2D" instance=ExtResource("5_k5q1k")]
 position = Vector2(89, -40)
 
-[node name="Level Complete" type="CanvasLayer" parent="."]
-visible = false
-follow_viewport_enabled = true
-
-[node name="Label" type="Label" parent="Level Complete"]
-offset_left = -419.0
-offset_top = -275.0
-offset_right = 350.0
-offset_bottom = -138.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 100
-text = "Level Complete!"
-metadata/_edit_use_anchors_ = true
-
-[node name="Button" type="Button" parent="Level Complete"]
-offset_left = -95.0
-offset_top = 124.0
-offset_right = 76.0
-offset_bottom = 180.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Next Level"
-metadata/_edit_use_anchors_ = true
+[node name="Level Complete" parent="." instance=ExtResource("6_0a0pc")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(22, -32)
