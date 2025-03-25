@@ -23,9 +23,11 @@ void SpotLight2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &SpotLight2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 	
-	ClassDB::bind_method(D_METHOD("get_color"), &SpotLight2D::get_color);
-	ClassDB::bind_method(D_METHOD("set_color", "color"), &SpotLight2D::set_color);
-	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "color"), "set_color", "get_color");
+	ClassDB::bind_method(D_METHOD("get_light_color"), &SpotLight2D::get_light_color);
+	ClassDB::bind_method(D_METHOD("set_light_color", "light_color"), &SpotLight2D::set_light_color);
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "light_color"), "set_light_color", "get_light_color");
+
+	ClassDB::bind_method(D_METHOD("debug_draw"), &SpotLight2D::debug_draw);
 }
 
 //getter/setters
@@ -43,15 +45,15 @@ void SpotLight2D::set_draw_debug(const bool drawDebug) {
 	this->drawDebug = drawDebug;
 }
 
-Color SpotLight2D::get_color() const {
-	return color;
+Color SpotLight2D::get_light_color() const {
+	return lightColor;
 }
-void SpotLight2D::set_color(const Color color) {
-	this->color = color;
+void SpotLight2D::set_light_color(const Color lightColor) {
+	this->lightColor = lightColor;
 }
 SpotLight2DInfo SpotLight2D::getInfo() const {
 	SpotLight2DInfo info;
-	info.color = get_color();
+	info.color = get_light_color();
 	info.arc = Math::deg_to_rad(get_arc());
 	info.position = get_global_position();
 	info.rotation = get_global_rotation();
@@ -60,24 +62,20 @@ SpotLight2DInfo SpotLight2D::getInfo() const {
 
 //constructor/destructor
 SpotLight2D::SpotLight2D() {
+	set_light_actor_type(LightActor2DType::spotLight);
 	arc = 30;
 	drawDebug = false;
-	color = Settings::defaultLightColor;
+	lightColor = Settings::defaultLightColor;
 }
 
 SpotLight2D::~SpotLight2D() {
 }
 
 //ops
-void SpotLight2D::_ready() {
-	queue_redraw();
-}
-
-void SpotLight2D::_process(double delta) {
-	queue_redraw();
-}
-
 void SpotLight2D::_draw() {
+	debug_draw();
+}
+void SpotLight2D::debug_draw() {
 	if(drawDebug) {
 		const real_t arcRad = Math::deg_to_rad(arc);
 		const real_t halfArcRad = arcRad / 2;

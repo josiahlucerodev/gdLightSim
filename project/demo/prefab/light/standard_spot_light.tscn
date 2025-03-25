@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://did4d7l16cyrw"]
+
+[node name="SpotLight2D" type="SpotLight2D"]
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-43, 1, 21, -26, 21, 26)
+uv = PackedVector2Array(-2, 0, 23, -13, 23, 13)

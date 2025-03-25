@@ -8,7 +8,7 @@
 #include "interactor/lightInteractor2D.h"
 #include "ops/section2D.h"
 #include "misc/descendants.h"
-#include "lightEnvironmentData.h"
+#include "lightEnvironment2DData.h"
 
 template<typename LightEmitterType>
 std::vector<LightEmitterType*> getLightEmitter(Node& node, const std::string_view& name) {
@@ -48,7 +48,7 @@ SectionGenerationInfo getSectionGenerationInfo(const std::vector<Shape2D>& shape
 }
 
 template<typename GenerationResult>
-void handleGenerationResult(LightEnviromentData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, GenerationResult& generationResult) {
+void handleGenerationResult(LightEnviroment2DData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, GenerationResult& generationResult) {
     using decayed_generation_result = std::decay_t<GenerationResult>;
 
     if constexpr(std::is_same_v<decayed_generation_result, std::vector<RadialSection>>) {
@@ -84,7 +84,7 @@ void handleGenerationResult(LightEnviromentData& envData, SectionsInfo& sections
 } 
 
 template<typename LightEmitterType> 
-void preformEmitterAction(LightEnviromentData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, LightEmitterType& lightEmitter) {
+void preformEmitterAction(LightEnviroment2DData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, LightEmitterType& lightEmitter) {
     using light_emitter = LightEmitter<LightEmitterType>;
 
     typename light_emitter::source_info source = lightEmitter.getInfo();
@@ -98,7 +98,7 @@ void preformEmitterAction(LightEnviromentData& envData, SectionsInfo& sectionsIn
 }
 
 template<typename LightInteractorType, typename Session>
-void preformInteractorActionOnSection(LightEnviromentData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, Session& section) {
+void preformInteractorActionOnSection(LightEnviroment2DData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, Session& section) {
     using light_interactor = LightInteractor<LightInteractorType>;
 
     LightInteractorShotInfo shotInfo{envData.shapes, envData.bvh, raySettings};
@@ -111,7 +111,7 @@ void preformInteractorActionOnSection(LightEnviromentData& envData, SectionsInfo
 }
 
 template<typename LightInteractorType>
-void preformInteractorAction(LightEnviromentData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, SectionVariant& section) {
+void preformInteractorAction(LightEnviroment2DData& envData, SectionsInfo& sectionsInfo, const RaySettings& raySettings, SectionVariant& section) {
     std::visit([&](auto&& section) -> void {
         preformInteractorActionOnSection<LightInteractorType, decltype(section)>(envData, sectionsInfo, raySettings, section);
     }, section);

@@ -1,12 +1,8 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
 //own
 #include "lightEmitter2D.h"
-
-using namespace godot;
+#include "../lightActor2D.h"
 
 struct SpotLight2DInfo {
 	real_t arc;
@@ -15,14 +11,14 @@ struct SpotLight2DInfo {
 	Color color;
 };
 
-struct SpotLight2D : public Node2D {
+struct SpotLight2D : public LightActor2D {
 private:
-	GDCLASS(SpotLight2D, Node2D);
+	GDCLASS(SpotLight2D, LightActor2D);
 
 private:
     double arc;
 	bool drawDebug;
-	Color color;
+	Color lightColor;
 
 protected:
 	static void _bind_methods();
@@ -32,17 +28,16 @@ public:
     SpotLight2D();
 	~SpotLight2D();
 
-	void _ready() override;
-	void _process(double delta) override;
 	void _draw() override;
 
 	double get_arc() const;
 	void set_arc(const double);
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool debugDraw);
-	Color get_color() const;
-	void set_color(const Color color);
+	Color get_light_color() const;
+	void set_light_color(const Color lightColor);
 	SpotLight2DInfo getInfo() const;
+	void debug_draw();
 };
 
 std::vector<RayVariant> shotSpotLight2D(const SpotLight2DInfo& source, EmitterShotInfo& shotInfo);

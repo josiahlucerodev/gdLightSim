@@ -1,87 +1,105 @@
-[gd_scene load_steps=10 format=4 uid="uid://c8bbq8f2ctmn"]
+[gd_scene load_steps=11 format=4 uid="uid://c8bbq8f2ctmn"]
 
-[ext_resource type="Shader" uid="uid://ctqmmjb0maaex" path="res://demo/light.gdshader" id="1_ewo7l"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_k5q1k"]
 [ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="2_pjvrk"]
 [ext_resource type="Texture2D" uid="uid://d370wt6felklx" path="res://icon.svg" id="3_2ssnh"]
-[ext_resource type="Script" uid="uid://docg4bkkv3kjm" path="res://demo/node_2d.gd" id="4_gcgup"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/prefab/light/standard_beam_light.tscn" id="5_wfs5x"]
 [ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/flower_sensor.gd" id="6_k5q1k"]
 
+[sub_resource type="Shader" id="Shader_gcgup"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	//COLOR = vec4(1.0, 1.0, 0.0, 1.0);
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
-shader = ExtResource("1_ewo7l")
+shader = SubResource("Shader_gcgup")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_k5q1k"]
 _surfaces = [{
-"aabb": AABB(-9934, -225, 0, 10157, 100, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-8.74228e-07, -20, 0, 10000, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 18,
-"vertex_data": PackedByteArray("AABTwwAA+sIAAAAAAACEQgAA+sIAAAAAAACEQgAAI8MAAAAAAABTwwAA+sIAAAAAAACEQgAAI8MAAAAAAABTwwAAI8MAAAAAAABTw48CI8MAAAAAkgZfQ48CI8MAAAAAPIpPQwAAYcMAAAAAAABTw48CI8MAAAAAPIpPQwAAYcMAAAAAAABTwwAAYcMAAAAAAACEQgAA+sIAAAAAADgbxnMA+sIAAAAAADgbxjkAI8MAAAAAAACEQgAA+sIAAAAAADgbxjkAI8MAAAAAAACEQgAAI8MAAAAA")
+"vertex_count": 6,
+"vertex_data": PackedByteArray("eqxqtQAAoEEAAAAAAEAcRgAAoEEAAAAAAEAcRgAAoMEAAAAAeqxqtQAAoEEAAAAAAEAcRgAAoMEAAAAAeqxqtQAAoMEAAAAA")
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
 radius = 74.2083
 
+[sub_resource type="GDScript" id="GDScript_wfs5x"]
+script/source = "extends Node2D
+"
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_k5q1k")
 
-[node name="LightEnvironment2D" type="LightEnvironment2D" parent="."]
-linearSectionTolerance = 0.5
+[node name="lightEnvironment2D" type="LightEnvironment2D" parent="."]
+displayBVH2D = false
+displayAABB = false
+displayPoints = false
+displayMidpoints = false
+displayRays = false
+displayRadialSections = false
+radialRaySpread = 0.1
+displayLinearSections = false
+linearRaySpread = 0.001
 displayScatterSections = false
 scatterRaySpread = 0.0001
-scatterSectionTolerance = 0.5
 material = SubResource("ShaderMaterial_pjvrk")
 mesh = SubResource("ArrayMesh_k5q1k")
 
-[node name="Player" type="CharacterBody2D" parent="LightEnvironment2D"]
+[node name="Player" type="CharacterBody2D" parent="lightEnvironment2D"]
 visibility_layer = 2
 z_index = -1
 position = Vector2(-386, 127.049)
 script = ExtResource("2_pjvrk")
+interaction_distance = 100.0
+interaction_hint_radius = 30.0
 
-[node name="Sprite2D" type="Sprite2D" parent="LightEnvironment2D/Player"]
+[node name="Sprite2D" type="Sprite2D" parent="lightEnvironment2D/Player"]
 texture = ExtResource("3_2ssnh")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LightEnvironment2D/Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="lightEnvironment2D/Player"]
 shape = SubResource("CircleShape2D_pjvrk")
 
-[node name="BeamLight2D" type="BeamLight2D" parent="LightEnvironment2D"]
-light_width = 100.0
-position = Vector2(-211, -175)
-
-[node name="LightColider2D" type="LightColider2D" parent="LightEnvironment2D"]
-is_hit = true
-position = Vector2(258, 61)
+[node name="LightColider2D" type="LightColider2D" parent="lightEnvironment2D"]
+position = Vector2(-168, -277)
 scale = Vector2(0.995638, 0.986528)
 polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
 
-[node name="Node2D" type="Node2D" parent="LightEnvironment2D"]
-script = ExtResource("4_gcgup")
+[node name="Node2D" type="Node2D" parent="lightEnvironment2D"]
+script = SubResource("GDScript_wfs5x")
 
-[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D/Node2D"]
-position = Vector2(-87, -52)
-
-[node name="Flower" type="LightSensor2D" parent="LightEnvironment2D"]
-is_hit = true
-position = Vector2(9, -280)
+[node name="Flower" type="LightSensor2D" parent="lightEnvironment2D"]
+position = Vector2(-643, -24)
 polygon = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 uv = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 script = ExtResource("6_k5q1k")
-metadata/_custom_type_script = ExtResource("6_k5q1k")
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
-[node name="SensorTypes" type="LightSensor2D" parent="LightEnvironment2D"]
-position = Vector2(-219, -231)
+[node name="SensorTypes" type="LightSensor2D" parent="lightEnvironment2D"]
+position = Vector2(-516, -273)
 polygon = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 uv = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 script = ExtResource("6_k5q1k")
 type = 1
-metadata/_custom_type_script = ExtResource("6_k5q1k")
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
-[node name="Mirror2D" type="Mirror2D" parent="LightEnvironment2D"]
-draw_debug = true
-position = Vector2(66, -113)
+[node name="BeamLight2D" parent="lightEnvironment2D" instance=ExtResource("5_wfs5x")]
 
 [node name="Level Complete" type="CanvasLayer" parent="."]
 visible = false
@@ -108,4 +126,3 @@ text = "Next Level"
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(44, 4)

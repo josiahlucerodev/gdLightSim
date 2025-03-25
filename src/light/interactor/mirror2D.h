@@ -1,13 +1,9 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightInteractor2D.h"
 #include "../ops/util.h"
+#include "../lightActor2D.h"
 
 struct Mirror2DInfo {
 	real_t width;
@@ -15,19 +11,19 @@ struct Mirror2DInfo {
 	Point2 position;
 };
 
-class Mirror2D : public Node2D {
-	GDCLASS(Mirror2D, Node2D);
+class Mirror2D : public LightActor2D {
+	GDCLASS(Mirror2D, LightActor2D);
+
 private:
 	bool drawDebug;
-    real_t mirrorWidth;
+
 protected:
 	static void _bind_methods();
+	
 public:
     Mirror2D();
 	~Mirror2D();
 
-	void _ready() override;
-	void _process(double delta) override;
 	void _draw() override;
 
 	bool get_draw_debug() const;
@@ -35,6 +31,8 @@ public:
     real_t get_mirror_width() const;
 	void set_mirror_width(const real_t);
 	Mirror2DInfo getInfo() const;
+
+	void debug_draw();
 };
 
 template<>

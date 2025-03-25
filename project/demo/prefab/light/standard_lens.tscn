@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cbd85kmnqs4tb"]
+
+[node name="Lens2D" type="Lens2D"]
+lens_width = 50.0
+scale = Vector2(2, 25)
+color = Color(0.753, 0.753, 0.753, 0.3)
+polygon = PackedVector2Array(1.00001, -0.999999, 1.00001, 1, -0.999992, 1, -0.999992, -0.999999)

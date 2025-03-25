@@ -18,7 +18,7 @@
 #include "data/shape2D.h"
 #include "ops/ray2D.h"
 #include "ops/section2D.h"
-#include "lightEnvironmentData.h"
+#include "lightEnvironment2DData.h"
 
 using namespace godot;
 
@@ -42,7 +42,7 @@ public:
     
     RaySettings raySettings;
     SectionsInfo sectionsInfo;
-	LightEnviromentData envData;
+	LightEnviroment2DData envData;
     Ref<ArrayMesh> lightArrayMesh;
 public:
 

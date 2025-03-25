@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://7dgm21sa7kpt"]
+
+[node name="Mirror2D" type="Mirror2D"]
+mirror_width = 50.0
+scale = Vector2(1e-05, 25)
+color = Color(0.752941, 0.752941, 0.752941, 1)
+polygon = PackedVector2Array(0, -0.996396, 1, -0.996396, 1, 1.0036, 0, 1.0036)
+uv = PackedVector2Array(-22354.3, 5624.17)

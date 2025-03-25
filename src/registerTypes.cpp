@@ -18,7 +18,9 @@
 void gdextension_initialize(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
+		//light
 		ClassDB::register_class<LightEnvironment2D>();
+		ClassDB::register_class<LightActor2D>();
 
 		//emitters
 		ClassDB::register_class<SpotLight2D>();

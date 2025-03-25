@@ -30,7 +30,8 @@ using namespace godot;
 #include "draw/data.h"
 #include "mesh/meshData.h"
 #include "mesh/section.h"
-#include "lightActor.h"
+#include "lightActor2D.h"
+#include "lightActor2DOperations.h"
 #include "settings.h"
 
 //binding

@@ -11,6 +11,14 @@ void LightColider2D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_hit"), "set_is_hit", "get_is_hit");
 }
 
+//constructor/deconstructor
+LightColider2D::LightColider2D() {
+	set_light_actor_type(LightActor2DType::lightCollider);
+	isHit = false;
+}
+LightColider2D::~LightColider2D() {
+}
+
 //getter/setters
 bool LightColider2D::get_is_hit() const {
 	return isHit;

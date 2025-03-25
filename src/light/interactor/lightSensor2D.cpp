@@ -23,6 +23,14 @@ LightSensor2DInfo LightSensor2D::getInfo() const {
     return info;
 }
 
+//constructor/deconstructor
+LightSensor2D::LightSensor2D() {
+	set_light_actor_type(LightActor2DType::lightSensor);
+	isHit = false;
+}
+LightSensor2D::~LightSensor2D() {
+}
+
 void checkAndSetIfHit(const BVH2D& bvh, std::unordered_map<LightSensor2D*, ShapeId>& sensorsToShapeId) {
 	for(auto [sensor, id] : sensorsToShapeId) {
 		sensor->set_is_hit(bvh.shapeIsHit[id]);

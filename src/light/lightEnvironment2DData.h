@@ -10,7 +10,7 @@
 #include "ops/ray2D.h"
 #include "ops/section2D.h"
 
-struct LightEnviromentData {
+struct LightEnviroment2DData {
     BVH2D bvh;
 	std::vector<Shape2D> shapes;
 	std::vector<Point2> points;

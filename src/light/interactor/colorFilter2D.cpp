@@ -25,6 +25,8 @@ void ColorFilter2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_filter_color"), &ColorFilter2D::get_filter_color);
 	ClassDB::bind_method(D_METHOD("set_filter_color", "filter_color"), &ColorFilter2D::set_filter_color);
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "filter_color"), "set_filter_color", "get_filter_color");
+
+	ClassDB::bind_method(D_METHOD("debug_draw"), &ColorFilter2D::debug_draw);
 }
 
 //getter/setters
@@ -36,10 +38,12 @@ void ColorFilter2D::set_draw_debug(const bool drawDebug) {
 }
 
 real_t ColorFilter2D::get_filter_width() const {
-	return filterWidth;
+	return get_scale().y * 2;
 }
 void ColorFilter2D::set_filter_width(const real_t filterWidth) {
-	this->filterWidth = filterWidth;
+	Vector2 scale = get_scale();
+	scale.y = filterWidth / 2;
+	set_scale(scale);
 }
 
 Color ColorFilter2D::get_filter_color() const {
@@ -59,29 +63,24 @@ ColorFilter2DInfo ColorFilter2D::getInfo() const {
 
 //constructor/destructor
 ColorFilter2D::ColorFilter2D() {
+	set_light_actor_type(LightActor2DType::colorFilter);
 	drawDebug = false;
 	filterColor = Settings::defaultLightColor;
-	filterWidth = 100;
 }
-
 ColorFilter2D::~ColorFilter2D() {
 }
 
 //ops
-void ColorFilter2D::_ready() {
-	queue_redraw();
-}
-
-void ColorFilter2D::_process(double delta) {
-	queue_redraw();
-}
-
 void ColorFilter2D::_draw() {
+	debug_draw();
+}
+
+void ColorFilter2D::debug_draw() {
 	if(drawDebug) {
 		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::defaultObjectColor, true);
 
-        Point2 rightOffset = Point2(0, -1) * (filterWidth / 2);
-        Point2 leftOffset = Point2(0, 1) * (filterWidth / 2);
+        Point2 rightOffset = Point2(0, -1) * (get_filter_width() / 2);
+        Point2 leftOffset = Point2(0, 1) * (get_filter_width() / 2);
 
         draw_line(leftOffset, rightOffset
 			, Settings::defaultObjectColor, Settings::debugLineWidth);

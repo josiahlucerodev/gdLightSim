@@ -1,14 +1,8 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-#include <godot_cpp/classes/polygon2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightInteractor2D.h"
-
+#include "../lightActor2D.h"
 
 struct LightSensor2DInfo {
     real_t rotation;
@@ -16,8 +10,8 @@ struct LightSensor2DInfo {
     PackedVector2Array points;
 };
 
-class LightSensor2D : public Polygon2D {
-	GDCLASS(LightSensor2D, Polygon2D);
+class LightSensor2D : public LightActor2D {
+	GDCLASS(LightSensor2D, LightActor2D);
 
 protected:
     static void _bind_methods();
@@ -26,6 +20,9 @@ private:
 	bool isHit;
 
 public:
+    LightSensor2D();
+    ~LightSensor2D();
+
     bool get_is_hit() const;
     void set_is_hit(const bool isHit);
     LightSensor2DInfo getInfo() const;

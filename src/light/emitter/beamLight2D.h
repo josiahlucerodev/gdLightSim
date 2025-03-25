@@ -3,15 +3,11 @@
 //std
 #include <vector>
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightEmitter2D.h"
 #include "../ops/shotLight.h"
 #include "../ops/util.h"
+#include "../lightActor2D.h"
 
 struct BeamLight2DInfo {
 	real_t width;
@@ -20,12 +16,11 @@ struct BeamLight2DInfo {
 	Color color;
 };
 
-struct BeamLight2D : public Node2D {
-	GDCLASS(BeamLight2D, Node2D);
+struct BeamLight2D : public LightActor2D {
+	GDCLASS(BeamLight2D, LightActor2D);
 private:
 	bool drawDebug;
-    double lightWidth;
-	Color color;
+	Color lightColor;
 protected:
 	static void _bind_methods();
 
@@ -33,17 +28,17 @@ public:
     BeamLight2D();
 	~BeamLight2D();
 
-	void _ready() override;
-	void _process(double delta) override;
 	void _draw() override;
 
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool debugDraw);
 	real_t get_light_width() const;
 	void set_light_width(const real_t lightWidth);
-	Color get_color() const;
-	void set_color(const Color color);
+	Color get_light_color() const;
+	void set_light_color(const Color lightColor);
 	BeamLight2DInfo getInfo();
+
+	void debug_draw();
 };
 
 template<>

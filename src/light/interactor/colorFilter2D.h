@@ -1,12 +1,8 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightInteractor2D.h"
+#include "../lightActor2D.h"
 
 //std
 #include <algorithm>
@@ -18,8 +14,8 @@ struct ColorFilter2DInfo {
 	Point2 position;
 };
 
-class ColorFilter2D : public Node2D {
-	GDCLASS(ColorFilter2D, Node2D);
+class ColorFilter2D : public LightActor2D {
+	GDCLASS(ColorFilter2D, LightActor2D);
 protected:
     static void _bind_methods();
 private:
@@ -30,8 +26,6 @@ public:
     ColorFilter2D();
     ~ColorFilter2D();
 
-    void _ready() override;
-    void _process(double delta) override;
     void _draw() override;
 
     bool get_draw_debug() const;
@@ -41,6 +35,8 @@ public:
     Color get_filter_color() const;
 	void set_filter_color(const Color filterColor);
 	ColorFilter2DInfo getInfo() const;
+
+	void debug_draw();
 };
 
 template<>

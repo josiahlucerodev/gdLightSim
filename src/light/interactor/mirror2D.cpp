@@ -21,6 +21,8 @@ void Mirror2D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_mirror_width"), &Mirror2D::get_mirror_width);
 	ClassDB::bind_method(D_METHOD("set_mirror_width", "mirror_width"), &Mirror2D::set_mirror_width);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "mirror_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_mirror_width", "get_mirror_width");
+
+	ClassDB::bind_method(D_METHOD("debug_draw"), &Mirror2D::debug_draw);
 }
 
 //getters/setters
@@ -32,10 +34,12 @@ void Mirror2D::set_draw_debug(const bool drawDebug) {
 }
 
 real_t Mirror2D::get_mirror_width() const {
-	return mirrorWidth;
+	return get_scale().y * 2;
 }
 void Mirror2D::set_mirror_width(const real_t mirrorWidth) {
-	this->mirrorWidth = mirrorWidth;
+	Vector2 scale = get_scale();
+	scale.y = mirrorWidth / 2;
+	set_scale(scale);
 }
 
 Mirror2DInfo Mirror2D::getInfo() const {
@@ -48,28 +52,24 @@ Mirror2DInfo Mirror2D::getInfo() const {
 
 //constructor/deconstructor
 Mirror2D::Mirror2D() {
+	set_light_actor_type(LightActor2DType::mirror);
 	drawDebug = false;
-	mirrorWidth = 100;
 }
 
 Mirror2D::~Mirror2D() {
 }
 
 //ops
-void Mirror2D::_ready() {
-	queue_redraw();
-}
-
-void Mirror2D::_process(double delta) {
-	queue_redraw();
-}
-
 void Mirror2D::_draw() {
+	debug_draw();
+}
+
+void Mirror2D::debug_draw() {
 	if(drawDebug) {
 		draw_circle(Point2(0, 0), Settings::pointRadius, Settings::defaultObjectColor, true);
 
-        Point2 rightOffset = Point2(0, -1) * (mirrorWidth / 2);
-        Point2 leftOffset = Point2(0, 1) * (mirrorWidth / 2);
+        Point2 rightOffset = Point2(0, -1) * (get_mirror_width() / 2);
+        Point2 leftOffset = Point2(0, 1) * (get_mirror_width() / 2);
 
         draw_line(leftOffset, rightOffset
 			, Settings::defaultObjectColor, Settings::debugLineWidth);

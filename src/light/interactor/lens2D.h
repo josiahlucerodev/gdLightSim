@@ -1,12 +1,8 @@
 #pragma once
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightInteractor2D.h"
+#include "../lightActor2D.h"
 
 struct Lens2DInfo {
 	real_t width;
@@ -15,20 +11,17 @@ struct Lens2DInfo {
 	Point2 position;
 };
 
-struct Lens2D : public Node2D {
-	GDCLASS(Lens2D, Node2D);
+struct Lens2D : public LightActor2D {
+	GDCLASS(Lens2D, LightActor2D);
 protected:
     static void _bind_methods();
 private:
 	bool drawDebug;
-    real_t lensWidth;
 	real_t focalLength;
 public:
     Lens2D();
     ~Lens2D();
 
-    void _ready() override;
-    void _process(double delta) override;
     void _draw() override;
 
     bool get_draw_debug() const;
@@ -38,6 +31,8 @@ public:
     real_t get_focal_length() const;
 	void set_focal_length(const real_t focalLength);
 	Lens2DInfo getInfo() const;
+
+	void debug_draw();
 };
 
 template<>

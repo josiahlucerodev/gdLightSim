@@ -3,14 +3,9 @@
 //std
 #include <unordered_map>
 
-//godotcpp
-#include <godot_cpp/classes/node2d.hpp>
-#include <godot_cpp/classes/polygon2d.hpp>
-
-using namespace godot;
-
 //own
 #include "lightInteractor2D.h"
+#include "../lightActor2D.h"
 
 struct LightColider2DInfo {
     real_t rotation;
@@ -18,8 +13,8 @@ struct LightColider2DInfo {
     PackedVector2Array points;
 };
 
-struct LightColider2D : public Polygon2D {
-	GDCLASS(LightColider2D, Polygon2D);
+struct LightColider2D : public LightActor2D {
+	GDCLASS(LightColider2D, LightActor2D);
 
 protected:
     static void _bind_methods();
@@ -28,6 +23,9 @@ private:
 	bool isHit;
 
 public:
+    LightColider2D();
+    ~LightColider2D();
+
     bool get_is_hit() const;
     void set_is_hit(const bool isHit);
     LightColider2DInfo getInfo() const;

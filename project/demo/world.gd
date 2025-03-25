@@ -2,7 +2,7 @@ extends Node2D
 
 func _process(delta: float) -> void:
 	var completed = true
-	var descendents = get_all_descendants(self)
+	var descendents = Descendants.get_descendants(self)
 	for node in descendents:
 		if node is SensorTypes:
 			var sensor_node = node as SensorTypes
@@ -13,13 +13,3 @@ func _process(delta: float) -> void:
 	if completed:
 		var level_complete = $"Level Complete"
 		level_complete.visible = true
-		
-
-func get_all_descendants(node):
-	var all_descendants = []
-	for child in node.get_children():
-		all_descendants.append(child)
-		all_descendants += get_all_descendants(child) 
-	return all_descendants
-		
-	

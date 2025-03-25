@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dwbalyfke5krh"]
+
+[node name="ColorFilter2D" type="ColorFilter2D"]
+color = Color(0, 0, 1, 1)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1, -1, -1)
