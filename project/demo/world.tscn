@@ -1,10 +1,11 @@
 [gd_scene load_steps=11 format=4 uid="uid://c8bbq8f2ctmn"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_k5q1k"]
-[ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="2_pjvrk"]
-[ext_resource type="Texture2D" uid="uid://d370wt6felklx" path="res://icon.svg" id="3_2ssnh"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/prefab/player.tscn" id="2_wfs5x"]
+[ext_resource type="PackedScene" uid="uid://cbd85kmnqs4tb" path="res://demo/prefab/light/standard_lens.tscn" id="5_k5q1k"]
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/prefab/light/standard_beam_light.tscn" id="5_wfs5x"]
-[ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/flower_sensor.gd" id="6_k5q1k"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/prefab/light/lightEnvironment.tscn" id="6_dpv1i"]
+[ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/plant.gd" id="6_k5q1k"]
 
 [sub_resource type="Shader" id="Shader_gcgup"]
 code = "shader_type canvas_item;
@@ -26,19 +27,16 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = SubResource("Shader_gcgup")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_wfs5x"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_0a0pc"]
 _surfaces = [{
-"aabb": AABB(-8.74228e-07, -20, 0, 10000, 40, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-85, -374.693, 0, 10268.4, 2760.05, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("eqxqtQAAoEEAAAAAAEAcRgAAoEEAAAAAAEAcRgAAoMEAAAAAeqxqtQAAoEEAAAAAAEAcRgAAoMEAAAAAeqxqtQAAoMEAAAAA")
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAA9QwAAIMIAAAAAn7tARHIxisIAAAAAy1NBRGRQbsIAAAAAAAA9QwAAIMIAAAAAlx0fRrlYu8MAAAAAs4kaRrQVFUUAAAAAAACqwgAADMIAAAAAAACyQgAADMIAAAAAAACyQgAAgsIAAAAAAACqwgAADMIAAAAAAACyQgAAgsIAAAAAAACqwgAAgsIAAAAAAACqwoMAgsIAAAAAGP1ARIMAgsIAAAAAPF1ARAAAlsIAAAAAAACqwoMAgsIAAAAAPF1ARAAAlsIAAAAAAACqwgAAlsIAAAAAAACyQgAADMIAAAAAAAA9QwAAIMIAAAAAAAA9QwAAIMIAAAAAAACyQgAADMIAAAAAAAA9QwAAIMIAAAAAAACyQgAAgsIAAAAA")
 }]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
-radius = 74.2083
 
 [sub_resource type="GDScript" id="GDScript_wfs5x"]
 script/source = "extends Node2D
@@ -60,27 +58,18 @@ linearRaySpread = 0.001
 displayScatterSections = false
 scatterRaySpread = 0.0001
 material = SubResource("ShaderMaterial_pjvrk")
-mesh = SubResource("ArrayMesh_wfs5x")
-
-[node name="Player" type="CharacterBody2D" parent="lightEnvironment2D"]
-visibility_layer = 2
-z_index = -1
-position = Vector2(-386, 127.049)
-script = ExtResource("2_pjvrk")
-interaction_distance = 100.0
-interaction_hint_radius = 30.0
-
-[node name="Sprite2D" type="Sprite2D" parent="lightEnvironment2D/Player"]
-texture = ExtResource("3_2ssnh")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="lightEnvironment2D/Player"]
-shape = SubResource("CircleShape2D_pjvrk")
+mesh = SubResource("ArrayMesh_0a0pc")
 
 [node name="LightColider2D2" type="LightColider2D" parent="lightEnvironment2D"]
-position = Vector2(85, 389)
+position = Vector2(113, -4.00001)
+scale = Vector2(0.0508381, 0.0277599)
 polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
 
+[node name="Player" parent="lightEnvironment2D" instance=ExtResource("2_wfs5x")]
+position = Vector2(-386, 127.049)
+
 [node name="LightColider2D" type="LightColider2D" parent="lightEnvironment2D"]
+is_hit = true
 position = Vector2(709, -149)
 scale = Vector2(2, 2)
 polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299.549, 206.155, -344.631)
@@ -89,21 +78,25 @@ polygon = PackedVector2Array(238.155, -88.4832, 32.1553, 44.7135, -53.8447, -299
 script = SubResource("GDScript_wfs5x")
 
 [node name="Flower" type="LightSensor2D" parent="lightEnvironment2D"]
-position = Vector2(834, 171)
+position = Vector2(604, -170)
 polygon = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 uv = PackedVector2Array(-294, -72, -293, 50, -165, 48, -168, -67)
 script = ExtResource("6_k5q1k")
 metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
 [node name="SensorTypes" type="LightSensor2D" parent="lightEnvironment2D"]
-position = Vector2(310, -123)
-polygon = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
+position = Vector2(365, -201)
+polygon = PackedVector2Array(-200, 18.1395, -152, -15, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 uv = PackedVector2Array(-200, 18.1395, -109.5, 16.6395, -109.5, 69.1395, -198.5, 65.1395)
 script = ExtResource("6_k5q1k")
 type = 1
 metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
 [node name="BeamLight2D" parent="lightEnvironment2D" instance=ExtResource("5_wfs5x")]
+position = Vector2(-85, -55)
+
+[node name="Lens2D" parent="lightEnvironment2D" instance=ExtResource("5_k5q1k")]
+position = Vector2(89, -40)
 
 [node name="Level Complete" type="CanvasLayer" parent="."]
 visible = false
@@ -130,3 +123,6 @@ text = "Next Level"
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(22, -32)
+
+[node name="lightEnvironment2D2" parent="." instance=ExtResource("6_dpv1i")]

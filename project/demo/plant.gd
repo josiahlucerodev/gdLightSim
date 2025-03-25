@@ -1,4 +1,4 @@
-class_name SensorTypes
+class_name Plant
 
 extends LightSensor2D
 
