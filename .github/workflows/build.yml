@@ -109,18 +109,6 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Set up SCons cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{ github.workspace }}/.scons-cache/
-            ${{ github.workspace }}/**/.sconsign.dblite
-            ${{ github.workspace }}/godot-cpp/gen/
-          key: ${{ matrix.identifier }}-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            ${{ matrix.identifier }}-${{ github.ref }}-${{ github.sha }}
-            ${{ matrix.identifier }}-${{ github.ref }}-
-            ${{ matrix.identifier }}-
       - name: Compile extension
         shell: bash
         env:
