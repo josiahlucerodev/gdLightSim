@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="project"
-run/main_scene="uid://f2fdwnjg7hil"
+run/main_scene="uid://bt1mjr3joyglw"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Descendants="*res://demo/util/descendants.gd"
+TransitionHandler="*res://demo/transition/transition_handler.gd"
 
 [input]
 

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/prefab/light/standard_mirror.tscn" id="5_3oofa"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="7_huxi5"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_c6ce6"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_huxi5"]
 _surfaces = [{
 "aabb": AABB(-426, -279.152, 0, 40, 501.152, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -23,7 +23,7 @@ _surfaces = [{
 script = ExtResource("1_8aecd")
 
 [node name="lightEnvironment2D2" parent="." instance=ExtResource("1_hjlja")]
-mesh = SubResource("ArrayMesh_c6ce6")
+mesh = SubResource("ArrayMesh_huxi5")
 
 [node name="Player" parent="lightEnvironment2D2" instance=ExtResource("2_3oofa")]
 position = Vector2(-296, 165)
@@ -66,7 +66,7 @@ polygon = PackedVector2Array(150, -62, 280, -71, 268, -809, 159, -820)
 position = Vector2(-804, 429)
 polygon = PackedVector2Array(150, -62, 280, -71, 268, -809, 159, -820)
 
-[node name="LightColider2D5" type="LightColider2D" parent="lightEnvironment2D2"]
+[node name="Wall5" type="LightColider2D" parent="lightEnvironment2D2"]
 position = Vector2(-352, 700)
 polygon = PackedVector2Array(150, -62, 567, -66, 580, -814, 159, -820)
 

@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dusjg7d35bdip"]
+
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/prefab/light/lightEnvironment.tscn" id="1_ol3ox"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/prefab/player.tscn" id="2_vugrp"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/prefab/plants/flower.tscn" id="3_i6bsp"]
+
+[node name="level_2_alpha" type="Node2D"]
+
+[node name="lightEnvironment2D2" parent="." instance=ExtResource("1_ol3ox")]
+
+[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("2_vugrp")]
+position = Vector2(-138, -43)
+
+[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("3_i6bsp")]
+position = Vector2(207, -59)
+
+[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
