@@ -20,7 +20,6 @@ protected:
     static void _bind_methods();
 private:
 	bool drawDebug;
-    real_t filterWidth;
 	Color filterColor;
 public:
     ColorFilter2D();
@@ -31,7 +30,6 @@ public:
     bool get_draw_debug() const;
 	void set_draw_debug(const bool debugDraw);
     real_t get_filter_width() const;
-	void set_filter_width(const real_t);
     Color get_filter_color() const;
 	void set_filter_color(const Color filterColor);
 	ColorFilter2DInfo getInfo() const;

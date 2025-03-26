@@ -276,7 +276,7 @@ void LightEnvironment2D::_process(double delta) {
             shapeId++;
         }
     }
-    
+
     shapeId = envData.shapes.size();
     std::unordered_map<LightSensor2D*, ShapeId> sensorsToShapeId;
     std::vector<LightSensor2D*> lightSensors = getLightInteractor<LightSensor2D>(env, "LightSensor2D");

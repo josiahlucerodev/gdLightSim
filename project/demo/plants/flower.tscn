@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://biw5qyvgv3ovg"]
+
+[ext_resource type="Texture2D" uid="uid://dv26ujnw2ryk3" path="res://demo/sprites/plants/unbloomed_flower.png" id="1_13kct"]
+[ext_resource type="Script" uid="uid://cc22vm5hx0vmc" path="res://demo/plants/flower.gd" id="1_mxm87"]
+[ext_resource type="Texture2D" uid="uid://x0oigdeo8yyb" path="res://demo/sprites/plants/bloomed_flower.png" id="2_sb5hp"]
+
+[node name="Flower" type="LightSensor2D"]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-19, 64, 2, 64, 2, -19, -19, -19)
+uv = PackedVector2Array(-182.25, 31.5, -70.25, 45.5, -17.25, -13.5, -125.25, -44.5, -188.619, 35.3033)
+script = ExtResource("1_mxm87")
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
+
+[node name="UnbloomedFlower" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_13kct")
+
+[node name="BloomedFlower" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_sb5hp")

@@ -27,7 +27,6 @@ public:
     bool get_draw_debug() const;
 	void set_draw_debug(const bool debugDraw);
     real_t get_lens_width() const;
-	void set_lens_width(const real_t);
     real_t get_focal_length() const;
 	void set_focal_length(const real_t focalLength);
 	Lens2DInfo getInfo() const;

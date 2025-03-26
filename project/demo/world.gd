@@ -11,5 +11,5 @@ func _process(delta: float) -> void:
 			else:
 				completed = completed && sensor_node.is_hit
 	if completed:
-		var level_complete = $"Level Complete"
+		var level_complete = $"LevelComplete"
 		level_complete.visible = true

@@ -29,7 +29,6 @@ public:
 	bool get_draw_debug() const;
 	void set_draw_debug(const bool);
     real_t get_mirror_width() const;
-	void set_mirror_width(const real_t);
 	Mirror2DInfo getInfo() const;
 
 	void debug_draw();

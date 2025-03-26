@@ -6,6 +6,7 @@
             "type": "shell",
             "command": "scons",
             "args": [
+                "target=template_debug",
                 "debug_symbols=yes",
                 "dev_build=yes",
                 "lto=none",
@@ -21,7 +22,9 @@
             "label": "Release",
             "type": "shell",
             "command": "scons",
-            "args": [],
+            "args": [
+                 "target=template_release"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true

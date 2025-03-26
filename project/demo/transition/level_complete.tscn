@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bllajs03mvyw" path="res://demo/transition/level_complete.gd" id="1_gvq23"]
 
-[node name="Level Complete" type="CanvasLayer"]
+[node name="LevelComplete" type="CanvasLayer"]
 visible = false
 follow_viewport_enabled = true
 script = ExtResource("1_gvq23")
@@ -17,7 +17,7 @@ theme_override_font_sizes/font_size = 100
 text = "Level Complete!"
 metadata/_edit_use_anchors_ = true
 
-[node name="nextLevel" type="Button" parent="."]
+[node name="NextLevel" type="Button" parent="."]
 offset_left = -95.0
 offset_top = 124.0
 offset_right = 76.0

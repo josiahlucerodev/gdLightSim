@@ -17,11 +17,7 @@ void ColorFilter2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_draw_debug"), &ColorFilter2D::get_draw_debug);
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &ColorFilter2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
-	
-	ClassDB::bind_method(D_METHOD("get_filter_width"), &ColorFilter2D::get_filter_width);
-	ClassDB::bind_method(D_METHOD("set_filter_width", "filter_width"), &ColorFilter2D::set_filter_width);
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "filter_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_filter_width", "get_filter_width");
-	
+
 	ClassDB::bind_method(D_METHOD("get_filter_color"), &ColorFilter2D::get_filter_color);
 	ClassDB::bind_method(D_METHOD("set_filter_color", "filter_color"), &ColorFilter2D::set_filter_color);
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "filter_color"), "set_filter_color", "get_filter_color");
@@ -38,12 +34,7 @@ void ColorFilter2D::set_draw_debug(const bool drawDebug) {
 }
 
 real_t ColorFilter2D::get_filter_width() const {
-	return get_scale().y * 2;
-}
-void ColorFilter2D::set_filter_width(const real_t filterWidth) {
-	Vector2 scale = get_scale();
-	scale.y = filterWidth / 2;
-	set_scale(scale);
+	return get_global_scale().y * 2;
 }
 
 Color ColorFilter2D::get_filter_color() const {

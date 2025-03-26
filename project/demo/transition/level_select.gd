@@ -1,26 +1,26 @@
 extends Node2D
 
-var levelIndex = 0
+var level_index = 0
 var levels = ["res://demo/levels/level_1_alpha.tscn", "res://demo/levels/level_2_alpha.tscn"]
-var currentLevel = null
+var current_level = null
 
 func _ready():
 	loadLevel()
 
 func getLevel():
-	return levels[levelIndex]
+	return levels[level_index]
 	
 func _process(delta: float) -> void:
-	if TransitionHandler.transition:
-		TransitionHandler.transition = false
-		remove_child(currentLevel)
+	if TransitionHandler.transition_next_level():
+		TransitionHandler.transition_complete()
 		nextLevel()
-		loadLevel()
 		
 func nextLevel():
-	levelIndex += 1
+	remove_child(current_level)
+	level_index += 1
+	loadLevel()
 	
 func loadLevel():
 	var my_scene = load(getLevel()).instantiate()
 	add_child(my_scene)
-	currentLevel = my_scene
+	current_level = my_scene

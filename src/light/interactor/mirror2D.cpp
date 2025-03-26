@@ -18,10 +18,6 @@ void Mirror2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &Mirror2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 
-    ClassDB::bind_method(D_METHOD("get_mirror_width"), &Mirror2D::get_mirror_width);
-	ClassDB::bind_method(D_METHOD("set_mirror_width", "mirror_width"), &Mirror2D::set_mirror_width);
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "mirror_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_mirror_width", "get_mirror_width");
-
 	ClassDB::bind_method(D_METHOD("debug_draw"), &Mirror2D::debug_draw);
 }
 
@@ -34,12 +30,7 @@ void Mirror2D::set_draw_debug(const bool drawDebug) {
 }
 
 real_t Mirror2D::get_mirror_width() const {
-	return get_scale().y * 2;
-}
-void Mirror2D::set_mirror_width(const real_t mirrorWidth) {
-	Vector2 scale = get_scale();
-	scale.y = mirrorWidth / 2;
-	set_scale(scale);
+	return get_global_scale().y * 2;
 }
 
 Mirror2DInfo Mirror2D::getInfo() const {

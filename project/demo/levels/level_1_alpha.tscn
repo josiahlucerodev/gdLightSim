@@ -1,73 +1,56 @@
-[gd_scene load_steps=9 format=4 uid="uid://f2fdwnjg7hil"]
+[gd_scene load_steps=10 format=4 uid="uid://f2fdwnjg7hil"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_8aecd"]
-[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/prefab/light/lightEnvironment.tscn" id="1_hjlja"]
-[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/prefab/player.tscn" id="2_3oofa"]
-[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/prefab/plants/flower.tscn" id="3_8aecd"]
-[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/prefab/light/standard_beam_light.tscn" id="4_huxi5"]
-[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/prefab/light/standard_mirror.tscn" id="5_3oofa"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_hjlja"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="2_3oofa"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="3_8aecd"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="4_huxi5"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_3oofa"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="7_huxi5"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="8_c6ce6"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_huxi5"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_c6ce6"]
 _surfaces = [{
-"aabb": AABB(-426, -279.152, 0, 40, 501.152, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-468.002, -300, 0, 40.002, 556, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AADBwwAAXkMAAAAAAQDBw9Nbi8MAAAAAAQDVw3qTi8MAAAAAAADBwwAAXkMAAAAAAQDVw3qTi8MAAAAAAADVwwAAXkMAAAAA")
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AADWw/v/f0MAAAAAQgDWwwAAlsMAAAAA8v/fwwEAlsMAAAAAAADWw/v/f0MAAAAA8v/fwwEAlsMAAAAAsP/fw/7/f0MAAAAA0f/fw/7/f0MAAAAAEwDgwwEAlsMAAAAAKADgwwAAlsMAAAAA0f/fw/7/f0MAAAAAKADgwwAAlsMAAAAA5v/fwwAAgEMAAAAA5v/fwwAAgEMAAAAAKADgwwAAlsMAAAAAQgDqwwAAlsMAAAAA5v/fwwAAgEMAAAAAQgDqwwAAlsMAAAAAAADqwwIAgEMAAAAA")
 }]
 
 [node name="Level1Alpha" type="Node2D"]
 script = ExtResource("1_8aecd")
 
-[node name="lightEnvironment2D2" parent="." instance=ExtResource("1_hjlja")]
-mesh = SubResource("ArrayMesh_huxi5")
+[node name="lightEnvironment" parent="." instance=ExtResource("1_hjlja")]
+mesh = SubResource("ArrayMesh_c6ce6")
 
-[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("2_3oofa")]
+[node name="Player" parent="lightEnvironment" instance=ExtResource("2_3oofa")]
 position = Vector2(-296, 165)
 
-[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("3_8aecd")]
-position = Vector2(411, 176)
+[node name="Camera" type="Camera2D" parent="lightEnvironment"]
 
-[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("4_huxi5")]
-position = Vector2(-406, 222)
+[node name="Flower" parent="lightEnvironment" instance=ExtResource("3_8aecd")]
+position = Vector2(456, 176)
+
+[node name="BeamLight" parent="lightEnvironment" instance=ExtResource("4_huxi5")]
+position = Vector2(-448, 256)
 rotation = -1.5708
 
-[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
+[node name="MiddleWall" type="LightColider2D" parent="lightEnvironment"]
+position = Vector2(0, 120)
+scale = Vector2(364, 220)
+polygon = PackedVector2Array(1, -1, -1, -1, -1, 1, 1, 1)
 
-[node name="Mirror2D" parent="lightEnvironment2D2" instance=ExtResource("5_3oofa")]
-mirror_width = 100.0
-position = Vector2(403, -172)
-scale = Vector2(10, 50)
-polygon = PackedVector2Array(0, -0.996396, 1, -0.996396, 1, 0.292479, 1, 1.0036, 0, 1.0036)
+[node name="Border" parent="lightEnvironment" instance=ExtResource("8_c6ce6")]
 
-[node name="Mirror2D2" parent="lightEnvironment2D2" instance=ExtResource("5_3oofa")]
-mirror_width = 100.0
-position = Vector2(-416, -181)
-scale = Vector2(10, 50)
-polygon = PackedVector2Array(0, -0.996396, 1, -0.996396, 1, 0.292479, 1, 1.0036, 0, 1.0036)
+[node name="LeftMirror" parent="lightEnvironment" instance=ExtResource("5_3oofa")]
+position = Vector2(-448, -192)
+scale = Vector2(5, 50)
 
-[node name="Wall1" type="LightColider2D" parent="lightEnvironment2D2"]
-is_hit = true
-position = Vector2(3, 4)
-polygon = PackedVector2Array(-599, -285, 597, -272, 593, -351, -601, -360)
+[node name="RightMirror" parent="lightEnvironment" instance=ExtResource("5_3oofa")]
+position = Vector2(448, -192)
+scale = Vector2(5, 50)
 
-[node name="Wall2" type="LightColider2D" parent="lightEnvironment2D2"]
-position = Vector2(7, 641)
-polygon = PackedVector2Array(-599, -285, 597, -272, 593, -351, -601, -360)
-
-[node name="Wall3" type="LightColider2D" parent="lightEnvironment2D2"]
-position = Vector2(335, 463)
-polygon = PackedVector2Array(150, -62, 280, -71, 268, -809, 159, -820)
-
-[node name="Wall4" type="LightColider2D" parent="lightEnvironment2D2"]
-position = Vector2(-804, 429)
-polygon = PackedVector2Array(150, -62, 280, -71, 268, -809, 159, -820)
-
-[node name="Wall5" type="LightColider2D" parent="lightEnvironment2D2"]
-position = Vector2(-352, 700)
-polygon = PackedVector2Array(150, -62, 567, -66, 580, -814, 159, -820)
-
-[node name="Level Complete" parent="." instance=ExtResource("7_huxi5")]
+[node name="LevelComplete" parent="." instance=ExtResource("7_huxi5")]

@@ -17,10 +17,6 @@ void Lens2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_draw_debug", "draw_debug"), &Lens2D::set_draw_debug);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "draw_debug"), "set_draw_debug", "get_draw_debug");
 	
-	ClassDB::bind_method(D_METHOD("get_lens_width"), &Lens2D::get_lens_width);
-	ClassDB::bind_method(D_METHOD("set_lens_width", "lens_width"), &Lens2D::set_lens_width);
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "lens_width", PROPERTY_HINT_RANGE, "1,10000,1"), "set_lens_width", "get_lens_width");
-	
 	ClassDB::bind_method(D_METHOD("get_focal_length"), &Lens2D::get_focal_length);
 	ClassDB::bind_method(D_METHOD("set_focal_length", "focal_length"), &Lens2D::set_focal_length);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "focal_length", PROPERTY_HINT_RANGE, "-2000,2000,0.1"), "set_focal_length", "get_focal_length");
@@ -37,12 +33,7 @@ void Lens2D::set_draw_debug(const bool drawDebug) {
 }
 
 real_t Lens2D::get_lens_width() const {
-	return get_scale().y * 2;
-}
-void Lens2D::set_lens_width(const real_t lensWidth) {
-	Vector2 scale = get_scale();
-	scale.y = lensWidth / 2;
-	set_scale(scale);
+	return get_global_scale().y * 2;
 }
 
 real_t Lens2D::get_focal_length() const {
