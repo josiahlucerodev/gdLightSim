@@ -61,7 +61,8 @@ struct ShapeHit {
     RayHit2D shapeHit;
 };
 
-std::optional<ShapeHit> shotRayBVH2DNode(const Ray2D& ray, const std::optional<ShapeId>& shapeOriginId, BVH2D& bvh, BVH2D::Node* node) {
+std::optional<ShapeHit> shotRayBVH2DNode(std::vector<ShapeHit>& shapesHit, const Ray2D& ray, 
+    const std::optional<ShapeId>& shapeOriginId, BVH2D& bvh, BVH2D::Node* node) {
     if(node == nullptr) {
         return {};
     }
@@ -72,12 +73,11 @@ std::optional<ShapeHit> shotRayBVH2DNode(const Ray2D& ray, const std::optional<S
     std::optional<ShapeHit> shapeHit;
     auto checkClosesHit = [&](std::optional<ShapeHit> newShapeHit) {
         if(newShapeHit.has_value()) {
-            bvh.sortedShapes;
-            bvh.shapeIsHit[newShapeHit->shape->shapeId] = true;
+            shapesHit.push_back(newShapeHit.value());
             if(newShapeHit->shape->type == Shape2DType::sensor) {
                 return;
             }
-
+            
             if(shapeHit.has_value()) {
                 if(ray.origin.distance_to(newShapeHit.value().shapeHit.location) < 
                     ray.origin.distance_to(shapeHit.value().shapeHit.location)) {
@@ -126,13 +126,37 @@ std::optional<ShapeHit> shotRayBVH2DNode(const Ray2D& ray, const std::optional<S
     }
 
     if(node->b1) {
-        checkClosesHit(shotRayBVH2DNode(ray, shapeOriginId, bvh, node->b1));
+        checkClosesHit(shotRayBVH2DNode(shapesHit, ray, shapeOriginId, bvh, node->b1));
     }
     if(node->b1) {
-        checkClosesHit(shotRayBVH2DNode(ray, shapeOriginId, bvh, node->b2));
+        checkClosesHit(shotRayBVH2DNode(shapesHit, ray, shapeOriginId, bvh, node->b2));
     }
     return shapeHit;
 }  
+
+std::optional<ShapeHit> shotRayBVH2DNode(const Ray2D& ray, 
+    const std::optional<ShapeId>& shapeOriginId, BVH2D& bvh, BVH2D::Node* node) {
+    std::vector<ShapeHit> shapesHit;
+    std::optional<ShapeHit> hit = shotRayBVH2DNode(shapesHit, ray, shapeOriginId, bvh, bvh.root);
+
+    if(hit.has_value()) {
+        real_t hitDistanceToStart = ray.origin.distance_to(hit.value().shapeHit.location);
+        for(ShapeHit shapeHit : shapesHit) {
+            real_t shapeDistanceToStart = ray.origin.distance_to(shapeHit.shapeHit.location);
+            if(shapeHit.shape->type == Shape2DType::sensor &&
+                shapeDistanceToStart < hitDistanceToStart) {
+                bvh.shapeIsHit[shapeHit.shape->shapeId] = true;
+            }
+        }
+    } else {
+        for(ShapeHit shapeHit : shapesHit) {
+            if(shapeHit.shape->type == Shape2DType::sensor) {
+                bvh.shapeIsHit[shapeHit.shape->shapeId] = true;
+            }
+        }
+    }
+    return hit;
+}
 
 std::optional<RayHit2D> shotRay(const Ray2D& ray, const std::optional<ShapeId>& shapeOriginId, BVH2D& bvh) {
     std::optional<ShapeHit> shapeHit = shotRayBVH2DNode(ray, shapeOriginId, bvh, bvh.root);
