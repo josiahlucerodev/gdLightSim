@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://f2fdwnjg7hil"]
+[gd_scene load_steps=11 format=4 uid="uid://f2fdwnjg7hil"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_8aecd"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_hjlja"]
@@ -8,8 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_3oofa"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="7_huxi5"]
 [ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="8_c6ce6"]
+[ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_yriis"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_c6ce6"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_yriis"]
 _surfaces = [{
 "aabb": AABB(-468.002, -300, 0, 40.002, 556, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -24,7 +25,7 @@ _surfaces = [{
 script = ExtResource("1_8aecd")
 
 [node name="lightEnvironment" parent="." instance=ExtResource("1_hjlja")]
-mesh = SubResource("ArrayMesh_c6ce6")
+mesh = SubResource("ArrayMesh_yriis")
 
 [node name="Player" parent="lightEnvironment" instance=ExtResource("2_3oofa")]
 position = Vector2(-296, 165)
@@ -52,5 +53,8 @@ scale = Vector2(5, 50)
 [node name="RightMirror" parent="lightEnvironment" instance=ExtResource("5_3oofa")]
 position = Vector2(448, -192)
 scale = Vector2(5, 50)
+
+[node name="Mushroom" parent="lightEnvironment" instance=ExtResource("8_yriis")]
+position = Vector2(425, 65)
 
 [node name="LevelComplete" parent="." instance=ExtResource("7_huxi5")]

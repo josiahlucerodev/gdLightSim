@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://coopc0u4g42js"]
+
+[ext_resource type="Script" uid="uid://c4y2cbfgvyo3l" path="res://demo/plants/plant.gd" id="1_dnkd1"]
+[ext_resource type="Script" uid="uid://bya2pf0g2ovss" path="res://demo/plants/mushroom.gd" id="1_srj5g"]
+[ext_resource type="Texture2D" uid="uid://3cobx7fjrqvx" path="res://demo/sprites/plants/Mushroom.png" id="2_srj5g"]
+
+[node name="Mushroom" type="LightSensor2D"]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-22, -21, -23, 78, 11, 78, 11, -22)
+script = ExtResource("1_srj5g")
+type = 1
+metadata/_custom_type_script = ExtResource("1_dnkd1")
+
+[node name="MushroomSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("2_srj5g")

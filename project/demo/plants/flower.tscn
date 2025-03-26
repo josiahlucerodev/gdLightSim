@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://biw5qyvgv3ovg"]
 
-[ext_resource type="Texture2D" uid="uid://dv26ujnw2ryk3" path="res://demo/sprites/plants/unbloomed_flower.png" id="1_13kct"]
+[ext_resource type="Texture2D" uid="uid://dv26ujnw2ryk3" path="res://demo/sprites/plants/Unbloomed_Flower.png" id="1_13kct"]
 [ext_resource type="Script" uid="uid://cc22vm5hx0vmc" path="res://demo/plants/flower.gd" id="1_mxm87"]
-[ext_resource type="Texture2D" uid="uid://x0oigdeo8yyb" path="res://demo/sprites/plants/bloomed_flower.png" id="2_sb5hp"]
+[ext_resource type="Texture2D" uid="uid://x0oigdeo8yyb" path="res://demo/sprites/plants/Bloomed_Flower.png" id="2_sb5hp"]
 
 [node name="Flower" type="LightSensor2D"]
 color = Color(1, 1, 1, 0)
