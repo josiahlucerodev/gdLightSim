@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	for untyped_light_actor in light_actors:
 		var light_actor = untyped_light_actor as LightActor2D;
 		var light_actor_position = light_actor.get_global_transform().get_origin()
-		if player_position.distance_to(light_actor_position) < interaction_distance:
+		if light_actor.player_rotatable && player_position.distance_to(light_actor_position) < interaction_distance:
 			close_light_actors.append(light_actor)
 	
 	var closest_light_actor: LightActor2D = null;

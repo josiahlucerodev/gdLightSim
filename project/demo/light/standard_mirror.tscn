@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://7dgm21sa7kpt"]
 
 [node name="Mirror" type="Mirror2D"]
+player_rotatable = true
 color = Color(0.753, 0.753, 0.753, 1)
 polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)

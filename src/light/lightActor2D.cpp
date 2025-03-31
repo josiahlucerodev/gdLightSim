@@ -16,7 +16,8 @@ void LightActor2D::_bind_methods() {
 
 //constructor/destructor
 LightActor2D::LightActor2D() {
-    set_light_actor_type(LightActor2DType::unknown);
+    type = LightActor2DType::unknown;
+    playerRotatable = false;
 }
 LightActor2D::~LightActor2D() {
 }

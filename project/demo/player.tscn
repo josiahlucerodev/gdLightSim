@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://daijmfxacj8t3" path="res://demo/sprites/player/PlayerSprite.png" id="2_giqk6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
-radius = 74.2083
+radius = 50.04
 
 [node name="Player" type="CharacterBody2D"]
 visibility_layer = 2
@@ -14,7 +14,8 @@ interaction_distance = 100.0
 interaction_hint_radius = 30.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.265234, 0.265234)
+position = Vector2(0, -5)
+scale = Vector2(0.198242, 0.198242)
 texture = ExtResource("2_giqk6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
