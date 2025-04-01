@@ -41,6 +41,7 @@ rotation = -1.5708
 [node name="MiddleWall" type="LightColider2D" parent="lightEnvironment"]
 position = Vector2(0, 119)
 scale = Vector2(364, 220)
+color = Color(0.511259, 0.511259, 0.511259, 1)
 polygon = PackedVector2Array(0.697802, -0.877273, 0.510989, -1.05909, -0.728022, -1.15, -0.826923, -0.0590909, -1, 1, 1, 1, 0.945055, 0.204545, 0.722528, -0.468182)
 
 [node name="Border" parent="lightEnvironment" instance=ExtResource("8_c6ce6")]
@@ -55,9 +56,11 @@ scale = Vector2(5, 50)
 
 [node name="LightColider2D" type="LightColider2D" parent="lightEnvironment"]
 is_hit = true
+color = Color(0.511259, 0.511259, 0.511259, 1)
 polygon = PackedVector2Array(-560, -300, -345, -300, -522, -265, -560, 283)
 
 [node name="LightColider2D2" type="LightColider2D" parent="lightEnvironment"]
+color = Color(0.509286, 0.509286, 0.509286, 1)
 polygon = PackedVector2Array(560, 301, 497, 300, 542, 112, 513, -95, 534, -269, 343, -300, 560, -300)
 
 [node name="LevelComplete" parent="." instance=ExtResource("7_huxi5")]

@@ -54,12 +54,15 @@ is_hit = true
 
 [node name="CaveWall" type="LightColider2D" parent="lightEnvironment2D2"]
 position = Vector2(-9, 0)
+color = Color(0.511259, 0.511259, 0.511259, 1)
 polygon = PackedVector2Array(-551, -300, -551, -128, -276, -221, 54, -239, 265, -164, 482, -184, 535, -84, 569, -22, 569, -300)
 
 [node name="CaveWall2" type="LightColider2D" parent="lightEnvironment2D2"]
-polygon = PackedVector2Array(560, 154, 408, 269, 220, 299, 560, 299)
+color = Color(0.509286, 0.509286, 0.509286, 1)
+polygon = PackedVector2Array(560, 154, 408, 269, 220, 300, 560, 300)
 
 [node name="CaveWall3" type="LightColider2D" parent="lightEnvironment2D2"]
+color = Color(0.509286, 0.509286, 0.509286, 1)
 polygon = PackedVector2Array(-560, 301, -560, 160, -445, 270, -288, 300)
 
 [node name="LevelComplete" parent="." instance=ExtResource("8_dess3")]
