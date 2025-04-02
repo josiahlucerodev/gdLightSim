@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="1_7bn6e"]
 [ext_resource type="Texture2D" uid="uid://daijmfxacj8t3" path="res://demo/sprites/player/PlayerSprite.png" id="2_giqk6"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_pjvrk"]
-radius = 50.04
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_giqk6"]
+radius = 38.0
+height = 106.0
 
 [node name="Player" type="CharacterBody2D"]
 visibility_layer = 2
@@ -19,4 +20,4 @@ scale = Vector2(0.198242, 0.198242)
 texture = ExtResource("2_giqk6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_pjvrk")
+shape = SubResource("CapsuleShape2D_giqk6")

@@ -1,32 +1,30 @@
-[gd_scene format=3 uid="uid://0kc2d6a2lbsq"]
+[gd_scene load_steps=2 format=3 uid="uid://0kc2d6a2lbsq"]
+
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="1_bo1gq"]
 
 [node name="Border" type="Node2D"]
 position = Vector2(-4.76837e-07, 2.64698e-23)
 
-[node name="WallUp" type="LightColider2D" parent="."]
-is_hit = true
-position = Vector2(0, -320)
-scale = Vector2(600, 20)
-color = Color(0.509286, 0.509286, 0.509286, 1)
-polygon = PackedVector2Array(1, -1, -1, -1, -1, 1, 1, 1)
-
-[node name="WallDown" type="LightColider2D" parent="."]
-is_hit = true
+[node name="WallDown" parent="." instance=ExtResource("1_bo1gq")]
 position = Vector2(0, 320)
-scale = Vector2(600, 20)
-color = Color(0.509286, 0.509286, 0.509286, 1)
-polygon = PackedVector2Array(1, -1, -1, -1, -1, 1, 1, 1)
+scale = Vector2(560, 20)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
 
-[node name="WallLeft" type="LightColider2D" parent="."]
-is_hit = true
-position = Vector2(-580, 0)
-scale = Vector2(20, 340)
-color = Color(0.511259, 0.511259, 0.511259, 1)
-polygon = PackedVector2Array(1, -1, -1, -1, -1, 1, 1, 1)
+[node name="WallUp" parent="." instance=ExtResource("1_bo1gq")]
+position = Vector2(0, -320)
+scale = Vector2(560, 20)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
 
-[node name="WallRight" type="LightColider2D" parent="."]
-is_hit = true
+[node name="WallRight" parent="." instance=ExtResource("1_bo1gq")]
 position = Vector2(580, 0)
 scale = Vector2(20, 340)
-color = Color(0.509286, 0.509286, 0.509286, 1)
-polygon = PackedVector2Array(1, -1, -1, -1, -1, 1, 1, 1)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
+
+[node name="WallLeft" parent="." instance=ExtResource("1_bo1gq")]
+position = Vector2(-580, 0)
+scale = Vector2(20, 340)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
