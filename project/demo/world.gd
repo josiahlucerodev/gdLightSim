@@ -6,10 +6,7 @@ func _process(delta: float) -> void:
 	for node in descendents:
 		if node is Plant:
 			var sensor_node = node as Plant
-			if sensor_node.type == Plant.Type.MUSHROOM:
-				completed = completed && !sensor_node.is_hit
-			else:
-				completed = completed && sensor_node.is_hit
+			completed = completed && sensor_node.is_complete
 	if completed:
 		var level_complete = $"LevelComplete"
 		level_complete.visible = true

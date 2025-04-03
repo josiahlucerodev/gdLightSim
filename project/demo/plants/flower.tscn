@@ -18,3 +18,8 @@ texture = ExtResource("1_13kct")
 [node name="BloomedFlower" type="Sprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_sb5hp")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.75
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c8bbq8f2ctmn"]
+[gd_scene load_steps=12 format=4 uid="uid://c8bbq8f2ctmn"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_k5q1k"]
 [ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="2_wfs5x"]
@@ -29,12 +29,19 @@ void fragment() {
 shader = SubResource("Shader_gcgup")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_dpv1i"]
+_surfaces = [{
+"aabb": AABB(-85, -374.693, 0, 10268.4, 2760.05, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAA9QwAAIMIAAAAAnrtARHIxisIAAAAAy1NBRGRQbsIAAAAAAAA9QwAAIMIAAAAAlx0fRrlYu8MAAAAAs4kaRrMVFUUAAAAAAACqwgAADMIAAAAAAACyQgAADMIAAAAAAACyQgAAgsIAAAAAAACqwgAADMIAAAAAAACyQgAAgsIAAAAAAACqwgAAgsIAAAAAAACqwoMAgsIAAAAAGP1ARIMAgsIAAAAAPF1ARAAAlsIAAAAAAACqwoMAgsIAAAAAPF1ARAAAlsIAAAAAAACqwgAAlsIAAAAAAACyQgAADMIAAAAAAAA9QwAAIMIAAAAAAAA9QwAAIMIAAAAAAACyQgAADMIAAAAAAAA9QwAAIMIAAAAAAACyQgAAgsIAAAAA")
+}]
 
 [sub_resource type="GDScript" id="GDScript_wfs5x"]
 script/source = "extends Node2D
 "
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_0a0pc"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_k5q1k")
@@ -98,4 +105,3 @@ position = Vector2(89, -40)
 position = Vector2(22, -32)
 
 [node name="lightEnvironment2D2" parent="." instance=ExtResource("6_dpv1i")]
-mesh = SubResource("ArrayMesh_0a0pc")
