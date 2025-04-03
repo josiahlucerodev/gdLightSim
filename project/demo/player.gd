@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed: float = 300.0
-@export var interaction_rotation_speed: float = 0.01
+@export var interaction_rotation_speed: float = 0.02
 @export var interaction_distance: float = 10
 @export var interaction_area_color: Color = Color(1.0, 1.0, 1.0, 1.0)
 @export var interaction_hint_color: Color = Color(1.0, 1.0, 1.0, 1.0)
