@@ -55,9 +55,7 @@ struct LightInteractor<Mirror2D> {
 		const RayHit2D startRay = std::get<1>(radialSection.startRay);
 		const RayHit2D endRay = std::get<1>(radialSection.endRay);
 		const ShapeId mirrorShapeId = startRay.shapeId;
-		const Point2 hitMidLocation = (startRay.location + endRay.location) / 2;
-		const real_t sectionHitWidth = startRay.location.distance_to(endRay.location);
-		const real_t mirrorRotation = clockwiseAngle(hitMidLocation, startRay.location);
+		const real_t mirrorRotation = shotInfo.shapes[mirrorShapeId].rotation;
 		const Ray2D startReflectRay = Ray2D{startRay.location, vectorFromAngle(getRayReflectionAngle(startRay.angle, mirrorRotation)) };
 		const Ray2D endReflectRay = Ray2D{endRay.location, vectorFromAngle(getRayReflectionAngle(endRay.angle, mirrorRotation))};
 		std::vector<Point2> points = getPointsExcluding(mirrorShapeId, shotInfo.shapes);
@@ -73,8 +71,8 @@ struct LightInteractor<Mirror2D> {
 	static linear_shot_result shot(const LinearSection& linearSection, LightInteractorShotInfo shotInfo) {
 		const RayHit2D startRay = std::get<1>(linearSection.startRay);
 		const RayHit2D endRay = std::get<1>(linearSection.endRay);
-		const Point2 bounceMidLocation = (startRay.location + endRay.location) / 2;
-		const real_t mirrorRotation = clockwiseAngle(bounceMidLocation, startRay.location);
+		const ShapeId mirrorShapeId = startRay.shapeId;
+		const real_t mirrorRotation = shotInfo.shapes[mirrorShapeId].rotation;
 		const real_t reflectAngle = getRayReflectionAngle(startRay.angle, mirrorRotation);
 		const Vector2 reflectDirection = vectorFromAngle(reflectAngle); 
 		std::vector<Point2> points = getPointsExcluding(startRay.shapeId, shotInfo.shapes);
@@ -91,9 +89,7 @@ struct LightInteractor<Mirror2D> {
 		const RayHit2D startRay = std::get<1>(scatterSection.startRay);
 		const RayHit2D endRay = std::get<1>(scatterSection.endRay);
 		const ShapeId mirrorShapeId = startRay.shapeId;
-		const Point2 hitMidLocation = (startRay.location + endRay.location) / 2;
-		const real_t sectionHitWidth = startRay.location.distance_to(endRay.location);
-		const real_t mirrorRotation = clockwiseAngle(hitMidLocation, startRay.location);
+		const real_t mirrorRotation = shotInfo.shapes[mirrorShapeId].rotation;
 		const Ray2D startReflectRay = Ray2D{startRay.location, vectorFromAngle(getRayReflectionAngle(startRay.angle, mirrorRotation)) };
 		const Ray2D endReflectRay = Ray2D{endRay.location, vectorFromAngle(getRayReflectionAngle(endRay.angle, mirrorRotation))};
 		std::vector<Point2> points = getPointsExcluding(mirrorShapeId, shotInfo.shapes);

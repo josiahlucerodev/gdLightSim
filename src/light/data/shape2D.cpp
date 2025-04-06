@@ -59,6 +59,7 @@ Shape2D constructShape2D(const ShapeId shapeId, real_t width, real_t rotation, P
     shape.shapeId = shapeId;
     shape.midPoint = (leftPoint + rightPoint) / 2;
     shape.points = {rightPoint, leftPoint};
+    shape.rotation = rotation;
 
     shape.aabb = createAABB(rightPoint);
     shape.aabb = updateAABB(shape.aabb, leftPoint);

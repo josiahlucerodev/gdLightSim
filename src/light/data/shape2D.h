@@ -26,6 +26,7 @@ struct Shape2D {
 
     Color filterColor;
     real_t focalLength;
+    real_t rotation;
 
     Point2 midPoint;
     AABB2D aabb;
