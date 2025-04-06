@@ -81,6 +81,10 @@ std::vector<Section> generateSectionsBase(const Color& color, const std::vector<
     std::vector<Section> sections;
     size_t i = 0;
 
+	constexpr real_t hitEps = 0.1;
+	constexpr real_t angleEps = 0.1;
+	constexpr real_t originEps = 0.1;
+
 	std::optional<RayHit2D> lastHitRay;
     while(i < rays.size()) {
         std::vector<RayHit2D> hitGroup;
@@ -96,6 +100,16 @@ std::vector<Section> generateSectionsBase(const Color& color, const std::vector<
                 } else if(newShape2DType != shapeType) {
                     break;
                 }
+
+				if(!hitGroup.empty()) {
+					Ray2D previousRay = hitGroup.back().ray;
+					if (abs(previousRay.origin.distance_to(rayHit.location)) < hitEps
+						&& abs(previousRay.origin.distance_to(rayHit.ray.origin)) < originEps  
+						&& abs(previousRay.direction.angle_to(rayHit.ray.direction)) < angleEps) {
+						i++;
+						continue;
+					}
+				}
 
                 hitGroup.push_back(std::get<1>(rays[i])); 
                 i++;
@@ -151,6 +165,16 @@ std::vector<Section> generateSectionsBase(const Color& color, const std::vector<
         while(i < rays.size()) {
             if (std::holds_alternative<Ray2D>(rays[i])) {
                 Ray2D ray = std::get<0>(rays[i]);
+
+				if(!missGroup.empty()) {
+					Ray2D previousRay = missGroup.back();
+					if (abs(previousRay.origin.distance_to(ray.origin)) < originEps 
+						&& abs(previousRay.direction.angle_to(ray.direction)) < angleEps) {
+						i++;
+						continue;
+					}
+				}
+
                 missGroup.push_back(ray); 
                 i++;
             } else {

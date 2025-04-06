@@ -20,6 +20,7 @@ LightActor2D::LightActor2D() {
     playerRotatable = false;
 }
 LightActor2D::~LightActor2D() {
+    
 }
 void LightActor2D::set_player_rotatable(bool playerRotatable) {
     this->playerRotatable = playerRotatable;
