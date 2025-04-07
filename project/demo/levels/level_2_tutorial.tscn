@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=4 uid="uid://dusjg7d35bdip"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_pybxs"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_bs0ow"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="3_bq2wh"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="4_ulsxj"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="5_de3k1"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="6_h6hwe"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_8hdia"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_4kuhp"]
+[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="10_dtm4r"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ler42"]
+_surfaces = [{
+"aabb": AABB(-443, -20, 0, 321.404, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AIDdwwAAoEEAAAAA6DDzwgAAoEEAAAAApB8LwwAAoMEAAAAAAIDdwwAAoEEAAAAApB8LwwAAoMEAAAAAAIDdwwAAoMEAAAAA")
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pybxs"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Level2Tutorial" type="Node2D"]
+script = ExtResource("1_pybxs")
+
+[node name="lightEnvironment2D2" parent="." instance=ExtResource("2_bs0ow")]
+mesh = SubResource("ArrayMesh_ler42")
+
+[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("3_bq2wh")]
+position = Vector2(-442, 70)
+
+[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("4_ulsxj")]
+position = Vector2(260, 0)
+
+[node name="Flower2" parent="lightEnvironment2D2" instance=ExtResource("4_ulsxj")]
+is_hit = true
+position = Vector2(-262, 0)
+
+[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
+
+[node name="Border" parent="lightEnvironment2D2" instance=ExtResource("5_de3k1")]
+
+[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("6_h6hwe")]
+position = Vector2(-443, 0)
+
+[node name="Mirror" parent="lightEnvironment2D2" instance=ExtResource("7_8hdia")]
+position = Vector2(0, 215)
+scale = Vector2(5, 75)
+
+[node name="CaveWall" parent="lightEnvironment2D2" instance=ExtResource("9_4kuhp")]
+position = Vector2(-559, -237)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-20, 7, -22, 115, 273, 17, 600, -3, 813, 71, 1038, 49, 1126, 218, 1125, -88, -13, -87)
+
+[node name="CaveWall2" parent="lightEnvironment2D2" instance=ExtResource("9_4kuhp")]
+position = Vector2(573, 300)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(14, 20, 1, -173, -170, -29, -428, 9)
+
+[node name="CaveWall3" parent="lightEnvironment2D2" instance=ExtResource("9_4kuhp")]
+position = Vector2(-573, 146)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(2, 1, 120, 122, 305, 172, 4, 167)
+
+[node name="RotationInstructions" type="Label" parent="lightEnvironment2D2"]
+z_index = 1
+offset_left = -154.5
+offset_top = 91.0
+offset_right = 154.5
+offset_bottom = 166.0
+text = "You can also rotate mirrors to reflect the beams of light!"
+label_settings = SubResource("LabelSettings_pybxs")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CaveRock" parent="lightEnvironment2D2" instance=ExtResource("9_4kuhp")]
+is_hit = true
+position = Vector2(-77, -106)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-4, 1, 53, -35, 121, -13, 162, 55, 166, 140, 82, 197, -24, 173, -63, 84)
+
+[node name="LevelComplete" parent="." instance=ExtResource("10_dtm4r")]

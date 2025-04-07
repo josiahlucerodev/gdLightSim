@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_l6778"]
 [ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_l6778"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_vug3o"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_l6778"]
 _surfaces = [{
 "aabb": AABB(-371.688, 45.0951, 0, 730.371, 221.145, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -31,7 +31,7 @@ displayAABB = true
 displayPoints = true
 displayMidpoints = true
 displayRays = true
-mesh = SubResource("ArrayMesh_vug3o")
+mesh = SubResource("ArrayMesh_l6778")
 
 [node name="Player" parent="lightEnvironment2D" instance=ExtResource("4_btry6")]
 position = Vector2(-264, 132)

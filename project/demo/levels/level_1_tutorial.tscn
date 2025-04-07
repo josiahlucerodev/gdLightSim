@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=4 uid="uid://b8h84iirujn5f"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_4iqhf"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_chafw"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="2_q7jw3"]
+[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="3_chafw"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="4_r5i43"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="5_s8ffn"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_q7jw3"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_chafw"]
+_surfaces = [{
+"aabb": AABB(-485.001, -300, 0, 40.0011, 300, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AIDewwAAlrgAAAAAJIDewwAAlsMAAAAAJIDywwAAlsMAAAAAAIDewwAAlrgAAAAAJIDywwAAlsMAAAAAAIDyw7KqmTgAAAAA")
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_r5i43"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_s8ffn"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rgs8k"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Level1Tutorial" type="Node2D"]
+script = ExtResource("1_4iqhf")
+
+[node name="LevelComplete" parent="." instance=ExtResource("3_chafw")]
+
+[node name="LightEnvironment2D" parent="." instance=ExtResource("2_chafw")]
+mesh = SubResource("ArrayMesh_chafw")
+
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("2_q7jw3")]
+
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_r5i43")]
+
+[node name="MovementInstructions" type="Label" parent="LightEnvironment2D/Player"]
+z_index = 1
+offset_left = -102.0
+offset_top = -87.0
+offset_right = 97.0
+offset_bottom = -64.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Move around using WASD!"
+label_settings = SubResource("LabelSettings_r5i43")
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_q7jw3")]
+position = Vector2(500, 0)
+
+[node name="RotationInstructions" type="Label" parent="LightEnvironment2D"]
+z_index = 1
+offset_left = -561.0
+offset_top = 29.0
+offset_right = -362.0
+offset_bottom = 104.0
+text = "Use Q and E to rotate this beam of light from the source!"
+label_settings = SubResource("LabelSettings_s8ffn")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="LevelInstructions" type="Label" parent="LightEnvironment2D"]
+z_index = 1
+offset_left = 247.0
+offset_top = -35.0
+offset_right = 446.0
+offset_bottom = 40.0
+text = "Give light to the flower to complete the level!"
+label_settings = SubResource("LabelSettings_rgs8k")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("5_s8ffn")]
+position = Vector2(-465, 0)
+rotation = -1.5708
+
+[node name="Camera2D" type="Camera2D" parent="LightEnvironment2D"]

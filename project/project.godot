@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 Descendants="*res://demo/util/descendants.gd"
 TransitionHandler="*res://demo/transition/transition_handler.gd"
 
+[display]
+
+window/vsync/vsync_mode=0
+
 [input]
 
 left={
