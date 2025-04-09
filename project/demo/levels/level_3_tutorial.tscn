@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://cavfergc1sxn5"]
+[gd_scene load_steps=12 format=4 uid="uid://cavfergc1sxn5"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_h1doo"]
-[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="2_qe2h4"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="3_7xx81"]
 [ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="4_d6ggj"]
 [ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="5_13ckl"]
@@ -11,7 +10,16 @@
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_13ckl"]
 [ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_p2alr"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_d6ggj"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_7xx81"]
+_surfaces = [{
+"aabb": AABB(-350, -20, 0, 910, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AACvwwAAoEEAAAAAAAAMRAAAoEEAAAAAAAAMRAAAoMEAAAAAAACvwwAAoEEAAAAAAAAMRAAAoMEAAAAAAACvwwAAoMEAAAAA")
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_13ckl"]
 outline_size = 4
@@ -20,54 +28,50 @@ outline_color = Color(0, 0, 0, 1)
 [node name="Level2Alpha" type="Node2D"]
 script = ExtResource("1_h1doo")
 
-[node name="lightEnvironment2D2" parent="." instance=ExtResource("3_7xx81")]
-mesh = SubResource("ArrayMesh_d6ggj")
+[node name="LightEnvironment2D" parent="." instance=ExtResource("3_7xx81")]
+mesh = SubResource("ArrayMesh_7xx81")
 
-[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("5_13ckl")]
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("5_13ckl")]
 position = Vector2(-442, 70)
 
-[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("6_p2alr")]
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_p2alr")]
 is_hit = true
 position = Vector2(260, 0)
 
-[node name="Flower2" parent="lightEnvironment2D2" instance=ExtResource("6_p2alr")]
+[node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("6_p2alr")]
 is_hit = true
 position = Vector2(-262, 0)
 
-[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("4_d6ggj")]
 
-[node name="Border" parent="lightEnvironment2D2" instance=ExtResource("4_d6ggj")]
-
-[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("7_lu0ig")]
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("7_lu0ig")]
 position = Vector2(-350, 0)
 
-[node name="Mirror" parent="lightEnvironment2D2" instance=ExtResource("7_d6ggj")]
+[node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("7_d6ggj")]
 position = Vector2(0, -150)
 rotation = 1.5708
 scale = Vector2(5, 50)
 
-[node name="Mushroom" parent="lightEnvironment2D2" instance=ExtResource("8_13ckl")]
+[node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("8_13ckl")]
 is_hit = true
 
-[node name="CaveWall" parent="lightEnvironment2D2" instance=ExtResource("9_p2alr")]
+[node name="CaveWall" parent="LightEnvironment2D" instance=ExtResource("9_p2alr")]
 position = Vector2(552, 232)
 rotation = 3.14159
 color = Color(0.509804, 0.509804, 0.509804, 1)
 polygon = PackedVector2Array(-20, 7, -22, 115, 273, 17, 600, -3, 813, 71, 1038, 49, 1126, 218, 1125, -88, -13, -87)
 
-[node name="CaveWall2" parent="lightEnvironment2D2" instance=ExtResource("9_p2alr")]
+[node name="CaveWall2" parent="LightEnvironment2D" instance=ExtResource("9_p2alr")]
 position = Vector2(-562, -293)
 rotation = 3.14159
 color = Color(0.509804, 0.509804, 0.509804, 1)
 polygon = PackedVector2Array(14, 20, 1, -173, -170, -29, -428, 9)
 
-[node name="CaveWall3" parent="lightEnvironment2D2" instance=ExtResource("9_p2alr")]
+[node name="CaveWall3" parent="LightEnvironment2D" instance=ExtResource("9_p2alr")]
 position = Vector2(573, -141)
 rotation = 3.14159
 color = Color(0.509804, 0.509804, 0.509804, 1)
 polygon = PackedVector2Array(2, 1, 53, 97, 120, 122, 305, 172, 4, 167)
-
-[node name="LevelComplete" parent="." instance=ExtResource("2_qe2h4")]
 
 [node name="RotationInstructions" type="Label" parent="."]
 z_index = 1

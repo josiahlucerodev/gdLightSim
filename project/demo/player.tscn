@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnj8vj0c8g14"]
+[gd_scene load_steps=5 format=3 uid="uid://cnj8vj0c8g14"]
 
 [ext_resource type="Script" uid="uid://dlsvirc5yes1c" path="res://demo/player.gd" id="1_7bn6e"]
 [ext_resource type="Texture2D" uid="uid://daijmfxacj8t3" path="res://demo/sprites/player/PlayerSprite.png" id="2_giqk6"]
+[ext_resource type="Texture2D" uid="uid://dl0aswx80tkqn" path="res://demo/sprites/player/Crate.png" id="2_yji6d"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_giqk6"]
 radius = 38.0
@@ -14,7 +15,13 @@ script = ExtResource("1_7bn6e")
 interaction_distance = 100.0
 interaction_hint_radius = 30.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="CrateSprite" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(1, 24)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_yji6d")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
 position = Vector2(0, -5)
 scale = Vector2(0.198242, 0.198242)
 texture = ExtResource("2_giqk6")

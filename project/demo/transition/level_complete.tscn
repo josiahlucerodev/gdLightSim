@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2yfl8qrx5y1y"]
+[gd_scene load_steps=13 format=3 uid="uid://b2yfl8qrx5y1y"]
 
 [ext_resource type="Script" uid="uid://bllajs03mvyw" path="res://demo/transition/level_complete.gd" id="1_gvq23"]
 
@@ -41,6 +41,76 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.270588, 0.105882, 0.0156863, 1)
+
+[sub_resource type="Animation" id="Animation_gvq23"]
+resource_name = "Shrink"
+markers = [{
+"color": Color(1, 1, 1, 1),
+"name": &"start",
+"time": 0.0
+}, {
+"color": Color(1, 1, 1, 1),
+"name": &"end",
+"time": 0.3
+}]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_70gt5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_adnvx"]
+resource_name = "Grow"
+markers = [{
+"color": Color(1, 1, 1, 1),
+"name": &"start",
+"time": 0.0
+}, {
+"color": Color(1, 1, 1, 1),
+"name": &"end",
+"time": 0.3
+}]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_adnvx"]
+_data = {
+&"Grow": SubResource("Animation_adnvx"),
+&"RESET": SubResource("Animation_70gt5"),
+&"Shrink": SubResource("Animation_gvq23")
+}
 
 [node name="LevelComplete" type="CanvasLayer"]
 visible = false
@@ -89,3 +159,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_rykqa")
 theme_override_styles/normal = SubResource("StyleBoxFlat_70gt5")
 text = "Next Level"
 metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_adnvx")
+}

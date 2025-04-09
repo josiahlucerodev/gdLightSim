@@ -44,12 +44,12 @@ func _process(delta: float) -> void:
 	for untyped_light_actor in light_actors:
 		var light_actor = untyped_light_actor as LightActor2D;
 		var light_actor_position = light_actor.get_global_transform().get_origin()
-		if light_actor.player_rotatable && player_position.distance_to(light_actor_position) < interaction_distance:
+		if light_actor.visible && light_actor.player_rotatable && player_position.distance_to(light_actor_position) < interaction_distance:
 			close_rotatable_actors.append(light_actor)
-		if light_actor.player_liftable && player_position.distance_to(light_actor_position) < interaction_distance:
+		if light_actor.visible && light_actor.player_liftable && player_position.distance_to(light_actor_position) < interaction_distance:
 			close_liftable_actors.append(light_actor)
 
-	
+	#find closest light actor that can be rotated (and is visible)
 	var closest_rotatable_actor: LightActor2D = null;
 	for close_rotatable_actor in close_rotatable_actors:
 		if closest_rotatable_actor == null:
@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 			var closest_position = closest_rotatable_actor.get_global_transform().get_origin()
 			if player_position.distance_to(close_position) < player_position.distance_to(closest_position):
 				closest_rotatable_actor = close_rotatable_actor
-	#find closest light actor that can be lifted
+	#find closest light actor that can be lifted (and is visible)
 	var closest_liftable_actor: LightActor2D = null;
 	for close_liftable_actor in close_liftable_actors:
 		if closest_liftable_actor == null:
@@ -90,6 +90,10 @@ func _process(delta: float) -> void:
 			lifted_object = closest_liftable_actor
 			lifting_object = true
 			lifted_object.visible = false
+	if lifting_object:
+		$CrateSprite.visible = true
+	else:
+		$CrateSprite.visible = false
 		
 	if closest_rotatable_actor != null:
 		set_draw_interaction_hint(closest_rotatable_actor.get_global_transform().get_origin())

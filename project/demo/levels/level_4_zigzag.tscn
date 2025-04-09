@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfpw581rrb3p3"]
+[gd_scene load_steps=10 format=4 uid="uid://dfpw581rrb3p3"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_66wmv"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_42w2o"]
@@ -8,64 +8,68 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="6_w6fw0"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="7_unrf4"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_a8f4o"]
-[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="9_vbdn2"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_66wmv"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_b7lhc"]
+_surfaces = [{
+"aabb": AABB(-520, -20, 0, 1080, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAACxAAAoEEAAAAAAAAMRAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoMEAAAAA")
+}]
 
 [node name="level_3_beta" type="Node2D"]
 script = ExtResource("1_66wmv")
 
-[node name="lightEnvironment2D2" parent="." instance=ExtResource("2_42w2o")]
-mesh = SubResource("ArrayMesh_66wmv")
+[node name="LightEnvironment2D" parent="." instance=ExtResource("2_42w2o")]
+mesh = SubResource("ArrayMesh_b7lhc")
 
-[node name="Border" parent="lightEnvironment2D2" instance=ExtResource("3_6t7ll")]
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_6t7ll")]
 
-[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
-
-[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("4_30xtu")]
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_30xtu")]
 position = Vector2(-300, 90)
 
-[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("5_r7r8w")]
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("5_r7r8w")]
 position = Vector2(-520, 0)
 
-[node name="Mirror" parent="lightEnvironment2D2" instance=ExtResource("6_w6fw0")]
+[node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("6_w6fw0")]
 player_rotatable = false
 position = Vector2(0, -166)
 rotation = 1.5708
 scale = Vector2(5, 550)
 
-[node name="Mirror2" parent="lightEnvironment2D2" instance=ExtResource("6_w6fw0")]
+[node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("6_w6fw0")]
 player_rotatable = false
 position = Vector2(-9.09495e-13, 159)
 rotation = -1.5708
 scale = Vector2(5, 550)
 
-[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("7_unrf4")]
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("7_unrf4")]
 is_hit = true
 position = Vector2(-320, -20)
 
-[node name="Flower2" parent="lightEnvironment2D2" instance=ExtResource("7_unrf4")]
+[node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("7_unrf4")]
 is_hit = true
 position = Vector2(-135, -20)
 
-[node name="Flower3" parent="lightEnvironment2D2" instance=ExtResource("7_unrf4")]
+[node name="Flower3" parent="LightEnvironment2D" instance=ExtResource("7_unrf4")]
 is_hit = true
 position = Vector2(48, -20)
 
-[node name="Flower4" parent="lightEnvironment2D2" instance=ExtResource("7_unrf4")]
+[node name="Flower4" parent="LightEnvironment2D" instance=ExtResource("7_unrf4")]
 is_hit = true
 position = Vector2(241, -20)
 
-[node name="Mushroom" parent="lightEnvironment2D2" instance=ExtResource("8_a8f4o")]
+[node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("8_a8f4o")]
 is_hit = true
 position = Vector2(-233, -20)
 
-[node name="Mushroom2" parent="lightEnvironment2D2" instance=ExtResource("8_a8f4o")]
+[node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("8_a8f4o")]
 is_hit = true
 position = Vector2(-43, -20)
 
-[node name="Mushroom3" parent="lightEnvironment2D2" instance=ExtResource("8_a8f4o")]
+[node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("8_a8f4o")]
 is_hit = true
 position = Vector2(142, -20)
-
-[node name="LevelComplete" parent="." instance=ExtResource("9_vbdn2")]
