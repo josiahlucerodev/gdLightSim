@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://dfpw581rrb3p3"]
+[gd_scene load_steps=11 format=3 uid="uid://dfpw581rrb3p3"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_66wmv"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_42w2o"]
@@ -10,22 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_a8f4o"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="9_vbdn2"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_dn2xp"]
-_surfaces = [{
-"aabb": AABB(-520, -20, 0, 1080, 40, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AAACxAAAoEEAAAAAAAAMRAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoMEAAAAA")
-}]
+[sub_resource type="ArrayMesh" id="ArrayMesh_66wmv"]
 
 [node name="level_3_beta" type="Node2D"]
 script = ExtResource("1_66wmv")
 
 [node name="lightEnvironment2D2" parent="." instance=ExtResource("2_42w2o")]
-mesh = SubResource("ArrayMesh_dn2xp")
+mesh = SubResource("ArrayMesh_66wmv")
 
 [node name="Border" parent="lightEnvironment2D2" instance=ExtResource("3_6t7ll")]
 

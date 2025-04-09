@@ -27,6 +27,7 @@ protected:
 private:
     LightActor2DType type;
     bool playerRotatable;
+    bool playerLiftable;
 
 public:
     LightActor2D();
@@ -36,6 +37,8 @@ public:
     LightActor2DType get_light_actor_type() const;
     void set_player_rotatable(bool rotatable);
     bool get_player_rotatable() const;
+    void set_player_liftable(bool liftable);
+    bool get_player_liftable() const;
     void _godot_set_light_actor_type(int actorType);
     int _godot_get_light_actor_type() const;
 };

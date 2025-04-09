@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b8h84iirujn5f"]
+[gd_scene load_steps=12 format=4 uid="uid://b8h84iirujn5f"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_4iqhf"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_chafw"]
@@ -9,6 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_q7jw3"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_chafw"]
+_surfaces = [{
+"aabb": AABB(-485.001, -300, 0, 40.0011, 300, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AIDewwAAlrgAAAAAJIDewwAAlsMAAAAAJIDywwAAlsMAAAAAAIDewwAAlrgAAAAAJIDywwAAlsMAAAAAAIDyw7KqmTgAAAAA")
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r5i43"]
 outline_size = 4
@@ -47,6 +56,7 @@ horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_q7jw3")]
+player_liftable = true
 position = Vector2(500, 0)
 
 [node name="RotationInstructions" type="Label" parent="LightEnvironment2D"]
@@ -73,6 +83,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("5_s8ffn")]
+player_liftable = true
 position = Vector2(-465, 0)
 rotation = -1.5708
 

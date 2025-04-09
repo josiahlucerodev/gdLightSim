@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://dcc20jtytjpjo"]
+[gd_scene load_steps=12 format=3 uid="uid://dcc20jtytjpjo"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_3li56"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_rrp0o"]
@@ -11,22 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_5vcob"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="10_gxkw1"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_jhl8d"]
-_surfaces = [{
-"aabb": AABB(-371.688, 45.0951, 0, 730.371, 221.145, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 18,
-"vertex_data": PackedByteArray("WVezQ3bCJ0MAAAAA8X2ow2phNEIAAAAAINi5w7w6/0IAAAAAWVezQ3bCJ0MAAAAAINi5w7w6/0IAAAAAHMOrQ8u5fUMAAAAAHMOrQ8u5fUMAAAAAINi5w7w6/0IAAAAAAAAawwAAJkMAAAAAHMOrQ8u5fUMAAAAAAAAawwAAJkMAAAAAFsOrQwy6fUMAAAAAFsOrQwy6fUMAAAAAAAAawwAAJkMAAAAA0E8Fw/SMNkMAAAAAFsOrQwy6fUMAAAAA0E8Fw/SMNkMAAAAAqKiqQ8UehUMAAAAA")
-}]
+[sub_resource type="ArrayMesh" id="ArrayMesh_3li56"]
 
 [node name="level_4_beta" type="Node2D"]
 script = ExtResource("1_3li56")
 
 [node name="lightEnvironment2D" parent="." instance=ExtResource("2_rrp0o")]
-mesh = SubResource("ArrayMesh_jhl8d")
+mesh = SubResource("ArrayMesh_3li56")
 
 [node name="Player" parent="lightEnvironment2D" instance=ExtResource("3_x46b0")]
 position = Vector2(-264, 132)

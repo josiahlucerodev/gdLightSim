@@ -9,6 +9,8 @@ extends CharacterBody2D
 var draw_interaction_hint: bool = false
 var draw_interaction_radius: bool = false
 var interaction_hint_position = null
+var lifting_object = false
+var lifted_object:LightActor2D = null
 
 func set_draw_interaction_hint(position) -> void:
 	interaction_hint_position = position;
@@ -37,34 +39,66 @@ func _process(delta: float) -> void:
 		if descendant is LightActor2D:
 			light_actors.append(descendant as LightActor2D)
 	
-	var close_light_actors = []
+	var close_rotatable_actors = []
+	var close_liftable_actors = []
 	for untyped_light_actor in light_actors:
 		var light_actor = untyped_light_actor as LightActor2D;
 		var light_actor_position = light_actor.get_global_transform().get_origin()
 		if light_actor.player_rotatable && player_position.distance_to(light_actor_position) < interaction_distance:
-			close_light_actors.append(light_actor)
+			close_rotatable_actors.append(light_actor)
+		if light_actor.player_liftable && player_position.distance_to(light_actor_position) < interaction_distance:
+			close_liftable_actors.append(light_actor)
+
 	
-	var closest_light_actor: LightActor2D = null;
-	for close_light_actor in close_light_actors:
-		if closest_light_actor == null:
-			closest_light_actor = close_light_actor
+	var closest_rotatable_actor: LightActor2D = null;
+	for close_rotatable_actor in close_rotatable_actors:
+		if closest_rotatable_actor == null:
+			closest_rotatable_actor = close_rotatable_actor
 		else:
-			var close_position = closest_light_actor.get_global_transform().get_origin()
-			var closest_position = closest_light_actor.get_global_transform().get_origin()
+			var close_position = closest_rotatable_actor.get_global_transform().get_origin()
+			var closest_position = closest_rotatable_actor.get_global_transform().get_origin()
 			if player_position.distance_to(close_position) < player_position.distance_to(closest_position):
-				closest_light_actor = close_light_actor
+				closest_rotatable_actor = close_rotatable_actor
+	#find closest light actor that can be lifted
+	var closest_liftable_actor: LightActor2D = null;
+	for close_liftable_actor in close_liftable_actors:
+		if closest_liftable_actor == null:
+			closest_liftable_actor = close_liftable_actor
+		else:
+			var close_position = close_liftable_actor.get_global_transform().get_origin()
+			var closest_position = closest_liftable_actor.get_global_transform().get_origin()
+			if player_position.distance_to(close_position) < player_position.distance_to(closest_position):
+				closest_liftable_actor = close_liftable_actor
 
 	var light_actor_rs = 0
+	var light_actor_v = 0
 	if Input.is_action_pressed("action_left"):
 		set_draw_interaction_radius()
-		light_actor_rs = interaction_rotation_speed
+		light_actor_rs += interaction_rotation_speed
 	if Input.is_action_pressed("action_right"):
 		set_draw_interaction_radius()
-		light_actor_rs = -interaction_rotation_speed
+		light_actor_rs += -interaction_rotation_speed
+	if Input.is_action_just_pressed("lift_object"):
+		set_draw_interaction_radius()
+		if lifting_object:
+			lifted_object.position = position
+			lifted_object.visible = true
+			lifted_object = null
+			lifting_object = false;
+
+		elif closest_liftable_actor != null && !lifting_object:
+			lifted_object = closest_liftable_actor
+			lifting_object = true
+			lifted_object.visible = false
 		
-	if closest_light_actor != null:
-		set_draw_interaction_hint(closest_light_actor.get_global_transform().get_origin())
-		closest_light_actor.rotation += light_actor_rs
+	if closest_rotatable_actor != null:
+		set_draw_interaction_hint(closest_rotatable_actor.get_global_transform().get_origin())
+		closest_rotatable_actor.rotation += light_actor_rs
+	queue_redraw()
+	#drag liftable actor with you
+	if closest_liftable_actor != null:
+		set_draw_interaction_hint(closest_liftable_actor.get_global_transform().get_origin())
+		closest_liftable_actor
 	queue_redraw()
 	
 func _draw() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://bxavvlc0aeo2e"]
+[gd_scene load_steps=12 format=3 uid="uid://bxavvlc0aeo2e"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_6khaf"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_at7cw"]
@@ -11,22 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_wjxvn"]
 [ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="10_730cf"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_rx2g1"]
-_surfaces = [{
-"aabb": AABB(-443, -20, 0, 1003, 40, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AIDdwwAAoEEAAAAAAAAMRAAAoEEAAAAAAAAMRAAAoMEAAAAAAIDdwwAAoEEAAAAAAAAMRAAAoMEAAAAAAIDdwwAAoMEAAAAA")
-}]
+[sub_resource type="ArrayMesh" id="ArrayMesh_6khaf"]
 
 [node name="Level2Alpha" type="Node2D"]
 script = ExtResource("1_6khaf")
 
 [node name="lightEnvironment2D2" parent="." instance=ExtResource("2_at7cw")]
-mesh = SubResource("ArrayMesh_rx2g1")
+mesh = SubResource("ArrayMesh_6khaf")
 
 [node name="Player" parent="lightEnvironment2D2" instance=ExtResource("3_vxik2")]
 position = Vector2(-442, 70)

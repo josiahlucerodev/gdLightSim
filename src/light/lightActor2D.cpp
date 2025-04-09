@@ -10,7 +10,10 @@ void LightActor2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_player_rotatable", "player_rotatable"), &LightActor2D::set_player_rotatable);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "player_rotatable"), "set_player_rotatable", "get_player_rotatable");
 
-    
+    ClassDB::bind_method(D_METHOD("get_player_liftable"), &LightActor2D::get_player_liftable);
+	ClassDB::bind_method(D_METHOD("set_player_liftable", "player_liftable"), &LightActor2D::set_player_liftable);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "player_liftable"), "set_player_liftable", "get_player_liftable");
+
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "actor_type", PROPERTY_HINT_ENUM, enumElements), "unknown, set_light_actor_type", "get_light_actor_type");
 }
 
@@ -18,15 +21,24 @@ void LightActor2D::_bind_methods() {
 LightActor2D::LightActor2D() {
     type = LightActor2DType::unknown;
     playerRotatable = false;
+    playerLiftable = false;
 }
 LightActor2D::~LightActor2D() {
     
 }
+
 void LightActor2D::set_player_rotatable(bool playerRotatable) {
     this->playerRotatable = playerRotatable;
 }
 bool LightActor2D::get_player_rotatable() const {
     return playerRotatable;
+}
+
+void LightActor2D::set_player_liftable(bool playerLiftable) {
+    this->playerLiftable = playerLiftable;
+}
+bool LightActor2D::get_player_liftable() const {
+    return playerLiftable;
 }
 
 //getter/setters
