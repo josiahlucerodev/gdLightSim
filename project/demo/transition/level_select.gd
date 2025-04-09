@@ -4,7 +4,8 @@ var level_index = 0
 var levels = ["res://demo/levels/level_1_tutorial.tscn", 
 "res://demo/levels/level_2_tutorial.tscn", 
 "res://demo/levels/level_3_tutorial.tscn", 
-"res://demo/levels/level_4_beta.tscn"]
+"res://demo/levels/level_4_zigzag.tscn",
+"res://demo/levels/level_5_beta.tscn"]
 var current_level = null
 
 func _ready():

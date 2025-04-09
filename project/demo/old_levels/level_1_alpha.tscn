@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://f2fdwnjg7hil"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_7jxpm"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_w28m5"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="3_xoiy5"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="4_5rea8"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="5_rhy14"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="6_chpbu"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="7_bb6kx"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="8_j32cj"]
+[ext_resource type="PackedScene" uid="uid://b2yfl8qrx5y1y" path="res://demo/transition/level_complete.tscn" id="9_twxdq"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xe0b2"]
+
+[node name="Level1Alpha" type="Node2D"]
+script = ExtResource("1_7jxpm")
+
+[node name="lightEnvironment" parent="." instance=ExtResource("2_w28m5")]
+mesh = SubResource("ArrayMesh_xe0b2")
+
+[node name="Camera" type="Camera2D" parent="lightEnvironment"]
+
+[node name="Flower" parent="lightEnvironment" instance=ExtResource("3_xoiy5")]
+position = Vector2(456, 176)
+
+[node name="BeamLight" parent="lightEnvironment" instance=ExtResource("4_5rea8")]
+position = Vector2(-448, 256)
+rotation = -1.5708
+
+[node name="Border" parent="lightEnvironment" instance=ExtResource("5_rhy14")]
+
+[node name="LeftMirror" parent="lightEnvironment" instance=ExtResource("6_chpbu")]
+position = Vector2(-448, -192)
+scale = Vector2(5, 50)
+
+[node name="RightMirror" parent="lightEnvironment" instance=ExtResource("6_chpbu")]
+position = Vector2(448, -192)
+scale = Vector2(5, 50)
+
+[node name="Player" parent="lightEnvironment" instance=ExtResource("7_bb6kx")]
+position = Vector2(-370, 125)
+
+[node name="MiddleWall" parent="lightEnvironment" instance=ExtResource("8_j32cj")]
+position = Vector2(-367, 315)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-3, 4, 72, -234, 98, -455, 559, -427, 627, -388, 634, -296, 726, -123, 737, 6)
+
+[node name="CaveWallLeft" parent="lightEnvironment" instance=ExtResource("8_j32cj")]
+is_hit = true
+position = Vector2(-574, -317)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(7, 4, 226, 12, 56, 51, 9, 619, -19, 617)
+
+[node name="CavewallRight" parent="lightEnvironment" instance=ExtResource("8_j32cj")]
+position = Vector2(304, -326)
+color = Color(0.509804, 0.509804, 0.509804, 1)
+polygon = PackedVector2Array(-3, -5, 53, 28, 226, 58, 186, 242, 231, 441, 186, 636, 282, 647, 276, 8)
+
+[node name="LevelComplete" parent="." instance=ExtResource("9_twxdq")]
