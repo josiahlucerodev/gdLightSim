@@ -51,6 +51,7 @@ position = Vector2(419, -231)
 position = Vector2(-18, -218)
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("8_rqye4")]
+visible = false
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("5_lhku2")]
 position = Vector2(496, -218)

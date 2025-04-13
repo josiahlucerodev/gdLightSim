@@ -1,27 +1,18 @@
-[gd_scene load_steps=6 format=4 uid="uid://bm13wwvfbtf63"]
+[gd_scene load_steps=6 format=3 uid="uid://bm13wwvfbtf63"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_wk13k"]
 [ext_resource type="PackedScene" uid="uid://did4d7l16cyrw" path="res://demo/light/standard_spot_light.tscn" id="2_h4ue0"]
 [ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="3_7rxok"]
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="4_3ou31"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_v776w"]
-_surfaces = [{
-"aabb": AABB(-560, -300.638, 0, 1120, 596.638, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 27,
-"vertex_data": PackedByteArray("AACAPwAAY8MAAAAAAAAMRJz0D8MAAAAAAAAMRNAr10IAAAAAAACAPwAAY8MAAAAAnv6LQwAAcMIAAAAAaAJmQwQAcMIAAAAAAACAPwAAY8MAAAAAAAAMRPyrNEMAAAAAAAAMRAr/k0MAAAAAAACAPwAAY8MAAAAAAAAMRAr/k0MAAAAAev8LRAAAlEMAAAAAAACAPwAAY8MAAAAAev8LRAAAlEMAAAAAfv8LxAAAlEMAAAAAAACAPwAAY8MAAAAAfv8LxAAAlEMAAAAAAAAMxP7+k0MAAAAAAACAPwAAY8MAAAAAAAAMxP7+k0MAAAAAAAAMxJSoD8MAAAAAnv6LQwAAcMIAAAAAAAAMRIqcY8MAAAAAAAAMRLRRlsMAAAAAnv6LQwAAcMIAAAAAAAAMRLRRlsMAAAAAaAJmQwQAcMIAAAAA")
-}]
+[sub_resource type="ArrayMesh" id="ArrayMesh_wk13k"]
 
 [node name="test_bug" type="Node2D"]
 position = Vector2(0, -4)
 
 [node name="lightEnvironment2D2" parent="." instance=ExtResource("1_wk13k")]
 displayRays = true
-mesh = SubResource("ArrayMesh_v776w")
+mesh = SubResource("ArrayMesh_wk13k")
 
 [node name="SpotLight2D" parent="lightEnvironment2D2" instance=ExtResource("2_h4ue0")]
 arc = 163.1

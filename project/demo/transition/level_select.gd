@@ -1,7 +1,7 @@
 extends Node2D
 
 var level_index = 0
-var levels = ["res://demo/levels/level_1_tutorial.tscn", 
+var levels = ["res://demo/levels/level_6_grid.tscn","res://demo/levels/level_1_tutorial.tscn", 
 "res://demo/levels/level_2_tutorial.tscn", 
 "res://demo/levels/level_3_tutorial.tscn", 
 "res://demo/levels/level_4_zigzag.tscn",
