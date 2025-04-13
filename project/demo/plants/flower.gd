@@ -1,5 +1,8 @@
 extends Plant
 
+func _ready() -> void:
+	is_complete = is_hit
+	
 func _process(delta: float) -> void:
 	if was_hit != is_hit:
 		$Timer.start()

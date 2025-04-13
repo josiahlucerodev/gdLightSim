@@ -9,86 +9,91 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_05vcv"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_smhsl"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_05vcv"]
 _surfaces = [{
-"aabb": AABB(-215, 114, 0, 10000, 14, 1e-05),
+"aabb": AABB(-248, 249, 0, 10000, 14, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 6,
-"vertex_data": PackedByteArray("AABXwwAAAEMAAAAAAOQYRgAAAEMAAAAAAOQYRgAA5EIAAAAAAABXwwAAAEMAAAAAAOQYRgAA5EIAAAAAAABXwwAA5EIAAAAA")
+"vertex_data": PackedByteArray("AAB4wwCAg0MAAAAAAGAYRgCAg0MAAAAAAGAYRgAAeUMAAAAAAAB4wwCAg0MAAAAAAGAYRgAAeUMAAAAAAAB4wwAAeUMAAAAA")
 }]
 
 [node name="level_6_grid" type="Node2D"]
 script = ExtResource("1_ti037")
 
-[node name="lightEnvironment2D2" parent="." instance=ExtResource("1_no25w")]
-mesh = SubResource("ArrayMesh_smhsl")
+[node name="LightEnvironment2D" parent="." instance=ExtResource("1_no25w")]
+mesh = SubResource("ArrayMesh_05vcv")
 
-[node name="Border" parent="lightEnvironment2D2" instance=ExtResource("3_dtnom")]
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_dtnom")]
 visible = false
 
-[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("4_pg025")]
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_pg025")]
 position = Vector2(-300, 200)
 
-[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("5_05vcv")]
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("5_05vcv")]
 light_width = 14.0
 player_liftable = true
-position = Vector2(-215, 121)
+position = Vector2(-248, 256)
 scale = Vector2(0.35, 7)
 
-[node name="Camera2D" type="Camera2D" parent="lightEnvironment2D2"]
+[node name="Camera2D" type="Camera2D" parent="LightEnvironment2D"]
 
-[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(-150, -150)
 
-[node name="Flower2" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(0, -150)
 
-[node name="Flower3" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower3" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(150, -150)
 
-[node name="Flower4" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower4" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(-150, 0)
 
-[node name="Flower5" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower5" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 
-[node name="Flower6" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower6" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(150, 0)
 
-[node name="Flower7" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower7" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(-150, 150)
 
-[node name="Flower8" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower8" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(0, 150)
 
-[node name="Flower9" parent="lightEnvironment2D2" instance=ExtResource("6_pg025")]
+[node name="Flower9" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 position = Vector2(150, 150)
 
-[node name="Mirror" parent="lightEnvironment2D2" instance=ExtResource("7_05vcv")]
+[node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
 player_liftable = true
 position = Vector2(300, -150)
 scale = Vector2(5, 25)
 
-[node name="Mirror2" parent="lightEnvironment2D2" instance=ExtResource("7_05vcv")]
+[node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
 player_liftable = true
-position = Vector2(150, 250)
+position = Vector2(214, 208)
 scale = Vector2(5, 25)
 
-[node name="Mirror3" parent="lightEnvironment2D2" instance=ExtResource("7_05vcv")]
+[node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
 player_liftable = true
 position = Vector2(-300, -150)
 scale = Vector2(5, 25)
 
-[node name="Mushroom" parent="lightEnvironment2D2" instance=ExtResource("8_05vcv")]
+[node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("8_05vcv")]
 position = Vector2(-300, 0)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
-[node name="Mushroom2" parent="lightEnvironment2D2" instance=ExtResource("8_05vcv")]
+[node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("8_05vcv")]
 position = Vector2(300, 0)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
-[node name="Mushroom3" parent="lightEnvironment2D2" instance=ExtResource("8_05vcv")]
+[node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("8_05vcv")]
+is_hit = true
 position = Vector2(0, 250)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
-[node name="Mushroom4" parent="lightEnvironment2D2" instance=ExtResource("8_05vcv")]
+[node name="Mushroom4" parent="LightEnvironment2D" instance=ExtResource("8_05vcv")]
 position = Vector2(0, -250)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
