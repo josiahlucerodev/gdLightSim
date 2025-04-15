@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://bw68u5mcm8pyd"]
+[gd_scene load_steps=5 format=3 uid="uid://bw68u5mcm8pyd"]
 
+[ext_resource type="Shader" uid="uid://cbio6p2d4yj7h" path="res://demo/util/wall.gdshader" id="1_3xclo"]
 [ext_resource type="Script" uid="uid://dgadxpvlq33cm" path="res://demo/util/wall_2d.gd" id="1_s1vmf"]
+[ext_resource type="Texture2D" uid="uid://kkm87fhcbjh8" path="res://demo/sprites/cave/Cave_Wall.png" id="2_ttd4x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ttd4x"]
+shader = ExtResource("1_3xclo")
+shader_parameter/backgroundSampler = ExtResource("2_ttd4x")
 
 [node name="Wall2D" type="LightColider2D"]
+material = SubResource("ShaderMaterial_ttd4x")
 script = ExtResource("1_s1vmf")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
