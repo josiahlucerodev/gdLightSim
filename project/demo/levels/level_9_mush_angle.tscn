@@ -1,0 +1,95 @@
+[gd_scene load_steps=11 format=4 uid="uid://dtw0mwp323c18"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_cueyk"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_yvnfp"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="3_8qifo"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="4_r4b7w"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="5_s21iv"]
+[ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="6_77nbh"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="7_aimcp"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="8_0ndq3"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="9_pan8f"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s21iv"]
+_surfaces = [{
+"aabb": AABB(-10184, -69, 0, 10040, 344, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAAQwwCAiUMAAAAAAQAQwwAA6MEAAAAAAQA4wwAAisIAAAAAAAAQwwCAiUMAAAAAAQA4wwAAisIAAAAAAAA4wwCAiUMAAAAAAQAQwwAA6MEAAAAAAIAexoP/58EAAAAAACAfxuH/icIAAAAAAQAQwwAA6MEAAAAAACAfxuH/icIAAAAAAQA4wwAAisIAAAAA")
+}]
+
+[node name="level_9_mushAngle" type="Node2D"]
+script = ExtResource("1_cueyk")
+
+[node name="LightEnvironment2D" parent="." instance=ExtResource("2_yvnfp")]
+mesh = SubResource("ArrayMesh_s21iv")
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
+position = Vector2(-49, -78)
+scale = Vector2(3, 3)
+polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
+position = Vector2(971, -75)
+scale = Vector2(6, 3)
+polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
+
+[node name="Wall2D3" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
+position = Vector2(971, 403)
+scale = Vector2(6, 5)
+polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
+
+[node name="Wall2D4" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
+position = Vector2(-45, 399)
+scale = Vector2(3, 5)
+polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
+
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("4_r4b7w")]
+visible = false
+position = Vector2(0, 0)
+
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("5_s21iv")]
+position = Vector2(32, -61)
+
+[node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("6_77nbh")]
+position = Vector2(-196, -220)
+rotation = -1.5708
+scale = Vector2(1.75, 1.75)
+
+[node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("6_77nbh")]
+is_hit = true
+position = Vector2(-326, -85)
+scale = Vector2(1.5, 1.5)
+
+[node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("6_77nbh")]
+position = Vector2(528, -76)
+scale = Vector2(1.25, 1.25)
+
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("7_aimcp")]
+position = Vector2(250, -72)
+
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("8_0ndq3")]
+position = Vector2(-164, 275)
+rotation = -1.5708
+
+[node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
+position = Vector2(-165, -50)
+rotation = -0.785398
+scale = Vector2(5, 50)
+
+[node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
+position = Vector2(250, -125)
+rotation = 1.5708
+scale = Vector2(5, 275)
+
+[node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
+position = Vector2(150, 15)
+rotation = 1.5708
+scale = Vector2(5, 210)
