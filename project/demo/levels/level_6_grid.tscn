@@ -23,6 +23,7 @@ _surfaces = [{
 script = ExtResource("1_ti037")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("1_no25w")]
+max_actions = 50
 mesh = SubResource("ArrayMesh_pg025")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_dtnom")]

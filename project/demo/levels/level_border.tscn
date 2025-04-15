@@ -8,7 +8,7 @@
 script/source = "extends Label
 "
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_cod6j"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vins3"]
 
 [sub_resource type="Animation" id="Animation_cod6j"]
 resource_name = "LevelFadeIn"
@@ -131,7 +131,7 @@ offset_left = -608.0
 offset_top = -346.0
 offset_right = 599.0
 offset_bottom = 346.0
-texture = SubResource("PlaceholderTexture2D_cod6j")
+texture = SubResource("PlaceholderTexture2D_vins3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
