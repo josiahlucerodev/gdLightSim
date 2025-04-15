@@ -1,6 +1,94 @@
-[gd_scene load_steps=2 format=3 uid="uid://bt1mjr3joyglw"]
+[gd_scene load_steps=3 format=3 uid="uid://bt1mjr3joyglw"]
 
 [ext_resource type="Script" uid="uid://dhdykdtsjfy7v" path="res://demo/transition/level_select.gd" id="1_4tn8t"]
+[ext_resource type="PackedScene" uid="uid://bemqpbf6wou7c" path="res://demo/transition/level_button.tscn" id="2_dksf1"]
 
 [node name="levelSelect" type="Node2D"]
 script = ExtResource("1_4tn8t")
+
+[node name="BP" type="Node2D" parent="."]
+
+[node name="R1" type="Node2D" parent="BP"]
+
+[node name="L1" parent="BP/R1" instance=ExtResource("2_dksf1")]
+metadata/_edit_use_anchors_ = true
+
+[node name="L2" parent="BP/R1" instance=ExtResource("2_dksf1")]
+offset_left = 320.0
+offset_right = 350.0
+text = "2"
+metadata/_edit_use_anchors_ = true
+
+[node name="L3" parent="BP/R1" instance=ExtResource("2_dksf1")]
+offset_left = 640.0
+offset_right = 670.0
+text = "3
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="L4" parent="BP/R1" instance=ExtResource("2_dksf1")]
+offset_left = 960.0
+offset_right = 990.0
+text = "4
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="L5" parent="BP/R1" instance=ExtResource("2_dksf1")]
+offset_left = 1280.0
+offset_right = 1310.0
+metadata/_edit_use_anchors_ = true
+
+[node name="R2" type="Node2D" parent="BP"]
+position = Vector2(0, 320)
+
+[node name="L6" parent="BP/R2" instance=ExtResource("2_dksf1")]
+text = "6"
+
+[node name="L7" parent="BP/R2" instance=ExtResource("2_dksf1")]
+offset_left = 320.0
+offset_right = 350.0
+text = "7"
+
+[node name="L8" parent="BP/R2" instance=ExtResource("2_dksf1")]
+offset_left = 640.0
+offset_right = 670.0
+text = "8"
+
+[node name="L9" parent="BP/R2" instance=ExtResource("2_dksf1")]
+offset_left = 960.0
+offset_right = 990.0
+text = "9
+"
+
+[node name="L10" parent="BP/R2" instance=ExtResource("2_dksf1")]
+offset_left = 1280.0
+offset_right = 1310.0
+text = "10
+"
+
+[node name="R3" type="Node2D" parent="BP"]
+position = Vector2(0, 640)
+
+[node name="L11" parent="BP/R3" instance=ExtResource("2_dksf1")]
+text = "11
+"
+
+[node name="L12" parent="BP/R3" instance=ExtResource("2_dksf1")]
+offset_left = 320.0
+offset_right = 350.0
+text = "12"
+
+[node name="L13" parent="BP/R3" instance=ExtResource("2_dksf1")]
+offset_left = 640.0
+offset_right = 670.0
+text = "13"
+
+[node name="L14" parent="BP/R3" instance=ExtResource("2_dksf1")]
+offset_left = 960.0
+offset_right = 990.0
+text = "14"
+
+[node name="L15" parent="BP/R3" instance=ExtResource("2_dksf1")]
+offset_left = 1280.0
+offset_right = 1310.0
+text = "15"

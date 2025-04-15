@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bemqpbf6wou7c"]
+
+[node name="Button" type="Button"]
+offset_right = 30.0
+offset_bottom = 31.0
+scale = Vector2(8, 8)
+text = "1"

@@ -126,6 +126,7 @@ script = SubResource("GDScript_vins3")
 zoom = Vector2(1.65, 1.65)
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 z_index = -2
 offset_left = -608.0
 offset_top = -346.0
@@ -140,3 +141,11 @@ libraries = {
 autoplay = "LevelFadeIn"
 
 [node name="LevelComplete" parent="." instance=ExtResource("3_vins3")]
+
+[node name="ExitButton" type="Button" parent="."]
+offset_left = 472.0
+offset_top = -288.0
+offset_right = 509.0
+offset_bottom = -257.0
+scale = Vector2(2, 2)
+text = "Exit"
