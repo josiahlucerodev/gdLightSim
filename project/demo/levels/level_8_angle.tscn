@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_vg61o"]
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="6_wuqo1"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_kgnga"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_wuqo1"]
 _surfaces = [{
 "aabb": AABB(-750, -300, 0, 10000, 600, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -22,27 +22,27 @@ _surfaces = [{
 [node name="level_8_angle" type="Node2D"]
 script = ExtResource("1_wuqo1")
 
-[node name="lightEnvironment2D" parent="." instance=ExtResource("1_1xsoa")]
-mesh = SubResource("ArrayMesh_kgnga")
+[node name="LightEnvironment2D" parent="." instance=ExtResource("1_1xsoa")]
+mesh = SubResource("ArrayMesh_wuqo1")
 
-[node name="Border" parent="lightEnvironment2D" instance=ExtResource("2_fkq11")]
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("2_fkq11")]
 visible = false
 position = Vector2(0, 0)
 scale = Vector2(1.29616, 1.04517)
 
-[node name="Player" parent="lightEnvironment2D" instance=ExtResource("3_wuqo1")]
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("3_wuqo1")]
 position = Vector2(-248, 1)
 
-[node name="Flower" parent="lightEnvironment2D" instance=ExtResource("6_vg61o")]
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_vg61o")]
 player_liftable = true
 position = Vector2(250, 0)
 
-[node name="BeamLight2D" parent="lightEnvironment2D" instance=ExtResource("6_wuqo1")]
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("6_wuqo1")]
 light_width = 600.0
 position = Vector2(-750, 0)
 scale = Vector2(1, 300)
 
-[node name="Wall2D" parent="lightEnvironment2D" instance=ExtResource("6_fkq11")]
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("6_fkq11")]
 is_hit = true
 position = Vector2(275, 0)
 scale = Vector2(2, 2)
