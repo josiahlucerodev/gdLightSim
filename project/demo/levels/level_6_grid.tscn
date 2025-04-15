@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://bmfgckah61lmu"]
+[gd_scene load_steps=9 format=3 uid="uid://bmfgckah61lmu"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_no25w"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ti037"]
@@ -9,15 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_pg025"]
-_surfaces = [{
-"aabb": AABB(-204.95, -300, 0, 261.95, 504.95, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 18,
-"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQuhmPMIAAAAABABkQo7MhcIAAAAA3QxDwyPzTEMAAAAABABkQo7MhcIAAAAAI/NMw90MQ0MAAAAAAABkQuhmPMIAAAAAAACiwsAZOcMAAAAAAACiwk3mTMMAAAAAAABkQuhmPMIAAAAAAACiwk3mTMMAAAAABABkQo7MhcIAAAAAAACiwsAZOcMAAAAAAJkHQgAAlsMAAAAAMJthQQAAlsMAAAAAAACiwsAZOcMAAAAAMJthQQAAlsMAAAAAAACiwk3mTMMAAAAA")
-}]
 
 [node name="level_6_grid" type="Node2D"]
 script = ExtResource("1_ti037")
