@@ -8,7 +8,8 @@ var levels = [
 "res://demo/levels/level_4_zigzag.tscn",
 "res://demo/levels/level_5_beta.tscn",
 "res://demo/levels/level_6_grid.tscn",
-"res://demo/levels/level_7_mushring.tscn"]
+"res://demo/levels/level_7_mushring.tscn",
+"res://demo/levels/level_8_angle.tscn"]
 
 var current_level = null
 
