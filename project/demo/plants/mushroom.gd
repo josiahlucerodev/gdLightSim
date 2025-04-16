@@ -4,6 +4,8 @@ func _ready() -> void:
 	is_complete = !is_hit
 
 func _process(delta: float) -> void:
+	if is_hit:
+		is_complete = false
 	if was_hit != is_hit:
 		$Timer.start()
 	was_hit = is_hit

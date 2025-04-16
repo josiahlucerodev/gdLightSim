@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dusjg7d35bdip"]
+[gd_scene load_steps=11 format=4 uid="uid://dusjg7d35bdip"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_pybxs"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_bs0ow"]
@@ -10,6 +10,15 @@
 [ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_4kuhp"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ayome"]
+_surfaces = [{
+"aabb": AABB(-443, -20, 0, 321.404, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AIDdwwAAoEEAAAAA6DDzwgAAoEEAAAAApB8LwwAAoMEAAAAAAIDdwwAAoEEAAAAApB8LwwAAoMEAAAAAAIDdwwAAoMEAAAAA")
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pybxs"]
 outline_size = 4
