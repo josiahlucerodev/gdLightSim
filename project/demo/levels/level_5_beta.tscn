@@ -49,9 +49,9 @@ position = Vector2(419, -231)
 
 [node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("7_ix7m8")]
 position = Vector2(-18, -218)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("8_rqye4")]
-visible = false
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("5_lhku2")]
 position = Vector2(496, -218)

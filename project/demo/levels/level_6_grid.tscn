@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bmfgckah61lmu"]
+[gd_scene load_steps=10 format=4 uid="uid://bmfgckah61lmu"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_no25w"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ti037"]
@@ -9,6 +9,19 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_pg025"]
+_surfaces = [{
+"aabb": AABB(-204.95, -7275.96, 0, 7195.02, 7480.91, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQtBmPMIAAAAADABkQobMhcIAAAAA3QxDwyPzTEMAAAAADABkQobMhcIAAAAAI/NMw90MQ0MAAAAAAABkQtBmPMIAAAAA/v+hwqcZOcMAAAAA/v+hwjnmTMMAAAAAAABkQtBmPMIAAAAA/v+hwjnmTMMAAAAADABkQobMhcIAAAAA/v+hwqcZOcMAAAAAmHDaRUrB4sUAAAAAmHDaRa9f48UAAAAA/v+hwqcZOcMAAAAAmHDaRa9f48UAAAAA/v+hwjnmTMMAAAAA")
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_05vcv"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [node name="level_6_grid" type="Node2D"]
 script = ExtResource("1_ti037")
@@ -18,6 +31,7 @@ max_actions = 50
 mesh = SubResource("ArrayMesh_pg025")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_dtnom")]
+visible = false
 
 [node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_pg025")]
 position = Vector2(-300, 200)
@@ -72,3 +86,15 @@ scale = Vector2(5, 35)
 player_liftable = true
 position = Vector2(57, -64)
 scale = Vector2(5, 35)
+
+[node name="LevelInstructions" type="Label" parent="LightEnvironment2D"]
+z_index = 1
+offset_left = -104.0
+offset_top = 214.0
+offset_right = 95.0
+offset_bottom = 289.0
+text = "You can use space on certain objects to pick them up! Press space again to place them."
+label_settings = SubResource("LabelSettings_05vcv")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
