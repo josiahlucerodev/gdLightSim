@@ -8,6 +8,11 @@ func transition_complete() -> void:
 	transition_next_level_flag = false
 	transition_to_level_complete_flag = false
 	transition_level_completed = true;
+
+func selected_level() -> void:
+	transition_next_level_flag = false
+	transition_to_level_complete_flag = false
+
 	
 func goto_next_level() -> void:
 	transition_next_level_flag = true

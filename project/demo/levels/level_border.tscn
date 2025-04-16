@@ -142,6 +142,7 @@ autoplay = "LevelFadeIn"
 [node name="LevelComplete" parent="." instance=ExtResource("3_vins3")]
 
 [node name="ExitButton" type="Button" parent="."]
+z_index = 3
 offset_left = 472.0
 offset_top = -288.0
 offset_right = 509.0

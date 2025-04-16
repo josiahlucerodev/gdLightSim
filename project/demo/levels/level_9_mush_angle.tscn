@@ -76,6 +76,7 @@ scale = Vector2(1.25, 1.25)
 position = Vector2(250, -72)
 
 [node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("8_0ndq3")]
+player_rotatable = false
 position = Vector2(-164, 275)
 rotation = -1.5708
 
@@ -85,11 +86,13 @@ rotation = -0.785398
 scale = Vector2(5, 50)
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
+player_rotatable = false
 position = Vector2(250, -125)
 rotation = 1.5708
 scale = Vector2(5, 275)
 
 [node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
+player_rotatable = false
 position = Vector2(150, 15)
 rotation = 1.5708
 scale = Vector2(5, 210)

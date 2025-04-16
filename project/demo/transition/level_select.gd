@@ -33,18 +33,18 @@ var current_level = null
 	$BP/R3/L14,
 	$BP/R3/L15]
 	
-@onready var button_visable_array = [] 
+@onready var button_visible_array = [] 
 
 func _ready():
-	button_visable_array.resize(buttons.size())
-	button_visable_array.fill(false);
-	button_visable_array[0] = true;
+	button_visible_array.resize(buttons.size())
+	button_visible_array.fill(false);
+	button_visible_array[0] = true;
 		
 	update_buttons();
 
 func update_buttons():
 	for i in range(buttons.size()):
-		buttons[i].visible = button_visable_array[i];
+		buttons[i].visible = button_visible_array[i];
 
 func getLevel():
 	return levels[level_index]
@@ -58,10 +58,10 @@ func _process(delta: float) -> void:
 		remove_child(current_level)
 		current_level = null
 		if level_index != 0:
-			button_visable_array[level_index + 1] = TransitionHandler.is_level_completed();
+			button_visible_array[level_index + 1] = button_visible_array[level_index + 1] || TransitionHandler.is_level_completed();
 		update_buttons()
 		button_panel.visible = true
-		TransitionHandler.transition_complete()
+		TransitionHandler.selected_level()
 		
 	for i in range(buttons.size()):
 		var button = buttons[i];
@@ -74,7 +74,7 @@ func _process(delta: float) -> void:
 func nextLevel():
 	remove_child(current_level)
 	level_index += 1
-	button_visable_array[level_index] = true;
+	button_visible_array[level_index] = true;
 	
 	loadLevel()
 	

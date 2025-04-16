@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 		if closest_rotatable_actor == null:
 			closest_rotatable_actor = close_rotatable_actor
 		else:
-			var close_position = closest_rotatable_actor.get_global_transform().get_origin()
+			var close_position = close_rotatable_actor.get_global_transform().get_origin()
 			var closest_position = closest_rotatable_actor.get_global_transform().get_origin()
 			if player_position.distance_to(close_position) < player_position.distance_to(closest_position):
 				closest_rotatable_actor = close_rotatable_actor
@@ -102,7 +102,6 @@ func _process(delta: float) -> void:
 	#drag liftable actor with you
 	if closest_liftable_actor != null:
 		set_draw_interaction_hint(closest_liftable_actor.get_global_transform().get_origin())
-		closest_liftable_actor
 	queue_redraw()
 	
 func _draw() -> void:

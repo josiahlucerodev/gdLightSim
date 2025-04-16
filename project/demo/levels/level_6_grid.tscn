@@ -10,13 +10,13 @@
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_pg025"]
 _surfaces = [{
-"aabb": AABB(-204.95, -7275.96, 0, 7195.02, 7480.91, 1e-05),
+"aabb": AABB(-204.95, -300, 0, 261.95, 504.95, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 18,
-"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQtBmPMIAAAAADABkQobMhcIAAAAA3QxDwyPzTEMAAAAADABkQobMhcIAAAAAI/NMw90MQ0MAAAAAAABkQtBmPMIAAAAA/v+hwqcZOcMAAAAA/v+hwjnmTMMAAAAAAABkQtBmPMIAAAAA/v+hwjnmTMMAAAAADABkQobMhcIAAAAA/v+hwqcZOcMAAAAAmHDaRUrB4sUAAAAAmHDaRa9f48UAAAAA/v+hwqcZOcMAAAAAmHDaRa9f48UAAAAA/v+hwjnmTMMAAAAA")
+"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQtBmPMIAAAAADABkQobMhcIAAAAA3QxDwyPzTEMAAAAADABkQobMhcIAAAAAI/NMw90MQ0MAAAAAAABkQtBmPMIAAAAA/v+hwqcZOcMAAAAA/v+hwjnmTMMAAAAAAABkQtBmPMIAAAAA/v+hwjnmTMMAAAAADABkQobMhcIAAAAA/v+hwqcZOcMAAAAAnpkHQgAAlsMAAAAAOJ1hQQAAlsMAAAAA/v+hwqcZOcMAAAAAOJ1hQQAAlsMAAAAA/v+hwjnmTMMAAAAA")
 }]
 
 [sub_resource type="LabelSettings" id="LabelSettings_05vcv"]
@@ -31,7 +31,6 @@ max_actions = 50
 mesh = SubResource("ArrayMesh_pg025")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_dtnom")]
-visible = false
 
 [node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_pg025")]
 position = Vector2(-300, 200)

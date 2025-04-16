@@ -36,6 +36,7 @@ metadata/_edit_use_anchors_ = true
 [node name="L5" parent="BP/R1" instance=ExtResource("2_dksf1")]
 offset_left = 1280.0
 offset_right = 1310.0
+text = "5"
 metadata/_edit_use_anchors_ = true
 
 [node name="R2" type="Node2D" parent="BP"]
