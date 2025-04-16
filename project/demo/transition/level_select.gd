@@ -63,6 +63,12 @@ func _process(delta: float) -> void:
 		button_panel.visible = true
 		TransitionHandler.selected_level()
 		
+	#Ctrl + Shift + L in level select shows all levels
+	if(button_panel.visible && Input.is_action_just_pressed("debug_level_select")):
+		for i in range(buttons.size()):
+			button_visible_array[i] = true
+			update_buttons()
+		
 	for i in range(buttons.size()):
 		var button = buttons[i];
 		if button.button_pressed:
@@ -70,7 +76,6 @@ func _process(delta: float) -> void:
 			loadLevel()
 			button.button_pressed = false
 			pass
-			
 func nextLevel():
 	remove_child(current_level)
 	level_index += 1

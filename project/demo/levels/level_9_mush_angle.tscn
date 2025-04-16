@@ -12,13 +12,13 @@
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s21iv"]
 _surfaces = [{
-"aabb": AABB(-10184, -69.0392, 0, 10040, 344.039, 1e-05),
+"aabb": AABB(-560, -69.0027, 0, 416, 344.003, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 12,
-"vertex_data": PackedByteArray("AAAQw/5/iUMAAAAASAAQw1AC6MEAAAAAUgA4w6gAisIAAAAAAAAQw/5/iUMAAAAAUgA4w6gAisIAAAAAAAA4wwKAiUMAAAAASAAQw1AC6MEAAAAAAYAexvNP6MEAAAAAASAfxhEUisIAAAAASAAQw1AC6MEAAAAAASAfxhEUisIAAAAAUgA4w6gAisIAAAAA")
+"vertex_data": PackedByteArray("AAAQw/5/iUMAAAAASAAQw1AC6MEAAAAAUgA4w6gAisIAAAAAAAAQw/5/iUMAAAAAUgA4w6gAisIAAAAAAAA4wwKAiUMAAAAASAAQw1AC6MEAAAAAAAAMxIsF6MEAAAAAAAAMxGMBisIAAAAASAAQw1AC6MEAAAAAAAAMxGMBisIAAAAAUgA4w6gAisIAAAAA")
 }]
 
 [node name="level_9_mushAngle" type="Node2D"]
@@ -52,7 +52,6 @@ polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, 
 uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("4_r4b7w")]
-visible = false
 position = Vector2(0, 0)
 
 [node name="Player" parent="LightEnvironment2D" instance=ExtResource("5_s21iv")]
