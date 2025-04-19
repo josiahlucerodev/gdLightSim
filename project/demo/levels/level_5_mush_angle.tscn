@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="8_0ndq3"]
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="9_pan8f"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_s21iv"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_8yxim"]
 _surfaces = [{
 "aabb": AABB(-560, -69.0027, 0, 416, 344.003, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
@@ -21,11 +21,11 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AAAQw/5/iUMAAAAASAAQw1AC6MEAAAAAUgA4w6gAisIAAAAAAAAQw/5/iUMAAAAAUgA4w6gAisIAAAAAAAA4wwKAiUMAAAAASAAQw1AC6MEAAAAAAAAMxIsF6MEAAAAAAAAMxGMBisIAAAAASAAQw1AC6MEAAAAAAAAMxGMBisIAAAAAUgA4w6gAisIAAAAA")
 }]
 
-[node name="level_9_mushAngle" type="Node2D"]
+[node name="level_5_mushAngle" type="Node2D"]
 script = ExtResource("1_cueyk")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("2_yvnfp")]
-mesh = SubResource("ArrayMesh_s21iv")
+mesh = SubResource("ArrayMesh_8yxim")
 
 [node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
 position = Vector2(-49, -78)
