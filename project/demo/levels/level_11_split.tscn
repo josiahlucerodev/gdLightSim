@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=4 uid="uid://md4l5f7uw4nb"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ohwwv"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_fi68y"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="3_frwlh"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="4_ouky2"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_648u6"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_a87u8"]
+[ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_jfpp1"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ayj2w"]
+_surfaces = [{
+"aabb": AABB(-560, -30.0001, 0, 958, 60.0001, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AADHQwAA8MEAAAAAAAAMxEwA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8EEAAAAA")
+}]
+
+[node name="Level11Split" type="Node2D"]
+script = ExtResource("1_ohwwv")
+
+[node name="LightEnvironment2D" parent="." instance=ExtResource("2_fi68y")]
+mesh = SubResource("ArrayMesh_ayj2w")
+
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_frwlh")]
+
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("4_ouky2")]
+light_width = 60.0
+position = Vector2(398, 0)
+rotation = 3.14159
+scale = Vector2(1.5, 30)
+
+[node name="Mirror1" parent="LightEnvironment2D" instance=ExtResource("5_648u6")]
+player_liftable = true
+position = Vector2(-25, 100)
+scale = Vector2(5, 25)
+color = Color(0.376973, 0.828752, 0.894409, 1)
+
+[node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("5_648u6")]
+player_liftable = true
+position = Vector2(75, 100)
+scale = Vector2(5, 25)
+color = Color(0.376973, 0.828752, 0.894409, 1)
+
+[node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("5_648u6")]
+player_liftable = true
+position = Vector2(25, 100)
+scale = Vector2(5, 25)
+color = Color(0.376973, 0.828752, 0.894409, 1)
+
+[node name="Mirror4" parent="LightEnvironment2D" instance=ExtResource("5_648u6")]
+player_liftable = true
+position = Vector2(-75, 100)
+scale = Vector2(5, 25)
+color = Color(0.376973, 0.828752, 0.894409, 1)
+
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+is_hit = true
+position = Vector2(-398, 0)
+
+[node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(-398, -200)
+
+[node name="Flower3" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(250, -100)
+
+[node name="Flower4" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(400, 200)
+
+[node name="Flower5" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(-250, 100)
+
+[node name="Flower6" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(-398, 200)
+
+[node name="Flower7" parent="LightEnvironment2D" instance=ExtResource("6_a87u8")]
+position = Vector2(400, -202)
+
+[node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(-250, -100)
+
+[node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(250, 100)

@@ -11,7 +11,8 @@ var levels = [
 "res://demo/levels/level_7_grid.tscn",
 "res://demo/levels/level_8_angle.tscn",
 "res://demo/levels/level_9_mushring.tscn",
-"res://demo/levels/level_10_mirror_grid.tscn"]
+"res://demo/levels/level_10_mirror_grid.tscn",
+"res://demo/levels/level_11_split.tscn"]
 
 var current_level = null
 

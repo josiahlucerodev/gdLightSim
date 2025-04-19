@@ -20,7 +20,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvrk"]
 shader = SubResource("Shader_gcgup")
 
-[node name="lightEnvironment2D2" type="LightEnvironment2D"]
+[node name="LightEnvironment2D" type="LightEnvironment2D"]
 displayBVH2D = false
 displayAABB = false
 displayPoints = false
