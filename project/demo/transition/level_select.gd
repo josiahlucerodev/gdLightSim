@@ -38,9 +38,24 @@ var current_level = null
 func _ready():
 	button_visible_array.resize(buttons.size())
 	button_visible_array.fill(false);
-	button_visible_array[0] = true;
+	load_data()
 		
 	update_buttons();
+	
+func save_file(data):
+	var file = FileAccess.open("res://LevelData.dat",FileAccess.WRITE)
+	file.store_8(data)
+	file.close()
+	
+func load_data():
+	if !FileAccess.file_exists("res://LevelData.dat"):
+		save_file(level_index)
+	else:
+		var file = FileAccess.open("res://LevelData.dat", FileAccess.READ)
+		level_index = file.get_8()
+		for i in range(level_index + 1):
+			button_visible_array[i] = true
+		file.close()
 
 func update_buttons():
 	for i in range(buttons.size()):
@@ -79,6 +94,7 @@ func _process(delta: float) -> void:
 func nextLevel():
 	remove_child(current_level)
 	level_index += 1
+	save_file(level_index)
 	button_visible_array[level_index] = true;
 	
 	loadLevel()

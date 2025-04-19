@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://bmfgckah61lmu"]
+[gd_scene load_steps=10 format=3 uid="uid://bmfgckah61lmu"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_no25w"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ti037"]
@@ -9,15 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_pg025"]
-_surfaces = [{
-"aabb": AABB(-204.95, -300, 0, 261.95, 504.95, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 18,
-"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQtBmPMIAAAAADABkQobMhcIAAAAA3QxDwyPzTEMAAAAADABkQobMhcIAAAAAI/NMw90MQ0MAAAAAAABkQtBmPMIAAAAA/v+hwqcZOcMAAAAA/v+hwjnmTMMAAAAAAABkQtBmPMIAAAAA/v+hwjnmTMMAAAAADABkQobMhcIAAAAA/v+hwqcZOcMAAAAAnpkHQgAAlsMAAAAAOJ1hQQAAlsMAAAAA/v+hwqcZOcMAAAAAOJ1hQQAAlsMAAAAA/v+hwjnmTMMAAAAA")
-}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_05vcv"]
 outline_size = 4

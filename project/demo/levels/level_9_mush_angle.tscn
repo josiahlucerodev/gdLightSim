@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://dtw0mwp323c18"]
+[gd_scene load_steps=11 format=3 uid="uid://dtw0mwp323c18"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_cueyk"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_yvnfp"]
@@ -11,15 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="9_pan8f"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s21iv"]
-_surfaces = [{
-"aabb": AABB(-560, -69.0027, 0, 416, 344.003, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
-"format": 34359738393,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 12,
-"vertex_data": PackedByteArray("AAAQw/5/iUMAAAAASAAQw1AC6MEAAAAAUgA4w6gAisIAAAAAAAAQw/5/iUMAAAAAUgA4w6gAisIAAAAAAAA4wwKAiUMAAAAASAAQw1AC6MEAAAAAAAAMxIsF6MEAAAAAAAAMxGMBisIAAAAASAAQw1AC6MEAAAAAAAAMxGMBisIAAAAAUgA4w6gAisIAAAAA")
-}]
 
 [node name="level_9_mushAngle" type="Node2D"]
 script = ExtResource("1_cueyk")
