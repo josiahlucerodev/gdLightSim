@@ -40,7 +40,8 @@ func _ready():
 	button_visible_array.resize(buttons.size())
 	button_visible_array.fill(false);
 	load_data()
-		
+	for i in range(level_index + 1):
+			button_visible_array[i] = true
 	update_buttons();
 	
 func save_file(data):
@@ -54,8 +55,6 @@ func load_data():
 	else:
 		var file = FileAccess.open("res://LevelData.dat", FileAccess.READ)
 		level_index = file.get_8()
-		for i in range(level_index + 1):
-			button_visible_array[i] = true
 		file.close()
 
 func update_buttons():
