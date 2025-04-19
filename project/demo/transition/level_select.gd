@@ -45,15 +45,15 @@ func _ready():
 	update_buttons();
 	
 func save_file(data):
-	var file = FileAccess.open("res://LevelData.dat",FileAccess.WRITE)
+	var file = FileAccess.open("res://levelData.dat",FileAccess.WRITE)
 	file.store_8(data)
 	file.close()
 	
 func load_data():
-	if !FileAccess.file_exists("res://LevelData.dat"):
+	if !FileAccess.file_exists("res://levelData.dat"):
 		save_file(level_index)
 	else:
-		var file = FileAccess.open("res://LevelData.dat", FileAccess.READ)
+		var file = FileAccess.open("res://levelData.dat", FileAccess.READ)
 		level_index = file.get_8()
 		file.close()
 
