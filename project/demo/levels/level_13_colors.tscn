@@ -1,0 +1,85 @@
+[gd_scene load_steps=12 format=4 uid="uid://ctu7d3k6ufhdy"]
+
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ekjps"]
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_2oj2o"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="3_ns5xf"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="4_oupne"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="5_cerhl"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="6_c0vlq"]
+[ext_resource type="PackedScene" uid="uid://dwbalyfke5krh" path="res://demo/light/standard_color_filter.tscn" id="7_2oj2o"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="7_d7327"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2oj2o"]
+_surfaces = [{
+"aabb": AABB(-485.001, -187.722, 0, 40.0007, 187.722, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AIDewwAAlrgAAAAAFoDew9y4O8MAAAAAqlHswxsvOMMAAAAAAIDewwAAlrgAAAAAqlHswxsvOMMAAAAAlFHswwAAADgAAAAAlFHswwAAADgAAAAAqlHswxsvOMMAAAAAFoDyw1m5OMMAAAAAlFHswwAAADgAAAAAFoDyw1m5OMMAAAAAAIDyw7KqmTgAAAAA")
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jggty"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_y37rt"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Level13Colors" type="Node2D"]
+script = ExtResource("1_ekjps")
+
+[node name="LightEnvironment2D" parent="." instance=ExtResource("2_2oj2o")]
+mesh = SubResource("ArrayMesh_2oj2o")
+
+[node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_ns5xf")]
+
+[node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_oupne")]
+position = Vector2(-8, 8)
+
+[node name="Flower" parent="LightEnvironment2D" instance=ExtResource("5_cerhl")]
+player_liftable = true
+position = Vector2(500, 0)
+
+[node name="RotationInstructions" type="Label" parent="LightEnvironment2D"]
+z_index = 1
+offset_left = -432.0
+offset_top = -128.0
+offset_right = -176.0
+offset_bottom = 10.0
+text = "Color filter. It would be nice if the developers weren't lazy and actually made it do something meaningful. "
+label_settings = SubResource("LabelSettings_jggty")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="LevelInstructions" type="Label" parent="LightEnvironment2D"]
+z_index = 1
+offset_left = 247.0
+offset_top = -35.0
+offset_right = 446.0
+offset_bottom = 40.0
+text = "Give light to the flower to complete the level!"
+label_settings = SubResource("LabelSettings_y37rt")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("6_c0vlq")]
+player_liftable = true
+position = Vector2(-465, 0)
+rotation = -1.5708
+
+[node name="ColorFilter2D" parent="LightEnvironment2D" instance=ExtResource("7_2oj2o")]
+filter_color = Color(1, 0.239216, 0, 1)
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(5, 190)
+color = Color(1, 0.239216, 0, 0.360784)
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("7_d7327")]
+polygon = PackedVector2Array(-560, 300, 560, 300, 560, 162, 293, 238, -150, 178, -395, 234, -560, 189)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("7_d7327")]
+is_hit = true
+polygon = PackedVector2Array(-560, -300, -560, -188, -472.638, -184.184, -146, -226, 256, -135, 560, -182, 560, -300)
