@@ -34,6 +34,7 @@ var current_level = null
 	$BP/R3/L15]
 	
 @onready var button_visible_array = [] 
+@onready var home_button = $BP/Home
 
 func _ready():
 	button_visible_array.resize(buttons.size())
@@ -50,6 +51,9 @@ func getLevel():
 	return levels[level_index]
 	
 func _process(delta: float) -> void:
+	if home_button.button_pressed:
+		TransitionHandler.goto_home()
+	
 	if TransitionHandler.transition_next_level():
 		TransitionHandler.transition_complete()
 		nextLevel()

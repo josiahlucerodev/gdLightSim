@@ -1,0 +1,94 @@
+[gd_scene load_steps=9 format=4 uid="uid://crinrwcsai20t"]
+
+[ext_resource type="Script" uid="uid://bddox7ogj1b4" path="res://demo/transition/home_menu.gd" id="1_kv3ce"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="1_ngehn"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="2_er0bp"]
+[ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="2_kv3ce"]
+[ext_resource type="Script" uid="uid://dixo52f1ded7m" path="res://demo/transition/follow_mouse.gd" id="3_eelfc"]
+[ext_resource type="Texture2D" uid="uid://daijmfxacj8t3" path="res://demo/sprites/player/PlayerSprite.png" id="6_33s0f"]
+[ext_resource type="PackedScene" uid="uid://bt1mjr3joyglw" path="res://demo/transition/level_select.tscn" id="6_cqyw6"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_kv3ce"]
+_surfaces = [{
+"aabb": AABB(47.9982, 4.32066, 0, 10832, 2200.18, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("JP4/QumtS0MAAAAAun8cRg73ekQAAAAAvr8cRhogSUQAAAAAJP4/QumtS0MAAAAAvr8cRhogSUQAAAAA7QCAQuBCikAAAAAArv9bRADACUUAAAAA+/8pRgfICUUAAAAABQAqRg6Q+kQAAAAArv9bRADACUUAAAAABQAqRg6Q+kQAAAAAUgBcRACA+kQAAAAA")
+}]
+
+[node name="MenuSelect" type="Node2D"]
+script = ExtResource("1_kv3ce")
+
+[node name="HomeMenu" type="Node2D" parent="."]
+
+[node name="LightEnvironment2D" type="LightEnvironment2D" parent="HomeMenu"]
+displayBVH2D = false
+displayAABB = false
+displayPoints = false
+displayMidpoints = false
+displayRays = false
+displayRadialSections = false
+displayLinearSections = false
+displayScatterSections = false
+mesh = SubResource("ArrayMesh_kv3ce")
+
+[node name="Mushroom" parent="HomeMenu/LightEnvironment2D" instance=ExtResource("2_kv3ce")]
+position = Vector2(1552, 528)
+scale = Vector2(7, 7)
+metadata/_custom_type_script = "uid://c4y2cbfgvyo3l"
+
+[node name="Flower" parent="HomeMenu/LightEnvironment2D" instance=ExtResource("1_ngehn")]
+position = Vector2(456, 560)
+scale = Vector2(7, 7)
+uv = PackedVector2Array(-19, 64, 2, 64, 2, -19, -19, -19)
+
+[node name="Label" type="Label" parent="HomeMenu/LightEnvironment2D"]
+offset_left = 368.0
+offset_top = 40.0
+offset_right = 484.0
+offset_bottom = 63.0
+scale = Vector2(10, 10)
+theme_override_colors/font_color = Color(0.203922, 0.47451, 0.262745, 1)
+text = "Lumens Bloom"
+
+[node name="BeamLight2D" parent="HomeMenu/LightEnvironment2D" instance=ExtResource("2_er0bp")]
+light_width = 200.0
+position = Vector2(56, 104)
+rotation = 0.0801037
+scale = Vector2(1, 100)
+
+[node name="FollowMouse2" type="Node2D" parent="HomeMenu/LightEnvironment2D"]
+position = Vector2(880, 2104)
+script = ExtResource("3_eelfc")
+
+[node name="BeamLight2D2" parent="HomeMenu/LightEnvironment2D/FollowMouse2" instance=ExtResource("2_er0bp")]
+light_width = 200.0
+rotation = 5.01722e-05
+scale = Vector2(1, 100)
+skew = 1.56296
+
+[node name="ExitButton" type="Button" parent="HomeMenu"]
+offset_left = 720.0
+offset_top = 672.0
+offset_right = 819.0
+offset_bottom = 703.0
+scale = Vector2(3.99118, 3.99118)
+text = "Exit"
+
+[node name="LevelSelectButton" type="Button" parent="HomeMenu"]
+offset_left = 720.0
+offset_top = 504.0
+offset_right = 819.0
+offset_bottom = 535.0
+scale = Vector2(3.99118, 3.99118)
+text = "Level Select"
+
+[node name="Sprite2D" type="Sprite2D" parent="HomeMenu"]
+position = Vector2(920, 1088)
+texture = ExtResource("6_33s0f")
+
+[node name="LevelSelect" parent="." instance=ExtResource("6_cqyw6")]
+visible = false

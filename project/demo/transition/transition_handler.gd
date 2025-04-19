@@ -3,17 +3,18 @@ extends Node
 var transition_next_level_flag = false
 var transition_to_level_complete_flag = false;
 var transition_level_completed = false;
+var transition_back_to_home_flag = false;
 
 func transition_complete() -> void:
 	transition_next_level_flag = false
 	transition_to_level_complete_flag = false
 	transition_level_completed = true;
-
+	transition_back_to_home_flag = false;
+	
 func selected_level() -> void:
 	transition_next_level_flag = false
 	transition_to_level_complete_flag = false
 
-	
 func goto_next_level() -> void:
 	transition_next_level_flag = true
 
@@ -29,3 +30,9 @@ func transition_level_select() -> bool:
 
 func is_level_completed() -> bool:
 	return transition_level_completed
+
+func goto_home() -> void:
+	transition_back_to_home_flag = true;
+	
+func transition_home() -> bool:
+	return transition_back_to_home_flag

@@ -7,6 +7,16 @@
 script = ExtResource("1_4tn8t")
 
 [node name="BP" type="Node2D" parent="."]
+position = Vector2(268, 229)
+scale = Vector2(0.9, 0.9)
+
+[node name="Home" type="Button" parent="BP"]
+offset_left = 597.778
+offset_top = -234.444
+offset_right = 652.778
+offset_bottom = -203.444
+scale = Vector2(6, 6)
+text = "Home"
 
 [node name="R1" type="Node2D" parent="BP"]
 
