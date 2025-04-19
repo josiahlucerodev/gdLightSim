@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 			button_visible_array[level_index + 1] = button_visible_array[level_index + 1] || TransitionHandler.is_level_completed();
 		update_buttons()
 		button_panel.visible = true
-		TransitionHandler.selected_level()
+		TransitionHandler.transition_complete()
 		
 	#Ctrl + Shift + L in level select shows all levels
 	if(button_panel.visible && Input.is_action_just_pressed("debug_level_select")):
