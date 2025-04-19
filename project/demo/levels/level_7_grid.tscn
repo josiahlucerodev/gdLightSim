@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://bmfgckah61lmu"]
+[gd_scene load_steps=11 format=4 uid="uid://bmfgckah61lmu"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_no25w"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ti037"]
@@ -7,93 +7,104 @@
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="5_05vcv"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_pg025"]
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="8_0kxn8"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_pg025"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_gddri"]
 _surfaces = [{
-"aabb": AABB(-204.95, -300, 0, 261.95, 504.95, 1e-05),
+"aabb": AABB(-204.95, -300, 0, 261.95, 481.95, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 18,
-"vertex_data": PackedByteArray("3QxDwyPzTEMAAAAAAABkQtBmPMIAAAAADABkQobMhcIAAAAA3QxDwyPzTEMAAAAADABkQobMhcIAAAAAI/NMw90MQ0MAAAAAAABkQtBmPMIAAAAA/v+hwqcZOcMAAAAA/v+hwjnmTMMAAAAAAABkQtBmPMIAAAAA/v+hwjnmTMMAAAAADABkQobMhcIAAAAA/v+hwqcZOcMAAAAAnpkHQgAAlsMAAAAAOJ1hQQAAlsMAAAAA/v+hwqcZOcMAAAAAOJ1hQQAAlsMAAAAA/v+hwjnmTMMAAAAA")
+"vertex_data": PackedByteArray("3QxDwyPzNUMAAAAAAABkQmgzjMIAAAAADABkQobMs8IAAAAA3QxDwyPzNUMAAAAADABkQobMs8IAAAAAI/NMw90MLEMAAAAAAABkQmgzjMIAAAAA/v+hwqcZUMMAAAAA/v+hwjnmY8MAAAAAAABkQmgzjMIAAAAA/v+hwjnmY8MAAAAADABkQobMs8IAAAAA/v+hwqcZUMMAAAAAWGYuQQAAlsMAAAAA+GIOwQAAlsMAAAAA/v+hwqcZUMMAAAAA+GIOwQAAlsMAAAAA/v+hwjnmY8MAAAAA")
 }]
 
 [sub_resource type="LabelSettings" id="LabelSettings_05vcv"]
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[node name="level_6_grid" type="Node2D"]
+[node name="level_7_grid" type="Node2D"]
 script = ExtResource("1_ti037")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("1_no25w")]
 max_actions = 50
-mesh = SubResource("ArrayMesh_pg025")
+mesh = SubResource("ArrayMesh_gddri")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_dtnom")]
 
 [node name="Player" parent="LightEnvironment2D" instance=ExtResource("4_pg025")]
-position = Vector2(-300, 200)
+position = Vector2(-300, 177)
 
 [node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("5_05vcv")]
 light_width = 14.0
-position = Vector2(-200, 200)
+position = Vector2(-200, 177)
 rotation = -0.785398
 scale = Vector2(0.35, 7)
 
 [node name="Camera2D" type="Camera2D" parent="LightEnvironment2D"]
+position = Vector2(0, -23)
 
 [node name="Flower" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(-150, -150)
+position = Vector2(-150, -173)
 
 [node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 is_hit = true
-position = Vector2(0, -150)
+position = Vector2(0, -173)
 
 [node name="Flower3" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(150, -150)
+position = Vector2(150, -173)
 
 [node name="Flower4" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(-150, 0)
+position = Vector2(-150, -23)
 
 [node name="Flower5" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 is_hit = true
+position = Vector2(0, -23)
 
 [node name="Flower6" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(150, 0)
+position = Vector2(150, -23)
 
 [node name="Flower7" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
 is_hit = true
-position = Vector2(-150, 150)
+position = Vector2(-150, 127)
 
 [node name="Flower8" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(0, 150)
+position = Vector2(0, 127)
 
 [node name="Flower9" parent="LightEnvironment2D" instance=ExtResource("6_pg025")]
-position = Vector2(150, 150)
+position = Vector2(150, 127)
 
 [node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
-position = Vector2(150, -150)
+position = Vector2(150, -173)
 scale = Vector2(5, 35)
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
 player_liftable = true
-position = Vector2(-81, -202)
+position = Vector2(-81, -225)
 scale = Vector2(5, 35)
+color = Color(0.376973, 0.828752, 0.894409, 1)
 
 [node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("7_05vcv")]
 player_liftable = true
-position = Vector2(57, -64)
+position = Vector2(57, -87)
 scale = Vector2(5, 35)
+color = Color(0.376973, 0.828752, 0.894409, 1)
 
 [node name="LevelInstructions" type="Label" parent="LightEnvironment2D"]
 z_index = 1
-offset_left = -104.0
-offset_top = 214.0
-offset_right = 95.0
-offset_bottom = 289.0
-text = "You can use space on certain objects to pick them up! Press space again to place them."
+offset_left = -424.0
+offset_top = -38.0
+offset_right = -225.0
+offset_bottom = 63.0
+text = "You can use space on blue mirrors to pick them up! Press space again to place them."
 label_settings = SubResource("LabelSettings_05vcv")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("8_0kxn8")]
+polygon = PackedVector2Array(-560, -300, -394, -300, -499, -165, -465, 50, -507, 234, -262, 300, -560, 300)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("8_0kxn8")]
+polygon = PackedVector2Array(381, -300, 424, -126, 417, 14, 447, 133, 387, 300, 560, 300, 560, -300)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dfpw581rrb3p3"]
+[gd_scene load_steps=11 format=4 uid="uid://dfpw581rrb3p3"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_66wmv"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_42w2o"]
@@ -8,10 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="6_w6fw0"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="7_unrf4"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="8_a8f4o"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_66wmv"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b7lhc"]
+_surfaces = [{
+"aabb": AABB(-520, -20, 0, 1080, 40, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAACxAAAoEEAAAAAAAAMRAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoEEAAAAAAAAMRAAAoMEAAAAAAAACxAAAoMEAAAAA")
+}]
 
-[node name="level_3_beta" type="Node2D"]
+[node name="level_4_zigzag" type="Node2D"]
 script = ExtResource("1_66wmv")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("2_42w2o")]
@@ -29,13 +39,13 @@ position = Vector2(-520, 0)
 player_rotatable = false
 position = Vector2(0, -166)
 rotation = 1.5708
-scale = Vector2(5, 550)
+scale = Vector2(5.091, 560)
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("6_w6fw0")]
 player_rotatable = false
 position = Vector2(-9.09495e-13, 159)
 rotation = -1.5708
-scale = Vector2(5, 550)
+scale = Vector2(5.09, 560)
 
 [node name="Flower" parent="LightEnvironment2D" instance=ExtResource("7_unrf4")]
 is_hit = true
@@ -64,3 +74,10 @@ position = Vector2(-43, -20)
 [node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("8_a8f4o")]
 is_hit = true
 position = Vector2(142, -20)
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("9_66wmv")]
+polygon = PackedVector2Array(-560, 164, -560, 300, 560, 300, 560, 164)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("9_66wmv")]
+position = Vector2(0, -473)
+polygon = PackedVector2Array(-560, 173, -560, 302, 560, 302, 560, 173)
