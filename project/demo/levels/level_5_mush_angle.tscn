@@ -30,19 +30,19 @@ mesh = SubResource("ArrayMesh_8yxim")
 [node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
 position = Vector2(-49, -78)
 scale = Vector2(3, 3)
-polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+polygon = PackedVector2Array(-170.333, -74, -68.3333, -74, -68.6667, -18.6667, -170.333, -18.6667)
 uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
 
 [node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
 position = Vector2(971, -75)
 scale = Vector2(6, 3)
-polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+polygon = PackedVector2Array(-174, -75, -68.5, -75, -68.5, -18.6667, -173.833, -18.6667)
 uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
 
 [node name="Wall2D3" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
 position = Vector2(971, 403)
 scale = Vector2(6, 5)
-polygon = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -173.853, -18.7157)
+polygon = PackedVector2Array(-174, -76.6, -68.5, -76.6, -68.5, -20.6, -174, -20.6)
 uv = PackedVector2Array(-174, -76.5, -68.5, -76.5, -68.5, -18.5, -170, -18.5)
 
 [node name="Wall2D4" parent="LightEnvironment2D" instance=ExtResource("3_8qifo")]
@@ -86,12 +86,12 @@ scale = Vector2(5, 50)
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
 player_rotatable = false
-position = Vector2(250, -125)
+position = Vector2(244, -125)
 rotation = 1.5708
-scale = Vector2(5, 275)
+scale = Vector2(5.746, 316)
 
 [node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("9_pan8f")]
 player_rotatable = false
-position = Vector2(150, 15)
+position = Vector2(137, 15)
 rotation = 1.5708
 scale = Vector2(5, 210)
