@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 	if TransitionHandler.transition_level_select():
 		remove_child(current_level)
 		current_level = null
-		if level_index != 0:
+		if level_index != 0 && level_index != levels.size() - 1:
 			button_visible_array[level_index + 1] = button_visible_array[level_index + 1] || TransitionHandler.is_level_completed();
 		update_buttons()
 		button_panel.visible = true
@@ -94,15 +94,18 @@ func _process(delta: float) -> void:
 			loadLevel()
 			button.button_pressed = false
 			pass
+			
 func nextLevel():
 	remove_child(current_level)
 	level_index += 1
 	save_file(level_index)
 	button_visible_array[level_index] = true;
-	
 	loadLevel()
 	
 func loadLevel():
+	if level_index == levels.size() - 1:
+		TransitionHandler.last_level()
+	
 	var my_scene = load(getLevel()).instantiate()
 	add_child(my_scene)
 	current_level = my_scene

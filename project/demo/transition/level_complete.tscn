@@ -117,7 +117,9 @@ visible = false
 follow_viewport_enabled = true
 script = ExtResource("1_gvq23")
 
-[node name="Label" type="Label" parent="."]
+[node name="Level" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="Level"]
 z_index = 2
 offset_left = -384.5
 offset_top = -250.0
@@ -131,7 +133,7 @@ label_settings = SubResource("LabelSettings_gvq23")
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="NextLevel" type="Button" parent="."]
+[node name="NextLevel" type="Button" parent="Level"]
 z_index = 2
 offset_left = -86.0
 offset_top = 124.0
@@ -158,6 +160,51 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_o05l6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rykqa")
 theme_override_styles/normal = SubResource("StyleBoxFlat_70gt5")
 text = "Next Level"
+metadata/_edit_use_anchors_ = true
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="Game"]
+z_index = 2
+offset_left = -384.5
+offset_top = -250.0
+offset_right = 384.5
+offset_bottom = -113.0
+theme_override_colors/font_color = Color(0, 0.333333, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "Game Complete"
+label_settings = SubResource("LabelSettings_gvq23")
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Exit" type="Button" parent="Game"]
+z_index = 2
+offset_left = -86.0
+offset_top = 124.0
+offset_right = 85.0
+offset_bottom = 180.0
+theme_override_colors/font_disabled_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/font_hover_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/icon_disabled_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/icon_hover_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/icon_focus_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.270588, 0, 1)
+theme_override_colors/font_outline_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/font_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/font_focus_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_colors/font_pressed_color = Color(0.270588, 0.105882, 0.0156863, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_icons/icon = SubResource("CanvasTexture_gvq23")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gvq23")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_adnvx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o05l6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rykqa")
+theme_override_styles/normal = SubResource("StyleBoxFlat_70gt5")
+text = "Exit"
 metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
