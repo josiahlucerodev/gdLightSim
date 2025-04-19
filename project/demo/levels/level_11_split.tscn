@@ -9,22 +9,22 @@
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_jfpp1"]
 [ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="8_fi68y"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ayj2w"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_fi68y"]
 _surfaces = [{
-"aabb": AABB(-560, -30.0001, 0, 958, 60.0001, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-560, -30, 0, 958, 60.0024, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AADHQwAA8MEAAAAAAAAMxEwA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8EEAAAAA")
+"vertex_count": 12,
+"vertex_data": PackedByteArray("/v/GQwAA8MEAAAAA//8LxAf778EAAAAAAAAMxE4BmMEAAAAA/v/GQwAA8MEAAAAAAAAMxE4BmMEAAAAAAADHQ0cGmMEAAAAAAADHQ0cGmMEAAAAAAAAMxE4BmMEAAAAAAAAMxPkE8EEAAAAAAADHQ0cGmMEAAAAAAAAMxPkE8EEAAAAAAwDHQwAA8EEAAAAA")
 }]
 
 [node name="Level11Split" type="Node2D"]
 script = ExtResource("1_ohwwv")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("2_fi68y")]
-mesh = SubResource("ArrayMesh_ayj2w")
+mesh = SubResource("ArrayMesh_fi68y")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_frwlh")]
 
