@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmfgckah61lmu"]
+[gd_scene load_steps=11 format=4 uid="uid://bmfgckah61lmu"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_no25w"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ti037"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="5_05vcv"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_pg025"]
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="7_05vcv"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="8_0kxn8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_gddri"]
 _surfaces = [{
@@ -101,3 +102,9 @@ label_settings = SubResource("LabelSettings_05vcv")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("8_0kxn8")]
+polygon = PackedVector2Array(-560, -300, -394, -300, -499, -165, -465, 50, -507, 234, -262, 300, -560, 300)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("8_0kxn8")]
+polygon = PackedVector2Array(381, -300, 424, -126, 417, 14, 447, 133, 387, 300, 560, 300, 560, -300)
