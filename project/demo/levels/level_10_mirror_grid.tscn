@@ -1,0 +1,122 @@
+[gd_scene load_steps=10 format=4 uid="uid://d2sxdhrjjvlkw"]
+
+[ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_ndw8n"]
+[ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_qw2dm"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="2_15eiv"]
+[ext_resource type="PackedScene" uid="uid://0kc2d6a2lbsq" path="res://demo/levels/level_border.tscn" id="3_fv6ye"]
+[ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="4_bm6cw"]
+[ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_bm6cw"]
+[ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_kndvf"]
+[ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_qw2dm"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_bm6cw"]
+_surfaces = [{
+"aabb": AABB(-560, -261, 0, 260, 20, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AIDbwwAAccMAAAAAAACWwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwCAgsMAAAAAAACWwwAAccMAAAAAAAAMxP//cMMAAAAAAAAMxP9/gsMAAAAAAACWwwAAccMAAAAAAAAMxP9/gsMAAAAAAACWwwCAgsMAAAAA")
+}]
+
+[node name="level_10_mirror_grid" type="Node2D"]
+script = ExtResource("1_qw2dm")
+
+[node name="lightEnvironment2D2" parent="." instance=ExtResource("1_ndw8n")]
+mesh = SubResource("ArrayMesh_bm6cw")
+
+[node name="Player" parent="lightEnvironment2D2" instance=ExtResource("2_15eiv")]
+
+[node name="Border" parent="lightEnvironment2D2" instance=ExtResource("3_fv6ye")]
+
+[node name="BeamLight2D" parent="lightEnvironment2D2" instance=ExtResource("4_bm6cw")]
+light_width = 20.0
+position = Vector2(-439, -251)
+scale = Vector2(0.5, 10)
+
+[node name="Mirror" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(-300, -250)
+scale = Vector2(5, 40)
+
+[node name="Mirror2" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(0, -250)
+scale = Vector2(5, 40)
+
+[node name="Mirror3" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(300, -250)
+scale = Vector2(5, 40)
+
+[node name="Mirror4" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(-300, 0)
+scale = Vector2(5, 40)
+
+[node name="Mirror5" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+scale = Vector2(5, 40)
+
+[node name="Mirror6" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(300, 0)
+scale = Vector2(5, 40)
+
+[node name="Mirror7" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(-300, 250)
+scale = Vector2(5, 40)
+
+[node name="Mirror8" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(0, 250)
+scale = Vector2(5, 40)
+
+[node name="Mirror9" parent="lightEnvironment2D2" instance=ExtResource("5_bm6cw")]
+position = Vector2(300, 250)
+scale = Vector2(5, 40)
+
+[node name="Flower" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(-291, -143)
+
+[node name="Flower2" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(-205, -15)
+
+[node name="Flower3" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(9, -147)
+
+[node name="Flower4" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(68, -262)
+
+[node name="Mushroom" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(-98, -15)
+
+[node name="Mushroom2" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(-146, -264)
+
+[node name="Mushroom3" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(3, 103)
+
+[node name="Mushroom4" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(-295, 101)
+
+[node name="Mushroom5" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(156, -19)
+
+[node name="Mushroom6" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(157, 217)
+
+[node name="Mushroom7" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(301, -150)
+
+[node name="Mushroom8" parent="lightEnvironment2D2" instance=ExtResource("7_qw2dm")]
+position = Vector2(379, -274)
+
+[node name="Flower5" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(-130, 111)
+
+[node name="Flower6" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(-28, 227)
+
+[node name="Flower7" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(-235, 229)
+
+[node name="Flower8" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(159, 109)
+
+[node name="Flower9" parent="lightEnvironment2D2" instance=ExtResource("6_kndvf")]
+position = Vector2(477, -268)
