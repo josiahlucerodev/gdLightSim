@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://md4l5f7uw4nb"]
+[gd_scene load_steps=10 format=4 uid="uid://md4l5f7uw4nb"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_ohwwv"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_fi68y"]
@@ -7,28 +7,30 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_648u6"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_a87u8"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_jfpp1"]
+[ext_resource type="PackedScene" uid="uid://cnj8vj0c8g14" path="res://demo/player.tscn" id="8_fi68y"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ayj2w"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_fi68y"]
 _surfaces = [{
-"aabb": AABB(-560, -30.0001, 0, 958, 60.0001, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-560, -30, 0, 958, 60.0024, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AADHQwAA8MEAAAAAAAAMxEwA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8MEAAAAAAAAMxLT/70EAAAAAAADHQwAA8EEAAAAA")
+"vertex_count": 12,
+"vertex_data": PackedByteArray("/v/GQwAA8MEAAAAA//8LxAf778EAAAAAAAAMxE4BmMEAAAAA/v/GQwAA8MEAAAAAAAAMxE4BmMEAAAAAAADHQ0cGmMEAAAAAAADHQ0cGmMEAAAAAAAAMxE4BmMEAAAAAAAAMxPkE8EEAAAAAAADHQ0cGmMEAAAAAAAAMxPkE8EEAAAAAAwDHQwAA8EEAAAAA")
 }]
 
 [node name="Level11Split" type="Node2D"]
 script = ExtResource("1_ohwwv")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("2_fi68y")]
-mesh = SubResource("ArrayMesh_ayj2w")
+mesh = SubResource("ArrayMesh_fi68y")
 
 [node name="Border" parent="LightEnvironment2D" instance=ExtResource("3_frwlh")]
 
 [node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("4_ouky2")]
 light_width = 60.0
+player_rotatable = false
 position = Vector2(398, 0)
 rotation = 3.14159
 scale = Vector2(1.5, 30)
@@ -80,7 +82,22 @@ position = Vector2(-398, 200)
 position = Vector2(400, -202)
 
 [node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
-position = Vector2(-250, -100)
+position = Vector2(-259, -117)
 
 [node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
-position = Vector2(250, 100)
+position = Vector2(275, 117)
+
+[node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(-350, -100)
+
+[node name="Mushroom4" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(-479, -112)
+
+[node name="Mushroom5" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(355, 80)
+
+[node name="Mushroom6" parent="LightEnvironment2D" instance=ExtResource("7_jfpp1")]
+position = Vector2(450, 100)
+
+[node name="Player" parent="." instance=ExtResource("8_fi68y")]
+position = Vector2(0, 1)
