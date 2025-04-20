@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://crinrwcsai20t"]
+[gd_scene load_steps=9 format=4 uid="uid://crinrwcsai20t"]
 
 [ext_resource type="Script" uid="uid://bddox7ogj1b4" path="res://demo/transition/home_menu.gd" id="1_kv3ce"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="1_ngehn"]
@@ -9,6 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://bt1mjr3joyglw" path="res://demo/transition/level_select.tscn" id="6_cqyw6"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cqyw6"]
+_surfaces = [{
+"aabb": AABB(47.9982, 4.32066, 0, 10832, 2200.18, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"format": 34359738393,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("JP4/QumtS0MAAAAAun8cRgv3ekQAAAAAvr8cRhcgSUQAAAAAJP4/QumtS0MAAAAAvr8cRhcgSUQAAAAA7QCAQuBCikAAAAAArv9bRADACUUAAAAA+/8pRgfICUUAAAAABQAqRg6Q+kQAAAAArv9bRADACUUAAAAABQAqRg6Q+kQAAAAAUgBcRACA+kQAAAAA")
+}]
 
 [node name="MenuSelect" type="Node2D"]
 script = ExtResource("1_kv3ce")

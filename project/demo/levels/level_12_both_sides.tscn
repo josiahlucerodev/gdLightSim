@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://b14r4p6x00xus"]
+[gd_scene load_steps=11 format=4 uid="uid://b14r4p6x00xus"]
 
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_47qnw"]
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="2_lcgd6"]
@@ -8,16 +8,17 @@
 [ext_resource type="PackedScene" uid="uid://2l6cg6ka76wh" path="res://demo/light/standard_beam_light.tscn" id="6_3lhi8"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_3lhi8"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="8_e16lb"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_u7e14"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_e16lb"]
 _surfaces = [{
-"aabb": AABB(-496, -12, 0, 1056, 30, 1e-05),
-"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
+"aabb": AABB(-496, -12, 0, 940.803, 30, 1e-05),
+"attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 6,
-"vertex_data": PackedByteArray("AQD4wwAAkEEAAAAAAAAMRAAAkEEAAAAAAAAMRAAAQMEAAAAAAQD4wwAAkEEAAAAAAAAMRAAAQMEAAAAAAQD4wwAAQMEAAAAA")
+"vertex_count": 66,
+"vertex_data": PackedByteArray("AAD4wwAAkEEAAAAAePHdQwAAkEEAAAAAJizeQxYTQEAAAAAAAAD4wwAAkEEAAAAAJizeQxYTQEAAAAAAAAD4wxYTQEAAAAAAAAD4wxYTQEAAAAAAJizeQxYTQEAAAAAAKCzeQ64NQEAAAAAAAAD4wxYTQEAAAAAAKCzeQ64NQEAAAAAAAAD4w64NQEAAAAAAAAD4w7QCQEAAAAAAAIC/Q7QCQEAAAAAAAICSQ0z9P0AAAAAAAAD4w7QCQEAAAAAAAICSQ0z9P0AAAAAAAAD4w0z9P0AAAAAAAAD4w1LyP0AAAAAAKCzeQ1LyP0AAAAAAKizeQ+rsP0AAAAAAAAD4w1LyP0AAAAAAKizeQ+rsP0AAAAAAAAD4w+rsP0AAAAAAAAD4w+rsP0AAAAAAKizeQ+rsP0AAAAAA4jfeQ3CumDoAAAAAAAD4w+rsP0AAAAAA4jfeQ3CumDoAAAAAAAD4w3CumDoAAAAAAAD4w3CumDoAAAAA4jfeQ3CumDoAAAAA5jfeQ9zsWjoAAAAAAAD4w3CumDoAAAAA5jfeQ9zsWjoAAAAAAAD4w9zsWjoAAAAAAAD4wwjgLDkAAAAAAABUwgjgLDkAAAAAAAAPwwjgLLkAAAAAAAD4wwjgLDkAAAAAAAAPwwjgLLkAAAAAAAD4wwjgLLkAAAAAAAD4w9zsWroAAAAA5jfeQ9zsWroAAAAA6DfeQ3CumLoAAAAAAAD4w9zsWroAAAAA6DfeQ3CumLoAAAAAAAD4w3CumLoAAAAAAAD4w3CumLoAAAAA6DfeQ3CumLoAAAAA2GbeQwAAQMEAAAAAAAD4w3CumLoAAAAA2GbeQwAAQMEAAAAAAAD4wwAAQMEAAAAAAICSQ0z9P0AAAAAAKCzeQ0APQEAAAAAAKCzeQ/sJQEAAAAAAAICSQ0z9P0AAAAAAKCzeQ/sJQEAAAAAAAIC/Q7QCQEAAAAAAAAAPwwjgLLkAAAAA4jfeQ//1hTsAAAAA4jfeQ/7TdjsAAAAAAAAPwwjgLLkAAAAA4jfeQ/7TdjsAAAAAAABUwgjgLDkAAAAA")
 }]
 
 [node name="level_12_both_sides" type="Node2D"]
@@ -32,61 +33,67 @@ mesh = SubResource("ArrayMesh_e16lb")
 
 [node name="BeamLight2D" parent="LightEnvironment2D" instance=ExtResource("6_3lhi8")]
 light_width = 30.0
+player_rotatable = false
 position = Vector2(-496, 3)
 scale = Vector2(0.75, 15)
 
 [node name="Mirror" parent="LightEnvironment2D" instance=ExtResource("5_t538f")]
+position = Vector2(-98, 0)
 rotation = 1.5708
 scale = Vector2(5, 45)
 
 [node name="Mushroom" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(97, 76)
+position = Vector2(-1, 76)
 
 [node name="Mushroom2" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(97, -97)
+position = Vector2(-1, -97)
 
 [node name="Mushroom3" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(191, -254)
-
-[node name="Mushroom4" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(191, 227)
+position = Vector2(93, -254)
 
 [node name="Mirror2" parent="LightEnvironment2D" instance=ExtResource("5_t538f")]
-position = Vector2(3, -197)
+position = Vector2(-95, -197)
 rotation = 1.5708
 scale = Vector2(5, 45)
 
 [node name="Mirror3" parent="LightEnvironment2D" instance=ExtResource("5_t538f")]
-position = Vector2(1, 236)
+position = Vector2(-97, 236)
 rotation = 1.5708
 scale = Vector2(5, 45)
 
 [node name="Mirror4" parent="LightEnvironment2D" instance=ExtResource("5_t538f")]
-position = Vector2(436, 3)
+position = Vector2(338, 3)
 rotation = 1.5708
 scale = Vector2(5, 45)
 
 [node name="Flower" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
 is_hit = true
-position = Vector2(248, -14)
+position = Vector2(150, -14)
 
 [node name="Flower2" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
-position = Vector2(288, -113)
+position = Vector2(190, -113)
 
 [node name="Flower3" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
-position = Vector2(278, 100)
+position = Vector2(180, 100)
 
 [node name="Flower4" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
-position = Vector2(9, 119)
+position = Vector2(-89, 119)
 
 [node name="Flower5" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
-position = Vector2(12, -146)
+position = Vector2(-86, -146)
 
 [node name="Flower6" parent="LightEnvironment2D" instance=ExtResource("8_e16lb")]
-position = Vector2(373, -259)
+position = Vector2(258, -248)
 
 [node name="Mushroom5" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(-96, -102)
+position = Vector2(-194, -102)
 
 [node name="Mushroom6" parent="LightEnvironment2D" instance=ExtResource("7_3lhi8")]
-position = Vector2(-100, 84)
+position = Vector2(-198, 84)
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("9_u7e14")]
+polygon = PackedVector2Array(-154, 300, -284, 88, -422, 106, -531, 30, -505, -81, -354, -126, -287, -108, -184, -243, -48.9717, -289.087, 288, -300, -560, -300, -560, 300)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("9_u7e14")]
+is_hit = true
+polygon = PackedVector2Array(408, -300, 450, -182, 443, 47, 271, 161, 298, 274, 13, 300, 560, 300, 560, -300)

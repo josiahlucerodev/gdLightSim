@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://d2sxdhrjjvlkw"]
+[gd_scene load_steps=11 format=4 uid="uid://d2sxdhrjjvlkw"]
 
 [ext_resource type="PackedScene" uid="uid://udg7gtgxpnsq" path="res://demo/light/light_environment.tscn" id="1_ndw8n"]
 [ext_resource type="Script" uid="uid://bpo5ham15m4id" path="res://demo/world.gd" id="1_qw2dm"]
@@ -8,23 +8,24 @@
 [ext_resource type="PackedScene" uid="uid://7dgm21sa7kpt" path="res://demo/light/standard_mirror.tscn" id="5_bm6cw"]
 [ext_resource type="PackedScene" uid="uid://biw5qyvgv3ovg" path="res://demo/plants/flower.tscn" id="6_kndvf"]
 [ext_resource type="PackedScene" uid="uid://coopc0u4g42js" path="res://demo/plants/mushroom.tscn" id="7_qw2dm"]
+[ext_resource type="PackedScene" uid="uid://bw68u5mcm8pyd" path="res://demo/util/wall2d.tscn" id="9_qmjty"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_qw2dm"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_b8rax"]
 _surfaces = [{
-"aabb": AABB(-560, -261, 0, 260, 20, 1e-05),
+"aabb": AABB(-510.571, -261, 0, 210.571, 20, 1e-05),
 "attribute_data": PackedByteArray("//8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAAAA//8AzAAAgD8AAIA///8AzAAAAAAAAIA/"),
 "format": 34359738393,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 12,
-"vertex_data": PackedByteArray("AIDbwwAAccMAAAAAAACWwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwCAgsMAAAAAAACWwwAAccMAAAAAAAAMxP//cMMAAAAAAAAMxP9/gsMAAAAAAACWwwAAccMAAAAAAAAMxP9/gsMAAAAAAACWwwCAgsMAAAAA")
+"vertex_data": PackedByteArray("AIDbwwAAccMAAAAAAACWwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwAAccMAAAAAAACWwwCAgsMAAAAAAIDbwwCAgsMAAAAAAACWwwAAccMAAAAAJUn/w///cMMAAAAAMgz6w/9/gsMAAAAAAACWwwAAccMAAAAAMgz6w/9/gsMAAAAAAACWwwCAgsMAAAAA")
 }]
 
 [node name="level_10_mirror_grid" type="Node2D"]
 script = ExtResource("1_qw2dm")
 
 [node name="LightEnvironment2D" parent="." instance=ExtResource("1_ndw8n")]
-mesh = SubResource("ArrayMesh_qw2dm")
+mesh = SubResource("ArrayMesh_b8rax")
 
 [node name="Player" parent="LightEnvironment2D" instance=ExtResource("2_15eiv")]
 
@@ -120,3 +121,11 @@ position = Vector2(159, 109)
 
 [node name="Flower9" parent="LightEnvironment2D" instance=ExtResource("6_kndvf")]
 position = Vector2(477, -268)
+
+[node name="Wall2D" parent="LightEnvironment2D" instance=ExtResource("9_qmjty")]
+is_hit = true
+position = Vector2(0, -2)
+polygon = PackedVector2Array(-357, 302, -412, -13, -517, -95, -531, -200, -487, -284, -279, -298, -560, -298, -560, 302)
+
+[node name="Wall2D2" parent="LightEnvironment2D" instance=ExtResource("9_qmjty")]
+polygon = PackedVector2Array(392, 300, 500, 249, 439, 49, 454, -42, 526, -109, 560, -219, 560, 300)
